@@ -1,0 +1,763 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ThreadStatus {
+  DETECTED
+  NEEDS_REVIEW
+  OPEN
+  APPROACHING
+  POSTPONED
+  WAITING_ON_ME
+  WAITING_ON_THEM
+  CHANGED
+  LIKELY_RESOLVED
+  RESOLVED
+  EXPIRED
+  DISMISSED
+}
+
+enum CommitmentType {
+  EXPLICIT_PROMISE
+  REQUEST
+  FUTURE_INTENTION
+  RECIPROCAL_PLAN
+  REMINDER_REQUEST
+  WAITING_STATE
+  SELF_COMMITMENT
+}
+
+enum ThreadOwner {
+  ME
+  THEM
+  SHARED
+  SELF
+}
+
+enum ConversationSourceKind {
+  PASTE
+  EMAIL
+  MESSAGES
+  NOTES
+  MANUAL
+  VOICE
+  TEXT
+  TELEGRAM
+  WHATSAPP
+  INSTAGRAM
+}
+
+enum IntegrationKind {
+  MANUAL_PASTE
+  GMAIL
+  MESSAGES
+  WHATSAPP
+  SLACK
+  GOOGLE_CALENDAR
+  GOOGLE_DOCS
+  VOICE
+  TELEGRAM
+  INSTAGRAM
+  EMAIL
+  MEETINGS
+}
+
+enum IntegrationStatus {
+  NOT_CONNECTED
+  CONNECTING
+  CONNECTED
+  REQUIRES_ACTION
+  ERROR
+  DISCONNECTED
+  UNAVAILABLE
+  PENDING
+}
+
+enum NotificationChannel {
+  IN_APP
+  EMAIL
+  WEB_PUSH
+  NATIVE_PUSH
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+  READ
+}
+
+enum ReminderStatus {
+  SCHEDULED
+  SENT
+  CANCELLED
+}
+
+enum ResolutionKind {
+  FULFILLED
+  SUPERSEDED
+  CANCELLED
+  IRRELEVANT
+  EXPIRED
+  USER_DISMISSED
+}
+
+enum ActionProposalKind {
+  MOVE_CALENDAR_EVENT
+  OPEN_DOCUMENT
+  MOVE_DEADLINE
+  MICRO_ACTION
+  NONE
+}
+
+enum ActionProposalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  BLOCKED
+  EXECUTED
+}
+
+enum AuditAction {
+  AUTH_SIGN_IN
+  AUTH_SIGN_OUT
+  PROFILE_UPDATE
+  THREAD_CREATED
+  THREAD_STATUS_CHANGED
+  THREAD_RESOLVED
+  THREAD_DISMISSED
+  INTEGRATION_CONNECTED
+  INTEGRATION_DISCONNECTED
+  CONVERSATION_INGESTED
+  SOCIAL_ACTION_APPROVED
+  SOCIAL_ACTION_BLOCKED
+  REMINDER_SENT
+  INTERVENTION_CREATED
+  ACTION_PROPOSED
+  ACTION_BLOCKED
+  ACTION_APPROVED
+  ACTION_REJECTED
+  COMMITMENT_POSTPONED
+  SOURCE_INGESTED
+  COMMITMENT_DETECTED
+  MEMORY_CREATED
+  MEMORY_CORRECTED
+  MEMORY_DELETED
+  REMINDER_CREATED
+  CONSENT_GRANTED
+  CONSENT_WITHDRAWN
+  DATA_EXPORTED
+  ACCOUNT_DELETED
+  SOURCE_DATA_DELETED
+}
+
+model User {
+  id        String   @id @db.Uuid
+  email     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  profile            Profile?
+  people             Person[]
+  sources            ConversationSource[]
+  conversations      Conversation[]
+  messages           Message[]
+  threads            Thread[]
+  commitments        Commitment[]
+  commitmentEvidence CommitmentEvidence[]
+  threadEvents       ThreadEvent[]
+  resolutions        Resolution[]
+  reminders          Reminder[]
+  notifications      Notification[]
+  preference         UserPreference?
+  integrations       Integration[]
+  auditLogs          AuditLog[]
+  pushSubscriptions  PushSubscription[]
+  agentRuns          AgentRun[]
+  interventions      Intervention[]
+  actionProposals     ActionProposal[]
+  actionApprovals     ActionApproval[]
+  integrationAccounts IntegrationAccount[]
+  sourceMessages      SourceMessage[]
+  sourceConversations SourceConversation[]
+  memoryCandidates    MemoryCandidate[]
+  providerEvents      ProviderEvent[]
+  sourcePermissions   SourcePermission[]
+  consentEvents       ConsentEvent[]
+
+  @@map("users")
+}
+
+model Profile {
+  id                    String    @id @default(cuid())
+  userId                String    @unique @map("user_id") @db.Uuid
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  displayName           String?   @map("display_name")
+  timezone              String    @default("UTC")
+  onboardingCompletedAt DateTime? @map("onboarding_completed_at")
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  @@map("profiles")
+}
+
+model Person {
+  id             String   @id @default(cuid())
+  userId         String   @map("user_id") @db.Uuid
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name           String
+  aliases        String[] @default([])
+  notes          String?
+  howYouKnowThem String?  @map("how_you_know_them")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  threads     Thread[]
+  messages    Message[]
+  commitments Commitment[]
+
+  @@index([userId])
+  @@map("people")
+}
+
+model ConversationSource {
+  id           String                 @id @default(cuid())
+  userId       String                 @map("user_id") @db.Uuid
+  user         User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind         ConversationSourceKind
+  label        String
+  externalId   String?                @map("external_id")
+  lastSyncedAt DateTime?              @map("last_synced_at")
+  createdAt    DateTime               @default(now()) @map("created_at")
+  updatedAt    DateTime               @updatedAt @map("updated_at")
+
+  conversations Conversation[]
+  threads       Thread[]
+
+  @@index([userId])
+  @@map("conversation_sources")
+}
+
+model Conversation {
+  id         String             @id @default(cuid())
+  userId     String             @map("user_id") @db.Uuid
+  user       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceId   String             @map("source_id")
+  source     ConversationSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  title      String?
+  occurredAt DateTime?          @map("occurred_at")
+  ingestedAt DateTime           @default(now()) @map("ingested_at")
+  rawExcerpt String?            @map("raw_excerpt") @db.Text
+  createdAt  DateTime           @default(now()) @map("created_at")
+  updatedAt  DateTime           @updatedAt @map("updated_at")
+
+  messages Message[]
+  threads  Thread[]
+
+  @@index([userId, sourceId])
+  @@map("conversations")
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  userId         String       @map("user_id") @db.Uuid
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversationId String       @map("conversation_id")
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  personId       String?      @map("person_id")
+  person         Person?      @relation(fields: [personId], references: [id], onDelete: SetNull)
+  speaker        String
+  body           String       @db.Text
+  sentAt         DateTime?    @map("sent_at")
+  isFromUser     Boolean      @default(false) @map("is_from_user")
+  createdAt      DateTime     @default(now()) @map("created_at")
+
+  sourceThreads Thread[]              @relation("ThreadSourceMessage")
+  commitments   Commitment[]
+  evidenceItems CommitmentEvidence[]
+
+  @@index([userId, conversationId])
+  @@map("messages")
+}
+
+model Thread {
+  id                  String                 @id @default(cuid())
+  userId              String                 @map("user_id") @db.Uuid
+  user                User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personId            String?                @map("person_id")
+  person              Person?                @relation(fields: [personId], references: [id], onDelete: SetNull)
+  title               String
+  summary             String                 @db.Text
+  source              String
+  sourceId            String?                @map("source_id")
+  conversationSource  ConversationSource?    @relation(fields: [sourceId], references: [id], onDelete: SetNull)
+  conversationId      String?                @map("conversation_id")
+  conversation        Conversation?          @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+  sourceMessageId     String?                @map("source_message_id")
+  sourceMessage       Message?               @relation("ThreadSourceMessage", fields: [sourceMessageId], references: [id], onDelete: SetNull)
+  commitmentType      CommitmentType         @map("commitment_type")
+  owner               ThreadOwner
+  confidence          Float
+  status              ThreadStatus           @default(NEEDS_REVIEW)
+  createdAt           DateTime               @default(now()) @map("created_at")
+  updatedAt           DateTime               @updatedAt @map("updated_at")
+  lastEvidenceAt      DateTime               @map("last_evidence_at")
+  suggestedNextAction String                 @map("suggested_next_action") @db.Text
+  suggestedFollowUpAt DateTime?              @map("suggested_follow_up_at")
+  resolvedAt          DateTime?              @map("resolved_at")
+  resolutionReason    String?                @map("resolution_reason")
+  evidence            String                 @db.Text
+  context             String                 @db.Text
+  currentState        String                 @map("current_state") @db.Text
+  needsUserReview     Boolean                @default(true) @map("needs_user_review")
+  interpretedBy       String                 @default("heuristic") @map("interpreted_by")
+  postponementCount   Int                    @default(0) @map("postponement_count")
+  dueAt               DateTime?              @map("due_at")
+
+  commitments     Commitment[]
+  events          ThreadEvent[]
+  resolution      Resolution?
+  reminders       Reminder[]
+  agentRuns       AgentRun[]
+  interventions   Intervention[]
+  actionProposals ActionProposal[]
+
+  @@index([userId, status])
+  @@index([userId, personId])
+  @@index([userId, dueAt])
+  @@map("threads")
+}
+
+model Commitment {
+  id                  String         @id @default(cuid())
+  userId              String         @map("user_id") @db.Uuid
+  user                User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId            String         @map("thread_id")
+  thread              Thread         @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  personId            String?        @map("person_id")
+  person              Person?        @relation(fields: [personId], references: [id], onDelete: SetNull)
+  messageId           String?        @map("message_id")
+  message             Message?       @relation(fields: [messageId], references: [id], onDelete: SetNull)
+  type                CommitmentType
+  owner               ThreadOwner
+  text                String         @db.Text
+  normalizedText      String?        @map("normalized_text") @db.Text
+  dueHint             String?        @map("due_hint")
+  dueAt               DateTime?      @map("due_at")
+  deadlineConfidence  Float          @default(0) @map("deadline_confidence")
+  confidence          Float          @default(0)
+  isCommitment        Boolean        @default(true) @map("is_commitment")
+  createdAt           DateTime       @default(now()) @map("created_at")
+  updatedAt           DateTime       @updatedAt @map("updated_at")
+
+  evidenceItems CommitmentEvidence[]
+
+  @@index([userId, threadId])
+  @@map("commitments")
+}
+
+model CommitmentEvidence {
+  id           String      @id @default(cuid())
+  userId       String      @map("user_id") @db.Uuid
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  commitmentId String      @map("commitment_id")
+  commitment   Commitment  @relation(fields: [commitmentId], references: [id], onDelete: Cascade)
+  messageId    String?     @map("message_id")
+  message      Message?    @relation(fields: [messageId], references: [id], onDelete: SetNull)
+  exactText      String   @map("exact_text") @db.Text
+  sourceKind     String   @map("source_kind")
+  sourceProvider String?  @map("source_provider")
+  evidenceStart  Int?     @map("evidence_start")
+  evidenceEnd    Int?     @map("evidence_end")
+  confidence     Float    @default(0)
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@index([userId, commitmentId])
+  @@map("commitment_evidence")
+}
+
+model ThreadEvent {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id") @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId  String   @map("thread_id")
+  thread    Thread   @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  kind      String
+  body      String   @db.Text
+  metadata  Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId, threadId])
+  @@map("thread_events")
+}
+
+model Resolution {
+  id        String         @id @default(cuid())
+  userId    String         @map("user_id") @db.Uuid
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId  String         @unique @map("thread_id")
+  thread    Thread         @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  kind      ResolutionKind
+  note      String?        @db.Text
+  evidence  String?        @db.Text
+  createdAt DateTime       @default(now()) @map("created_at")
+
+  @@map("resolutions")
+}
+
+model Reminder {
+  id          String              @id @default(cuid())
+  userId      String              @map("user_id") @db.Uuid
+  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId    String              @map("thread_id")
+  thread      Thread              @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  remindAt    DateTime            @map("remind_at")
+  status      ReminderStatus      @default(SCHEDULED)
+  channel     NotificationChannel @default(IN_APP)
+  body        String              @db.Text
+  deliveredAt DateTime?           @map("delivered_at")
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
+
+  @@index([userId, remindAt, status])
+  @@index([status, remindAt])
+  @@map("reminders")
+}
+
+model Notification {
+  id        String              @id @default(cuid())
+  userId    String              @map("user_id") @db.Uuid
+  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channel   NotificationChannel
+  status    NotificationStatus  @default(PENDING)
+  title     String
+  body      String              @db.Text
+  href      String?
+  sentAt    DateTime?           @map("sent_at")
+  readAt    DateTime?           @map("read_at")
+  createdAt DateTime            @default(now()) @map("created_at")
+
+  @@index([userId, status])
+  @@map("notifications")
+}
+
+model UserPreference {
+  id                       String   @id @default(cuid())
+  userId                   String   @unique @map("user_id") @db.Uuid
+  user                     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emailNotifications       Boolean  @default(true) @map("email_notifications")
+  webPushEnabled           Boolean  @default(false) @map("web_push_enabled")
+  quietHoursStart          String?  @map("quiet_hours_start")
+  quietHoursEnd            String?  @map("quiet_hours_end")
+  followUpDays             Int      @default(3) @map("follow_up_days")
+  rememberReminders        Boolean  @default(true) @map("remember_reminders")
+  rememberCommitments      Boolean  @default(true) @map("remember_commitments")
+  rememberPossible         Boolean  @default(false) @map("remember_possible")
+  rememberDeadlines        Boolean  @default(true) @map("remember_deadlines")
+  rememberResolution       Boolean  @default(true) @map("remember_resolution")
+  rememberContext          Boolean  @default(false) @map("remember_context")
+  autoRememberClear        Boolean  @default(false) @map("auto_remember_clear")
+  conversationRetention    String   @default("EVIDENCE_ONLY") @map("conversation_retention")
+  createdAt                DateTime @default(now()) @map("created_at")
+  updatedAt                DateTime @updatedAt @map("updated_at")
+
+  @@map("user_preferences")
+}
+
+model Integration {
+  id          String            @id @default(cuid())
+  userId      String            @map("user_id") @db.Uuid
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind        IntegrationKind
+  status      IntegrationStatus @default(DISCONNECTED)
+  label       String
+  metadata    Json?
+  connectedAt DateTime?         @map("connected_at")
+  lastError   String?           @map("last_error") @db.Text
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+
+  @@unique([userId, kind])
+  @@map("integrations")
+}
+
+model AgentRun {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id") @db.Uuid
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId   String?  @map("thread_id")
+  thread     Thread?  @relation(fields: [threadId], references: [id], onDelete: SetNull)
+  kind       String
+  input      Json
+  output     Json
+  ok         Boolean  @default(true)
+  confidence Float    @default(0)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([userId, createdAt])
+  @@index([threadId])
+  @@map("agent_runs")
+}
+
+model Intervention {
+  id               String   @id @default(cuid())
+  userId           String   @map("user_id") @db.Uuid
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId         String   @map("thread_id")
+  thread           Thread   @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  reason           String   @db.Text
+  suggestedAction  String   @map("suggested_action") @db.Text
+  confidence       Float
+  requiresApproval Boolean  @default(true) @map("requires_approval")
+  status           String   @default("PENDING")
+  metadata         Json?
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  actionProposals ActionProposal[]
+
+  @@index([userId, threadId])
+  @@map("interventions")
+}
+
+model ActionProposal {
+  id               String               @id @default(cuid())
+  userId           String               @map("user_id") @db.Uuid
+  user             User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId         String               @map("thread_id")
+  thread           Thread               @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  interventionId   String?              @map("intervention_id")
+  intervention     Intervention?        @relation(fields: [interventionId], references: [id], onDelete: SetNull)
+  kind             ActionProposalKind
+  target           String
+  reason           String               @db.Text
+  risk             String
+  status           ActionProposalStatus @default(PENDING)
+  requiresApproval Boolean              @default(true) @map("requires_approval")
+  blockedReason    String?              @map("blocked_reason") @db.Text
+  metadata         Json?
+  createdAt        DateTime             @default(now()) @map("created_at")
+  updatedAt        DateTime             @updatedAt @map("updated_at")
+
+  approvals ActionApproval[]
+
+  @@index([userId, threadId, status])
+  @@map("action_proposals")
+}
+
+model ActionApproval {
+  id         String         @id @default(cuid())
+  userId     String         @map("user_id") @db.Uuid
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  proposalId String         @map("proposal_id")
+  proposal   ActionProposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  decision   String
+  note       String?        @db.Text
+  createdAt  DateTime       @default(now()) @map("created_at")
+
+  @@index([userId, proposalId])
+  @@map("action_approvals")
+}
+
+model AuditLog {
+  id        String      @id @default(cuid())
+  userId    String?     @map("user_id") @db.Uuid
+  user      User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    AuditAction
+  target    String?
+  metadata  Json?
+  ip        String?
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  @@index([userId, createdAt])
+  @@map("audit_logs")
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id") @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  userAgent String?  @map("user_agent")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@map("push_subscriptions")
+}
+
+enum MemoryCandidateStatus {
+  PENDING
+  REMEMBERED
+  IGNORED
+  AUTO_STORED
+}
+
+enum SourceProvider {
+  TELEGRAM
+  WHATSAPP
+  INSTAGRAM
+  EMAIL
+  CALENDAR
+  MEETINGS
+  MANUAL
+  VOICE
+  PASTE
+}
+
+model IntegrationAccount {
+  id                String            @id @default(cuid())
+  userId            String            @map("user_id") @db.Uuid
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider          SourceProvider
+  status            IntegrationStatus @default(NOT_CONNECTED)
+  externalAccountId String?           @map("external_account_id")
+  scopes            String[]          @default([])
+  tokenCipher       String?           @map("token_cipher") @db.Text
+  connectedAt       DateTime?         @map("connected_at")
+  lastSyncAt        DateTime?         @map("last_sync_at")
+  disconnectedAt    DateTime?         @map("disconnected_at")
+  linkCode          String?           @unique @map("link_code")
+  metadata          Json?
+  lastError         String?           @map("last_error") @db.Text
+  createdAt         DateTime          @default(now()) @map("created_at")
+  updatedAt         DateTime          @updatedAt @map("updated_at")
+
+  sourceMessages      SourceMessage[]
+  sourceConversations SourceConversation[]
+  memoryCandidates    MemoryCandidate[]
+  providerEvents      ProviderEvent[]
+
+  @@unique([userId, provider])
+  @@index([userId, status])
+  @@map("integration_accounts")
+}
+
+model SourcePermission {
+  id        String         @id @default(cuid())
+  userId    String         @map("user_id") @db.Uuid
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider  SourceProvider
+  granted   Boolean        @default(false)
+  scopes    String[]       @default([])
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+
+  @@unique([userId, provider])
+  @@map("source_permissions")
+}
+
+model SourceConversation {
+  id           String              @id @default(cuid())
+  userId       String              @map("user_id") @db.Uuid
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId    String?             @map("account_id")
+  account      IntegrationAccount? @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  provider     SourceProvider
+  externalId   String              @map("external_id")
+  title        String?
+  retained     Boolean             @default(false)
+  createdAt    DateTime            @default(now()) @map("created_at")
+  updatedAt    DateTime            @updatedAt @map("updated_at")
+
+  messages SourceMessage[]
+
+  @@unique([userId, provider, externalId])
+  @@index([userId, provider])
+  @@map("source_conversations")
+}
+
+model SourceMessage {
+  id                 String              @id @default(cuid())
+  userId             String              @map("user_id") @db.Uuid
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId          String?             @map("account_id")
+  account            IntegrationAccount? @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  conversationId     String?             @map("conversation_id")
+  conversation       SourceConversation? @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+  provider           SourceProvider
+  externalMessageId  String              @map("external_message_id")
+  sender             String
+  recipient          String?
+  sentAt             DateTime?           @map("sent_at")
+  content            String              @db.Text
+  attachmentsMetadata Json?              @map("attachments_metadata")
+  sourceUrl          String?             @map("source_url")
+  permissionsContext String?             @map("permissions_context")
+  isFromUser         Boolean             @default(true) @map("is_from_user")
+  retained           Boolean             @default(false)
+  createdAt          DateTime            @default(now()) @map("created_at")
+
+  candidates MemoryCandidate[]
+
+  @@unique([userId, provider, externalMessageId])
+  @@index([userId, sentAt])
+  @@map("source_messages")
+}
+
+model MemoryCandidate {
+  id                    String                @id @default(cuid())
+  userId                String                @map("user_id") @db.Uuid
+  user                  User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId             String?               @map("account_id")
+  account               IntegrationAccount?   @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  sourceMessageId       String?               @map("source_message_id")
+  sourceMessage         SourceMessage?        @relation(fields: [sourceMessageId], references: [id], onDelete: SetNull)
+  threadId              String?               @map("thread_id")
+  provider              SourceProvider
+  classification        String
+  confidence            Float
+  commitmentText        String                @map("commitment_text") @db.Text
+  normalizedCommitment  String                @map("normalized_commitment") @db.Text
+  actor                 String
+  targetPerson          String?               @map("target_person")
+  deadline              String?
+  dueAt                 DateTime?             @map("due_at")
+  deadlinePrecision     String?               @map("deadline_precision")
+  evidenceSpan          String                @map("evidence_span") @db.Text
+  reasoningSummary      String                @map("reasoning_summary") @db.Text
+  status                MemoryCandidateStatus @default(PENDING)
+  createdAt             DateTime              @default(now()) @map("created_at")
+  updatedAt             DateTime              @updatedAt @map("updated_at")
+
+  @@index([userId, status])
+  @@map("memory_candidates")
+}
+
+model ConsentEvent {
+  id            String    @id @default(cuid())
+  userId        String    @map("user_id") @db.Uuid
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  purpose       String
+  source        String
+  policyVersion String    @map("policy_version")
+  grantedAt     DateTime  @default(now()) @map("granted_at")
+  withdrawnAt   DateTime? @map("withdrawn_at")
+  metadata      Json?
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  @@index([userId, grantedAt])
+  @@map("consent_events")
+}
+
+model ProviderEvent {
+  id              String              @id @default(cuid())
+  userId          String?             @map("user_id") @db.Uuid
+  user            User?               @relation(fields: [userId], references: [id], onDelete: SetNull)
+  accountId       String?             @map("account_id")
+  account         IntegrationAccount? @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  provider        SourceProvider
+  externalEventId String              @map("external_event_id")
+  kind            String
+  processed       Boolean             @default(false)
+  createdAt       DateTime            @default(now()) @map("created_at")
+
+  @@unique([provider, externalEventId])
+  @@index([provider, createdAt])
+  @@map("provider_events")
+}

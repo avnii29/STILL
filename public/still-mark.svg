@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Still">
+  <circle cx="100" cy="100" r="100" fill="#f4efe6"/>
+  <circle cx="100" cy="100" r="86" fill="none" stroke="#4a9aa3" stroke-width="5"/>
+  <circle cx="100" cy="100" r="76" fill="none" stroke="#4a9aa3" stroke-width="2.4"/>
+  <circle cx="100" cy="118" r="18" fill="#e39b45"/>
+  <path d="M100 102 C98 88 86 78 74 70 C86 74 96 82 100 94" fill="none" stroke="#4a9aa3" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M100 94 C104 78 122 70 136 66 C124 74 110 82 104 96" fill="none" stroke="#4a9aa3" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M104 90 C114 78 126 80 132 84 C122 84 112 88 108 96" fill="none" stroke="#4a9aa3" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M78 68 C74 60 78 52 86 50 C86 58 84 64 80 70" fill="none" stroke="#4a9aa3" stroke-width="3" stroke-linecap="round"/>
+  <path d="M90 62 C88 52 94 44 102 44 C102 52 96 60 92 66" fill="none" stroke="#4a9aa3" stroke-width="3" stroke-linecap="round"/>
+  <path d="M128 64 C130 54 140 50 146 54 C140 60 134 64 130 70" fill="none" stroke="#4a9aa3" stroke-width="3" stroke-linecap="round"/>
+  <path id="arc" d="M48 118 A52 52 0 0 0 152 118" fill="none"/>
+  <text fill="#4a9aa3" font-size="11.5" font-family="Georgia, 'Times New Roman', serif" letter-spacing="0.6">
+    <textPath href="#arc" startOffset="50%" text-anchor="middle">The things that still matter</textPath>
+  </text>
+</svg>

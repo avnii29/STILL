@@ -1,0 +1,29 @@
+{
+  "name": "Still",
+  "short_name": "Still",
+  "description": "The things that still matter.",
+  "start_url": "/home",
+  "display": "standalone",
+  "background_color": "#f3eee6",
+  "theme_color": "#f3eee6",
+  "icons": [
+    {
+      "src": "/still-logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/still-logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/still-logo-tight.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

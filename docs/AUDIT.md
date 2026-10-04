@@ -26,9 +26,9 @@ Tests cover wording rules, the in-memory loop, guest parsing, retention, and aut
 | --- | --- | --- |
 | Name STILL, tagline “the things that still matter” | REAL | `README.md`. Earlier names Threads and NOMA are gone. |
 | Not a chatbot, todo, calendar, CRM, or dashboard | REAL | Home copy and empty states. No productivity score. |
-| Guest paste, evidence shown, nothing stored | REAL | `src/components/guest/guest-workspace.tsx` → `POST /api/extract` returns `persisted: false`. IndexedDB in `src/lib/guest/store.ts`. |
+| Guest paste, evidence shown, nothing stored | REAL (API proven live, Stage 1) | `src/components/guest/guest-workspace.tsx` → `POST /api/extract` returns `persisted: false`. IndexedDB in `src/lib/guest/store.ts`. Live: the Maya sentence returned `persisted: false`. Browser/IndexedDB half not walked. |
 | Signed-in type / paste / speak, then Remember | REAL | `src/components/capture-studio.tsx` → `POST /api/detect` then `POST /api/remember`. Speech is browser `SpeechRecognition`. Audio is not stored. |
-| AI extraction of what / who / when / evidence | PARTIAL | `src/lib/agents/extract.ts` and `src/lib/sources/detect.ts` are heuristics and match her examples in tests. A model is optional and off by default. See below. |
+| AI extraction of what / who / when / evidence | PARTIAL | `src/lib/agents/extract.ts` and `src/lib/sources/detect.ts` are heuristics. A model is optional and off by default. See below. **Stage 1, proven live:** the exact Maya sentence was returned as `is_commitment: false` (confidence 0.12) because `get` was missing from the `ACTION` list, and "Tuesday evening" was stored as 09:00. Both fixed in `extract.ts` and covered by a test; live re-run returns `is_commitment: true`, 0.88, Maya, "tuesday evening", 18:00 IST. Title is still `Yep, I'll get revised dataset to by`. |
 | User confirms or corrects before memory | REAL | Remember / not-a-commitment in capture. Source candidates: `src/components/candidate-card.tsx`, Telegram buttons in `src/app/api/integrations/telegram/webhook/route.ts`. |
 | Store commitment, person, deadline, evidence, source | REAL | `ingestConversation` in `src/lib/threads/ingest.ts`. Source confirm: `createMemoryFromCandidate` in `src/lib/sources/pipeline.ts`. |
 | Evidence drawer (“why do you remember this?”) | REAL | `src/components/evidence-drawer.tsx` on `src/app/(still)/app/threads/[id]/page.tsx`. |
@@ -38,7 +38,7 @@ Tests cover wording rules, the in-memory loop, guest parsing, retention, and aut
 | Resolution from later wording | PARTIAL | `runResolutionAgent` and `maybeResolveFromMessage`. High confidence (≥ 0.9) can mark resolved without a click. |
 | Deadline change backs off | PARTIAL | `applyDeadlineChange` in `src/lib/ingestion/signals.ts` on the source path. Capture ingest does not run that story by itself. |
 | Schedule a reminder | REAL | `scheduleRemindAt` in `src/lib/agents/extract.ts`. Row created when `dueAt` exists. |
-| Reminder actually fires | PARTIAL | `processDueReminders` in `src/lib/threads/reminders.ts`, route `src/app/api/cron/reminders/route.ts`, schedule in `vercel.json`. Nothing polls inside the app. Local use is a curl. |
+| Reminder actually fires | PARTIAL | `processDueReminders` in `src/lib/threads/reminders.ts`, route `src/app/api/cron/reminders/route.ts`, schedule in `vercel.json`. Nothing polls inside the app. Local use is a curl. **Stage 1, proven live:** `GET /api/cron/reminders` against the Supabase DB returned `{"due":0,"sent":0}` (route, auth rule, and query run). No reminder was delivered because no thread could be created without the demo user. |
 | In-app notice | REAL | `createNotification` in `src/lib/notifications/dispatch.ts`. |
 | Web push | PARTIAL | `src/lib/notifications/push.ts`, `POST /api/push/subscribe`, `public/sw.js`. Needs VAPID, opt-in, and the cron. |
 | Email notice | PARTIAL | Resend or log in `src/lib/notifications/email.ts`. SMTP does not send. |
@@ -60,8 +60,8 @@ Tests cover wording rules, the in-memory loop, guest parsing, retention, and aut
 | Replayable Maya demo | PARTIAL | `src/lib/demo/scenario.ts` and `/demo` run `runStillLoop` on fixed text. It is not her connected-account data. |
 | Guest usable without an account | REAL | `/still`. Migrate via `POST /api/guest/migrate`. |
 | PWA install | PARTIAL | `public/manifest.webmanifest`, service worker, offline page. Not verified as an installed app. |
-| RLS so users cannot read each other | PARTIAL | `prisma/sql/rls.sql`. The server uses `DATABASE_URL` and bypasses RLS. Whether production applied the SQL is unproven. |
-| Demo login `abc@gmail.com` / `abc123` | PARTIAL | Filled from `src/components/auth-form.tsx`. Account created only by `scripts/ensure-demo-account.ts` against a real Supabase project. |
+| RLS so users cannot read each other | PARTIAL (applied live, Stage 1) | `prisma/sql/rls.sql` applied to the Supabase "Still" database with no errors: 30 of 30 public tables have RLS on, 30 policies. The server uses `DATABASE_URL` and bypasses RLS. Cross-user read isolation through a browser client was not tested. |
+| Demo login `abc@gmail.com` / `abc123` | PARTIAL (blocked, Stage 1) | Filled from `src/components/auth-form.tsx`. The user does not exist. Supabase public signup rejects it with `email_address_invalid`; the script's admin path needs `SUPABASE_SERVICE_ROLE_KEY`, which is empty. `npm run demo:account` also fails first because it requires a missing `.env.local`. |
 | Privacy, terms, cookies, no tracking | REAL | `src/app/legal/*`, `docs/TRUST-AUDIT.md`, `docs/data-inventory.json`. No analytics SDK. |
 | Do not polish the landing page in this build | REAL | This stage did not touch it. |
 

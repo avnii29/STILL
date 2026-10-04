@@ -25,7 +25,7 @@ const EXPLICIT =
   /\b(i('ll| will)|i am going to|i'm going to|i told \w+ i('d| would)|i promised)\b/i;
 
 const ACTION =
-  /\b(send|share|forward|pay|transfer|call|text|message|introduce|handle|do|bring|drop|email|start|finish|apply|write|complete|review|submit|deliver|ship|fix|update)\b/i;
+  /\b(send|share|forward|pay|transfer|call|text|message|introduce|handle|do|bring|drop|email|start|finish|apply|write|complete|review|submit|deliver|ship|fix|update|get)\b/i;
 
 const NAME_STOP = new Set(
   [
@@ -126,6 +126,12 @@ export function extractDeadline(text: string, now = new Date()): DeadlineHit | n
     const current = now.getDay();
     let days = (target - current + 7) % 7;
     if (days === 0) days = 7;
+    const part = lower.match(new RegExp(`\\b${weekday[1]}\\s+(morning|afternoon|evening|night)\\b`));
+    if (part?.[1]) {
+      const hours = { morning: 9, afternoon: 14, evening: 18, night: 20 } as const;
+      const day = part[1] as keyof typeof hours;
+      return { phrase: `${weekday[1]} ${day}`, confidence: 0.8, dueAt: at(days, hours[day]) };
+    }
     return { phrase: weekday[1], confidence: 0.62, dueAt: at(days, 9) };
   }
   return null;

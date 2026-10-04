@@ -72,6 +72,17 @@ describe("commitment extraction", () => {
     expect(result.deadline_confidence).toBeGreaterThan(0.7);
   });
 
+  it("treats 'get X to Maya by Tuesday evening' as a commitment with an evening deadline", () => {
+    const result = extractCommitment({
+      text: "Yep, I'll get the revised dataset to Maya by Tuesday evening.",
+      now,
+    });
+    expect(result.is_commitment).toBe(true);
+    expect(result.person).toBe("Maya");
+    expect(result.deadline).toBe("tuesday evening");
+    expect(new Date(result.due_at!).getHours()).toBe(18);
+  });
+
   it("does not treat You as a person", () => {
     expect(extractPerson("I'll send you the PDF tonight.")).toBeNull();
   });

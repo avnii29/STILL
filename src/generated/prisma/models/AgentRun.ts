@@ -41,6 +41,7 @@ export type AgentRunMinAggregateOutputType = {
   kind: string | null
   ok: boolean | null
   confidence: number | null
+  provider: string | null
   createdAt: Date | null
 }
 
@@ -51,6 +52,7 @@ export type AgentRunMaxAggregateOutputType = {
   kind: string | null
   ok: boolean | null
   confidence: number | null
+  provider: string | null
   createdAt: Date | null
 }
 
@@ -63,6 +65,7 @@ export type AgentRunCountAggregateOutputType = {
   output: number
   ok: number
   confidence: number
+  provider: number
   createdAt: number
   _all: number
 }
@@ -83,6 +86,7 @@ export type AgentRunMinAggregateInputType = {
   kind?: true
   ok?: true
   confidence?: true
+  provider?: true
   createdAt?: true
 }
 
@@ -93,6 +97,7 @@ export type AgentRunMaxAggregateInputType = {
   kind?: true
   ok?: true
   confidence?: true
+  provider?: true
   createdAt?: true
 }
 
@@ -105,6 +110,7 @@ export type AgentRunCountAggregateInputType = {
   output?: true
   ok?: true
   confidence?: true
+  provider?: true
   createdAt?: true
   _all?: true
 }
@@ -204,6 +210,7 @@ export type AgentRunGroupByOutputType = {
   output: runtime.JsonValue
   ok: boolean
   confidence: number
+  provider: string
   createdAt: Date
   _count: AgentRunCountAggregateOutputType | null
   _avg: AgentRunAvgAggregateOutputType | null
@@ -239,6 +246,7 @@ export type AgentRunWhereInput = {
   output?: Prisma.JsonFilter<"AgentRun">
   ok?: Prisma.BoolFilter<"AgentRun"> | boolean
   confidence?: Prisma.FloatFilter<"AgentRun"> | number
+  provider?: Prisma.StringFilter<"AgentRun"> | string
   createdAt?: Prisma.DateTimeFilter<"AgentRun"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   thread?: Prisma.XOR<Prisma.ThreadNullableScalarRelationFilter, Prisma.ThreadWhereInput> | null
@@ -253,6 +261,7 @@ export type AgentRunOrderByWithRelationInput = {
   output?: Prisma.SortOrder
   ok?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   thread?: Prisma.ThreadOrderByWithRelationInput
@@ -270,6 +279,7 @@ export type AgentRunWhereUniqueInput = Prisma.AtLeast<{
   output?: Prisma.JsonFilter<"AgentRun">
   ok?: Prisma.BoolFilter<"AgentRun"> | boolean
   confidence?: Prisma.FloatFilter<"AgentRun"> | number
+  provider?: Prisma.StringFilter<"AgentRun"> | string
   createdAt?: Prisma.DateTimeFilter<"AgentRun"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   thread?: Prisma.XOR<Prisma.ThreadNullableScalarRelationFilter, Prisma.ThreadWhereInput> | null
@@ -284,6 +294,7 @@ export type AgentRunOrderByWithAggregationInput = {
   output?: Prisma.SortOrder
   ok?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.AgentRunCountOrderByAggregateInput
   _avg?: Prisma.AgentRunAvgOrderByAggregateInput
@@ -304,6 +315,7 @@ export type AgentRunScalarWhereWithAggregatesInput = {
   output?: Prisma.JsonWithAggregatesFilter<"AgentRun">
   ok?: Prisma.BoolWithAggregatesFilter<"AgentRun"> | boolean
   confidence?: Prisma.FloatWithAggregatesFilter<"AgentRun"> | number
+  provider?: Prisma.StringWithAggregatesFilter<"AgentRun"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AgentRun"> | Date | string
 }
 
@@ -314,6 +326,7 @@ export type AgentRunCreateInput = {
   output: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: boolean
   confidence?: number
+  provider?: string
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutAgentRunsInput
   thread?: Prisma.ThreadCreateNestedOneWithoutAgentRunsInput
@@ -328,6 +341,7 @@ export type AgentRunUncheckedCreateInput = {
   output: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: boolean
   confidence?: number
+  provider?: string
   createdAt?: Date | string
 }
 
@@ -338,6 +352,7 @@ export type AgentRunUpdateInput = {
   output?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: Prisma.BoolFieldUpdateOperationsInput | boolean
   confidence?: Prisma.FloatFieldUpdateOperationsInput | number
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutAgentRunsNestedInput
   thread?: Prisma.ThreadUpdateOneWithoutAgentRunsNestedInput
@@ -352,6 +367,7 @@ export type AgentRunUncheckedUpdateInput = {
   output?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: Prisma.BoolFieldUpdateOperationsInput | boolean
   confidence?: Prisma.FloatFieldUpdateOperationsInput | number
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -364,6 +380,7 @@ export type AgentRunCreateManyInput = {
   output: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: boolean
   confidence?: number
+  provider?: string
   createdAt?: Date | string
 }
 
@@ -374,6 +391,7 @@ export type AgentRunUpdateManyMutationInput = {
   output?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: Prisma.BoolFieldUpdateOperationsInput | boolean
   confidence?: Prisma.FloatFieldUpdateOperationsInput | number
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -386,6 +404,7 @@ export type AgentRunUncheckedUpdateManyInput = {
   output?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: Prisma.BoolFieldUpdateOperationsInput | boolean
   confidence?: Prisma.FloatFieldUpdateOperationsInput | number
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -408,6 +427,7 @@ export type AgentRunCountOrderByAggregateInput = {
   output?: Prisma.SortOrder
   ok?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -422,6 +442,7 @@ export type AgentRunMaxOrderByAggregateInput = {
   kind?: Prisma.SortOrder
   ok?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -432,6 +453,7 @@ export type AgentRunMinOrderByAggregateInput = {
   kind?: Prisma.SortOrder
   ok?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -530,6 +552,7 @@ export type AgentRunCreateWithoutUserInput = {
   output: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: boolean
   confidence?: number
+  provider?: string
   createdAt?: Date | string
   thread?: Prisma.ThreadCreateNestedOneWithoutAgentRunsInput
 }
@@ -542,6 +565,7 @@ export type AgentRunUncheckedCreateWithoutUserInput = {
   output: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: boolean
   confidence?: number
+  provider?: string
   createdAt?: Date | string
 }
 
@@ -583,6 +607,7 @@ export type AgentRunScalarWhereInput = {
   output?: Prisma.JsonFilter<"AgentRun">
   ok?: Prisma.BoolFilter<"AgentRun"> | boolean
   confidence?: Prisma.FloatFilter<"AgentRun"> | number
+  provider?: Prisma.StringFilter<"AgentRun"> | string
   createdAt?: Prisma.DateTimeFilter<"AgentRun"> | Date | string
 }
 
@@ -593,6 +618,7 @@ export type AgentRunCreateWithoutThreadInput = {
   output: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: boolean
   confidence?: number
+  provider?: string
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutAgentRunsInput
 }
@@ -605,6 +631,7 @@ export type AgentRunUncheckedCreateWithoutThreadInput = {
   output: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: boolean
   confidence?: number
+  provider?: string
   createdAt?: Date | string
 }
 
@@ -642,6 +669,7 @@ export type AgentRunCreateManyUserInput = {
   output: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: boolean
   confidence?: number
+  provider?: string
   createdAt?: Date | string
 }
 
@@ -652,6 +680,7 @@ export type AgentRunUpdateWithoutUserInput = {
   output?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: Prisma.BoolFieldUpdateOperationsInput | boolean
   confidence?: Prisma.FloatFieldUpdateOperationsInput | number
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   thread?: Prisma.ThreadUpdateOneWithoutAgentRunsNestedInput
 }
@@ -664,6 +693,7 @@ export type AgentRunUncheckedUpdateWithoutUserInput = {
   output?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: Prisma.BoolFieldUpdateOperationsInput | boolean
   confidence?: Prisma.FloatFieldUpdateOperationsInput | number
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -675,6 +705,7 @@ export type AgentRunUncheckedUpdateManyWithoutUserInput = {
   output?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: Prisma.BoolFieldUpdateOperationsInput | boolean
   confidence?: Prisma.FloatFieldUpdateOperationsInput | number
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -686,6 +717,7 @@ export type AgentRunCreateManyThreadInput = {
   output: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: boolean
   confidence?: number
+  provider?: string
   createdAt?: Date | string
 }
 
@@ -696,6 +728,7 @@ export type AgentRunUpdateWithoutThreadInput = {
   output?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: Prisma.BoolFieldUpdateOperationsInput | boolean
   confidence?: Prisma.FloatFieldUpdateOperationsInput | number
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutAgentRunsNestedInput
 }
@@ -708,6 +741,7 @@ export type AgentRunUncheckedUpdateWithoutThreadInput = {
   output?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: Prisma.BoolFieldUpdateOperationsInput | boolean
   confidence?: Prisma.FloatFieldUpdateOperationsInput | number
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -719,6 +753,7 @@ export type AgentRunUncheckedUpdateManyWithoutThreadInput = {
   output?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   ok?: Prisma.BoolFieldUpdateOperationsInput | boolean
   confidence?: Prisma.FloatFieldUpdateOperationsInput | number
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -733,6 +768,7 @@ export type AgentRunSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   output?: boolean
   ok?: boolean
   confidence?: boolean
+  provider?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   thread?: boolean | Prisma.AgentRun$threadArgs<ExtArgs>
@@ -747,6 +783,7 @@ export type AgentRunSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   output?: boolean
   ok?: boolean
   confidence?: boolean
+  provider?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   thread?: boolean | Prisma.AgentRun$threadArgs<ExtArgs>
@@ -761,6 +798,7 @@ export type AgentRunSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   output?: boolean
   ok?: boolean
   confidence?: boolean
+  provider?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   thread?: boolean | Prisma.AgentRun$threadArgs<ExtArgs>
@@ -775,10 +813,11 @@ export type AgentRunSelectScalar = {
   output?: boolean
   ok?: boolean
   confidence?: boolean
+  provider?: boolean
   createdAt?: boolean
 }
 
-export type AgentRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "threadId" | "kind" | "input" | "output" | "ok" | "confidence" | "createdAt", ExtArgs["result"]["agentRun"]>
+export type AgentRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "threadId" | "kind" | "input" | "output" | "ok" | "confidence" | "provider" | "createdAt", ExtArgs["result"]["agentRun"]>
 export type AgentRunInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   thread?: boolean | Prisma.AgentRun$threadArgs<ExtArgs>
@@ -807,6 +846,7 @@ export type $AgentRunPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     output: runtime.JsonValue
     ok: boolean
     confidence: number
+    provider: string
     createdAt: Date
   }, ExtArgs["result"]["agentRun"]>
   composites: {}
@@ -1241,6 +1281,7 @@ export interface AgentRunFieldRefs {
   readonly output: Prisma.FieldRef<"AgentRun", 'Json'>
   readonly ok: Prisma.FieldRef<"AgentRun", 'Boolean'>
   readonly confidence: Prisma.FieldRef<"AgentRun", 'Float'>
+  readonly provider: Prisma.FieldRef<"AgentRun", 'String'>
   readonly createdAt: Prisma.FieldRef<"AgentRun", 'DateTime'>
 }
     

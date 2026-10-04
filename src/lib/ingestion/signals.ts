@@ -4,6 +4,7 @@ import type { Prisma } from "@/generated/prisma/client";
 import { writeAuditLog } from "@/lib/audit";
 import type { AppUser } from "@/lib/auth";
 import { scheduleRemindAt } from "@/lib/agents/extract";
+import { zonedDate } from "@/lib/sources/temporal";
 import { createNotification } from "@/lib/notifications/dispatch";
 import { getPrisma } from "@/lib/prisma";
 import { bestThreadMatch } from "@/lib/sources/thread-match";
@@ -20,10 +21,6 @@ const OPEN = [
   "POSTPONED",
   "CHANGED",
 ] as const;
-
-function dayLabel(date: Date, timeZone: string) {
-  return new Intl.DateTimeFormat("en-US", { weekday: "long", timeZone }).format(date);
-}
 
 function detectionFrom(content: string, person: string | null, dueAt: Date | null): CommitmentDetection {
   return {
@@ -49,6 +46,8 @@ export async function applyDeadlineChange(input: {
   content: string;
   provider: string;
   now?: Date;
+  threadId?: string;
+  nextStatus?: "NEEDS_REVIEW" | "OPEN" | "CHANGED";
 }) {
   const prisma = getPrisma();
   const preference = await prisma.userPreference.findUnique({ where: { userId: input.user.id } });
@@ -63,13 +62,20 @@ export async function applyDeadlineChange(input: {
   if (!temporal?.dueAt) {
     return { changed: false, threadId: null as string | null, reply: null };
   }
+  const relaxed = relaxNoRush(input.content, temporal.dueAt, temporal.precision, input.user.timezone);
+  temporal.dueAt = relaxed;
 
-  const open = await prisma.thread.findMany({
-    where: { userId: input.user.id, status: { in: [...OPEN] } },
-    include: { person: true },
-    take: 20,
-    orderBy: { updatedAt: "desc" },
-  });
+  const open = input.threadId
+    ? await prisma.thread.findMany({
+        where: { id: input.threadId, userId: input.user.id, status: { in: [...OPEN] } },
+        include: { person: true },
+      })
+    : await prisma.thread.findMany({
+        where: { userId: input.user.id, status: { in: [...OPEN] } },
+        include: { person: true },
+        take: 20,
+        orderBy: { updatedAt: "desc" },
+      });
   const detection = detectionFrom(input.content, null, temporal.dueAt);
   const ranked = bestThreadMatch(
     open.map((thread) => ({
@@ -80,38 +86,48 @@ export async function applyDeadlineChange(input: {
     })),
     detection,
   );
+  const targeted = input.threadId ? open.find((thread) => thread.id === input.threadId) ?? null : null;
   const only = open.filter((thread) => thread.dueAt);
   const chosen =
-    ranked?.certainty === "STRONG"
+    targeted ??
+    (ranked?.certainty === "STRONG"
       ? open.find((thread) => thread.id === ranked.thread.id) ?? null
       : only.length === 1
         ? only[0]
-        : null;
+        : null);
   if (!chosen) {
     return { changed: false, threadId: ranked?.thread.id ?? null, reply: null };
   }
 
   const previous = chosen.dueAt;
-  const from = previous ? dayLabel(previous, input.user.timezone) : "unspecified";
-  const to = dayLabel(temporal.dueAt, input.user.timezone);
+  if (previous && Math.abs(previous.getTime() - temporal.dueAt.getTime()) < 60_000) {
+    return { changed: false, threadId: chosen.id, reply: null };
+  }
+  const from = previous ? whenLabel(previous, input.user.timezone) : "unspecified";
+  const to = whenLabel(temporal.dueAt, input.user.timezone);
   const quote = input.content.replace(/\s+/g, " ").trim().slice(0, 280);
-  await prisma.reminder.updateMany({
+  const noRush = /\bno rush\b|\bno hurry\b/i.test(input.content);
+  const remindAt = scheduleRemindAt(temporal.dueAt, input.now);
+  const scheduled = await prisma.reminder.findFirst({
     where: { threadId: chosen.id, status: "SCHEDULED" },
-    data: { status: "CANCELLED" },
+    orderBy: { remindAt: "asc" },
   });
-  await prisma.intervention.updateMany({
-    where: { threadId: chosen.id, status: "PENDING" },
-    data: { status: "CANCELLED" },
-  });
-  await prisma.reminder.create({
-    data: {
-      userId: input.user.id,
-      threadId: chosen.id,
-      remindAt: scheduleRemindAt(temporal.dueAt, input.now),
-      channel: "IN_APP",
-      body: `You said you'd ${chosen.title}. The time moved.`,
-    },
-  });
+  if (scheduled) {
+    await prisma.reminder.update({
+      where: { id: scheduled.id },
+      data: { remindAt, body: `You said you'd ${chosen.title}. The time moved.` },
+    });
+  } else {
+    await prisma.reminder.create({
+      data: {
+        userId: input.user.id,
+        threadId: chosen.id,
+        remindAt,
+        channel: "IN_APP",
+        body: `You said you'd ${chosen.title}. The time moved.`,
+      },
+    });
+  }
   await prisma.commitment.updateMany({
     where: { threadId: chosen.id },
     data: { dueAt: temporal.dueAt, dueHint: to },
@@ -121,8 +137,8 @@ export async function applyDeadlineChange(input: {
     data: {
       dueAt: temporal.dueAt,
       suggestedFollowUpAt: temporal.dueAt,
-      status: "CHANGED",
-      currentState: `${from} → ${to}`,
+      status: input.nextStatus ?? "CHANGED",
+      currentState: noRush ? "You don't need to rush this anymore." : `${from} → ${to}`,
       events: {
         create: {
           userId: input.user.id,
@@ -154,8 +170,30 @@ export async function applyDeadlineChange(input: {
     changed: true,
     threadId: chosen.id,
     reply: {
-      text: `Deadline changed.\n${from} → ${to}`,
+      text: noRush ? `You don't need to rush this anymore.\n${from} → ${to}` : `Deadline changed.\n${from} → ${to}`,
       buttons: [{ label: "Open thread", data: `open:${chosen.id}` }],
     },
   };
+}
+
+function whenLabel(date: Date, timeZone: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone,
+  }).format(date);
+}
+
+function relaxNoRush(content: string, dueAt: Date, precision: string, timeZone: string) {
+  if (!/\bno rush\b|\bno hurry\b/i.test(content) || precision !== "DAY") return dueAt;
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(dueAt);
+  const read = (type: string) => Number(parts.find((part) => part.type === type)?.value ?? 0);
+  return zonedDate(timeZone, read("year"), read("month"), read("day"), 21, 0);
 }

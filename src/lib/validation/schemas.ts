@@ -58,6 +58,8 @@ export const ingestPayloadSchema = z.object({
 export const rememberPayloadSchema = z.object({
   personName: z.string().trim().max(80).optional(),
   note: z.string().trim().min(8).max(4000),
+  context: z.string().trim().max(4000).optional(),
+  threadId: z.string().trim().min(1).max(40).optional(),
   isSelf: z.boolean().optional(),
   sourceKind: z.enum(["TEXT", "VOICE", "PASTE", "MANUAL"]).optional(),
 });
@@ -103,6 +105,7 @@ export const threadActionSchema = z.object({
     "postpone",
     "approve_proposal",
     "reject_proposal",
+    "edit_proposal",
     "delete",
   ]),
   resolutionKind: resolutionKindSchema.optional(),

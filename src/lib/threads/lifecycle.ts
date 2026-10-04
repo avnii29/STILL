@@ -46,6 +46,28 @@ export function evaluatePostponement(currentCount: number): PostponeAdvice {
   };
 }
 
+export type DayEvent = {
+  id: string;
+  title: string;
+  startsAt: string;
+  endsAt: string;
+  calendarId: string;
+  source: "google" | "local";
+  priority?: string;
+};
+
+export type ProposedMove = {
+  eventId: string;
+  calendarId: string;
+  title: string;
+  source: "google" | "local";
+  priority?: string;
+  fromStart: string;
+  fromEnd: string;
+  start: string;
+  end: string;
+};
+
 export type InterventionAdvice = {
   intervene: boolean;
   reason: string;
@@ -53,6 +75,7 @@ export type InterventionAdvice = {
   confidence: number;
   requiresApproval: true;
   status: "APPROACHING" | "POSTPONED" | "OPEN" | "QUIET";
+  proposedMove: ProposedMove | null;
 };
 
 export function evaluateIntervention(input: {
@@ -62,11 +85,29 @@ export function evaluateIntervention(input: {
   hasConflict: boolean;
   latestEvidence: string;
   now?: Date;
+  events?: DayEvent[];
 }): InterventionAdvice {
   const now = input.now ?? new Date();
   const hours = input.dueAt ? (input.dueAt.getTime() - now.getTime()) / 3_600_000 : null;
   const approaching = hours !== null && hours > 0 && hours <= 24;
   const overdue = hours !== null && hours <= 0;
+  const sameDay = (input.events ?? []).filter((event) => sameLocalDay(event.startsAt, input.dueAt ?? now));
+  const proposedMove =
+    input.postponementCount >= 1 ? nearbyMove(sameDay, input.dueAt) : null;
+
+  if (proposedMove && (input.postponementCount === 1 || input.postponementCount >= 2)) {
+    const from = new Date(proposedMove.fromStart);
+    const to = new Date(proposedMove.start);
+    return {
+      intervene: true,
+      reason: `${proposedMove.title} is on the same day. Move it from ${clock(from)} to ${clock(to)} instead of pushing the commitment.`,
+      suggestedAction: `Move ${proposedMove.title} to ${clock(to)}. Nothing moves until you approve.`,
+      confidence: 0.74,
+      requiresApproval: true,
+      status: "POSTPONED",
+      proposedMove,
+    };
+  }
 
   if (input.postponementCount >= 2) {
     return {
@@ -76,6 +117,7 @@ export function evaluateIntervention(input: {
       confidence: 0.74,
       requiresApproval: true,
       status: "POSTPONED",
+      proposedMove: null,
     };
   }
 
@@ -97,6 +139,7 @@ export function evaluateIntervention(input: {
       confidence: 0.7,
       requiresApproval: true,
       status: "APPROACHING",
+      proposedMove: null,
     };
   }
 
@@ -107,7 +150,64 @@ export function evaluateIntervention(input: {
     confidence: 0.4,
     requiresApproval: true,
     status: "QUIET",
+    proposedMove: null,
   };
+}
+
+function sameLocalDay(iso: string, day: Date) {
+  const value = new Date(iso);
+  if (Number.isNaN(value.getTime())) return false;
+  return (
+    value.getFullYear() === day.getFullYear() &&
+    value.getMonth() === day.getMonth() &&
+    value.getDate() === day.getDate()
+  );
+}
+
+function clock(value: Date) {
+  return value.toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" });
+}
+
+function nearbyMove(events: DayEvent[], dueAt: Date | null): ProposedMove | null {
+  const candidates = events
+    .filter((event) => {
+      const start = Date.parse(event.startsAt);
+      const end = Date.parse(event.endsAt);
+      return Number.isFinite(start) && Number.isFinite(end) && end > start;
+    })
+    .sort((left, right) => Date.parse(left.startsAt) - Date.parse(right.startsAt));
+  const preferred = dueAt
+    ? candidates.filter((event) => Date.parse(event.startsAt) < dueAt.getTime())
+    : candidates;
+  const event = (preferred.length > 0 ? preferred : candidates)[0];
+  if (!event) return null;
+  const start = new Date(event.startsAt);
+  const end = new Date(event.endsAt);
+  const duration = end.getTime() - start.getTime();
+  for (const minutes of [60, 90, 120, 180]) {
+    const nextStart = new Date(start.getTime() + minutes * 60_000);
+    const nextEnd = new Date(nextStart.getTime() + duration);
+    if (!sameLocalDay(nextStart.toISOString(), start)) continue;
+    const clash = candidates.some((other) => {
+      if (other.id === event.id) return false;
+      const otherStart = Date.parse(other.startsAt);
+      const otherEnd = Date.parse(other.endsAt);
+      return nextStart.getTime() < otherEnd && nextEnd.getTime() > otherStart;
+    });
+    if (clash) continue;
+    return {
+      eventId: event.id,
+      calendarId: event.calendarId,
+      title: event.title,
+      source: event.source,
+      priority: event.priority,
+      fromStart: event.startsAt,
+      fromEnd: event.endsAt,
+      start: nextStart.toISOString(),
+      end: nextEnd.toISOString(),
+    };
+  }
+  return null;
 }
 
 export function redTeamExternalAction(input: {
@@ -115,12 +215,16 @@ export function redTeamExternalAction(input: {
   evidence: string;
   stillActive: boolean;
   target?: string;
+  eventTitle?: string;
+  priority?: string;
 }) {
   const target = `${input.proposal} ${input.target ?? ""}`;
   return runRedTeamAgent({
     proposal: target,
     evidence: input.evidence,
     stillActive: input.stillActive,
+    eventTitle: input.eventTitle,
+    priority: input.priority,
   }).output;
 }
 

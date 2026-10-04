@@ -11,6 +11,7 @@ export function createAnthropicModel(opts: {
     async completeJson<T>({ system, user }: { system: string; user: string; schemaName: string }) {
       const response = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
+        signal: AbortSignal.timeout(30_000),
         headers: {
           "x-api-key": opts.apiKey,
           "anthropic-version": "2023-06-01",

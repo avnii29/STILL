@@ -6,7 +6,7 @@ import { rememberPayloadSchema } from "@/lib/validation/schemas";
 import { getLanguageModel } from "@/lib/agents/provider";
 import { parseConversationText } from "@/lib/agents/ingestion";
 import { detectThreadsFromMessages } from "@/lib/agents/pipeline";
-import { extractCommitment } from "@/lib/agents/extract";
+import { readCommitment } from "@/lib/agents/read-commitment";
 
 export const dynamic = "force-dynamic";
 
@@ -18,15 +18,22 @@ export async function POST(request: Request) {
       return jsonError(429, "Give Still a moment.", { retryAfterMs: limited.retryAfterMs });
     }
     const body = rememberPayloadSchema.parse(await request.json());
-    const extraction = extractCommitment({
+    const model = getLanguageModel();
+    const personHint = body.isSelf ? undefined : body.personName;
+    const reading = await readCommitment({
       text: body.note,
-      personHint: body.isSelf ? undefined : body.personName,
+      personHint,
+      context: body.context,
+      model,
     });
+    const extraction = reading.extraction;
     const messages = parseConversationText(`Me: ${body.note}`);
     const detections = await detectThreadsFromMessages({
       messages,
-      personName: body.isSelf ? undefined : body.personName ?? extraction.person ?? undefined,
-      model: getLanguageModel(),
+      personName: personHint ?? extraction.person ?? undefined,
+      context: body.context,
+      model,
+      reading,
     });
     const visible = detections.filter(
       (item) => item.shouldSurface || item.needs_user_review || item.uncertain,
@@ -48,7 +55,12 @@ export async function POST(request: Request) {
         suggestedAction: item.suggested_action,
         normalized: item.normalizedCommitment ?? extraction.normalized_commitment,
       })),
-      uncertain: extraction.uncertain || visible.length === 0 || visible.every((item) => !item.is_thread),
+      interpretedBy: reading.interpretedBy,
+      provider: reading.provider,
+      uncertain:
+        extraction.uncertain ||
+        (extraction.is_commitment &&
+          (visible.length === 0 || visible.every((item) => !item.is_thread))),
     });
   } catch (error) {
     return handleRouteError(error, "detect");

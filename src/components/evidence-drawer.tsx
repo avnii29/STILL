@@ -87,7 +87,7 @@ export function EvidenceDrawer({
           </p>
           <p className="whitespace-pre-wrap">{context}</p>
           <p className="text-sm text-ink-soft">
-            {interpretedBy === "heuristic"
+            {!interpretedBy || interpretedBy.startsWith("heuristic")
               ? "This reading came from wording patterns, not a model."
               : "A language model helped interpret this. It does not control what you keep."}
           </p>

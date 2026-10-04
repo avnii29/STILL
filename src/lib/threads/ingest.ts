@@ -5,6 +5,7 @@ import { getLanguageModel } from "@/lib/agents/provider";
 import { parseConversationText } from "@/lib/agents/ingestion";
 import { detectThreadsFromMessages } from "@/lib/agents/pipeline";
 import { extractCommitment, scheduleRemindAt } from "@/lib/agents/extract";
+import type { Extraction } from "@/lib/agents/extract";
 import { runResolutionAgent } from "@/lib/agents/resolution-agent";
 import { writeAuditLog } from "@/lib/audit";
 import { getPrisma } from "@/lib/prisma";
@@ -12,6 +13,8 @@ import { logger } from "@/lib/logger";
 import type { AppUser } from "@/lib/auth";
 import { createNotification } from "@/lib/notifications/dispatch";
 import { runStillLoop } from "@/lib/agents/orchestrator";
+import { applyDeadlineChange } from "@/lib/ingestion/signals";
+import { proposeThreadResolution } from "@/lib/threads/actions";
 import { evaluateIntervention } from "@/lib/threads/lifecycle";
 import { calendarStatus } from "@/lib/integrations/google";
 import {
@@ -28,6 +31,7 @@ export async function ingestConversation(input: {
   ip?: string;
   sourceKind?: ConversationSourceKind;
   quiet?: boolean;
+  threadId?: string;
 }) {
   const prisma = getPrisma();
   const messages = parseConversationText(input.conversationText);
@@ -156,10 +160,14 @@ export async function ingestConversation(input: {
     const storedMessages = conversation?.messages ?? [];
     const sourceMessage =
       storedMessages.find((item) => item.body === detection.evidence) ?? storedMessages[0];
-    const extracted = extractCommitment({
-      text: detection.evidence,
-      personHint: detection.personName ?? person?.name,
-    });
+    const extracted: Extraction =
+      detection.extraction ??
+      extractCommitment({
+        text: detection.evidence,
+        personHint: detection.personName ?? person?.name,
+      });
+    const traceProvider = detection.extraction ? detection.meta.provider : "heuristic";
+    const traceInterpretedBy = detection.extraction ? detection.meta.interpretedBy : "heuristic";
     const dueAt = extracted.due_at ? new Date(extracted.due_at) : null;
 
     const status: ThreadStatus = detection.uncertain
@@ -192,7 +200,7 @@ export async function ingestConversation(input: {
         context: `${detection.context}\n\n${detection.socialCaution}`,
         currentState: detection.current_state,
         needsUserReview: true,
-        interpretedBy: detection.meta.interpretedBy,
+        interpretedBy: traceInterpretedBy,
         commitments: {
           create: {
             userId: input.user.id,
@@ -224,8 +232,8 @@ export async function ingestConversation(input: {
               kind: "DETECTED",
               body: extracted.evidence,
               metadata: {
-                interpretedBy: detection.meta.interpretedBy,
-                provider: detection.meta.provider,
+                interpretedBy: traceInterpretedBy,
+                provider: traceProvider,
                 extraction: extracted,
               } as Prisma.InputJsonValue,
             },
@@ -247,9 +255,10 @@ export async function ingestConversation(input: {
         threadId: thread.id,
         kind: "EXTRACT",
         input: { text: extracted.evidence } as Prisma.InputJsonValue,
-        output: extracted as Prisma.InputJsonValue,
+        output: { ...extracted, interpretedBy: traceInterpretedBy } as Prisma.InputJsonValue,
         ok: extracted.is_commitment || extracted.uncertain,
         confidence: extracted.confidence,
+        provider: traceProvider,
       },
     });
 
@@ -291,6 +300,7 @@ export async function ingestConversation(input: {
         output: intervention as Prisma.InputJsonValue,
         ok: true,
         confidence: intervention.confidence,
+        provider: "heuristic",
       },
     });
     const loop = runStillLoop({
@@ -312,6 +322,7 @@ export async function ingestConversation(input: {
         } as Prisma.InputJsonValue,
         ok: item.ok,
         confidence: item.confidence,
+        provider: "heuristic",
       })),
     });
 
@@ -323,10 +334,24 @@ export async function ingestConversation(input: {
     });
   }
 
+  const followUp = messages.map((message) => message.body).join("\n");
+  const deadlineFollowUp =
+    Boolean(input.threadId) || /\bno rush\b|\bno hurry\b|\bactually\b|\binstead\b/i.test(followUp);
+  if (deadlineFollowUp) {
+    await applyDeadlineChange({
+      user: input.user,
+      content: followUp,
+      provider: "capture",
+      threadId: input.threadId,
+      nextStatus: "NEEDS_REVIEW",
+    });
+  }
+
   await maybeResolveOlderThreads({
     userId: input.user.id,
     personId: person?.id,
     laterMessages: messages.map((message) => `${message.speaker}: ${message.body}`),
+    threadId: input.threadId,
   });
 
   if (createdThreadIds.length > 0 && !input.quiet) {
@@ -345,14 +370,21 @@ export async function ingestConversation(input: {
     userId: input.user.id,
     conversationId: conversation?.id ?? null,
     threadCount: createdThreadIds.length,
-    interpretedBy: model ? "llm" : "heuristic",
+    interpretedBy: traceInterpretedBy(detections, model),
   });
 
   return {
     conversationId: conversation?.id ?? null,
     threadIds: createdThreadIds,
-    interpretedBy: model ? "llm" : "heuristic",
+    interpretedBy: traceInterpretedBy(detections, model),
   };
+}
+
+function traceInterpretedBy(
+  detections: Array<{ meta: { interpretedBy: string } }>,
+  model: { provider: string } | null,
+) {
+  return detections[0]?.meta.interpretedBy ?? (model ? `model:${model.provider}` : "heuristic");
 }
 
 export async function rememberNote(input: {
@@ -363,6 +395,7 @@ export async function rememberNote(input: {
   ip?: string;
   sourceKind?: ConversationSourceKind;
   quiet?: boolean;
+  threadId?: string;
 }) {
   return ingestConversation({
     user: input.user,
@@ -372,6 +405,7 @@ export async function rememberNote(input: {
     ip: input.ip,
     sourceKind: input.sourceKind ?? (input.isSelf ? "TEXT" : "MANUAL"),
     quiet: input.quiet,
+    threadId: input.threadId,
   });
 }
 
@@ -379,12 +413,13 @@ async function maybeResolveOlderThreads(input: {
   userId: string;
   personId?: string;
   laterMessages: string[];
+  threadId?: string;
 }) {
   const prisma = getPrisma();
   const open = await prisma.thread.findMany({
     where: {
       userId: input.userId,
-      personId: input.personId,
+      ...(input.threadId ? { id: input.threadId } : input.personId ? { personId: input.personId } : {}),
       status: {
         in: [
           "DETECTED",
@@ -410,20 +445,17 @@ async function maybeResolveOlderThreads(input: {
       model,
     });
     if (!look.likelyResolved) continue;
-    await prisma.thread.update({
-      where: { id: thread.id },
-      data: {
-        status: "LIKELY_RESOLVED",
-        currentState: look.evidence,
-        resolutionReason: look.uncertainty,
-        events: {
-          create: {
-            userId: input.userId,
-            kind: "LIKELY_RESOLVED",
-            body: look.evidence,
-          },
-        },
-      },
+    if (!input.threadId) {
+      const blob = input.laterMessages.join(" ").toLowerCase();
+      const words = thread.evidence.toLowerCase().split(/\W+/).filter((word) => word.length > 3);
+      if (!words.some((word) => blob.includes(word))) continue;
+    }
+    await proposeThreadResolution({
+      userId: input.userId,
+      threadId: thread.id,
+      evidence: input.laterMessages.join(" ").replace(/^Me:\s*/i, ""),
+      confidence: 0.8,
+      resolutionKind: look.kind === "CANCELLED" ? "CANCELLED" : "FULFILLED",
     });
   }
 }

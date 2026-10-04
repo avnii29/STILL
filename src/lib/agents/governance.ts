@@ -109,12 +109,17 @@ export function runRedTeamAgent(input: {
   proposal: string;
   evidence: string;
   stillActive: boolean;
+  eventTitle?: string;
+  priority?: string;
 }): AgentEnvelope<{
   allowed: boolean;
   blockedReason?: string;
   checks: string[];
 }> {
   const interview = /interview/i.test(input.proposal) || /interview/i.test(input.evidence);
+  const title = input.eventTitle ?? "";
+  const importantTitle = /\b(interview|meeting|call)\b/i.test(title);
+  const highPriority = (input.priority ?? "").toLowerCase() === "high";
   const checks = [
     "evidence current",
     "commitment still active",
@@ -122,15 +127,20 @@ export function runRedTeamAgent(input: {
     "reversible",
     "another person affected",
     "unexpected consequence",
+    "event importance",
   ];
-  const allowed = input.stillActive && !interview;
+  const allowed = input.stillActive && !interview && !importantTitle && !highPriority;
   const output = {
     allowed,
     blockedReason: interview
       ? "This event contains an interview link."
-      : input.stillActive
-        ? undefined
-        : "The commitment is no longer active.",
+      : importantTitle
+        ? "That event looks important, so it stays where it is."
+        : highPriority
+          ? "That event is marked high priority, so it stays where it is."
+          : input.stillActive
+            ? undefined
+            : "The commitment is no longer active.",
     checks,
   };
   logger.info("agent.redteam", { allowed, blockedReason: output.blockedReason });

@@ -115,15 +115,42 @@ export function ThreadActions({
               changed.
             </p>
           ) : (
-            <div className="mt-5 flex flex-wrap gap-3">
+            <div className="mt-5 flex flex-wrap items-end gap-3">
               <button
                 type="button"
                 disabled={busy}
                 onClick={() => act("approve_proposal", { proposalId: pendingProposal.id })}
                 className="min-h-11 rounded-md bg-ink px-4 text-sm text-paper disabled:opacity-60"
               >
-                Move it
+                {pendingProposal.kind === "RESOLVE_THREAD" ? "Yes, it's done" : "Move it"}
               </button>
+              {pendingProposal.kind === "MOVE_CALENDAR_EVENT" ? (
+                <>
+                  <label className="flex flex-col gap-2 text-sm text-ink-soft" htmlFor="still-edit-when">
+                    Edit the time
+                    <input
+                      id="still-edit-when"
+                      type="datetime-local"
+                      value={when}
+                      onChange={(event) => setWhen(event.target.value)}
+                      className="min-h-11 rounded-md border border-line bg-paper px-3"
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    disabled={busy || !when}
+                    onClick={() =>
+                      act("edit_proposal", {
+                        proposalId: pendingProposal.id,
+                        when: new Date(when).toISOString(),
+                      })
+                    }
+                    className="min-h-11 rounded-md border border-line px-4 text-sm disabled:opacity-60"
+                  >
+                    Use this time
+                  </button>
+                </>
+              ) : null}
               <button
                 type="button"
                 disabled={busy}

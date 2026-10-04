@@ -12,7 +12,7 @@ import {
   redTeamExternalAction,
 } from "@/lib/threads/lifecycle";
 import { calendarStatus, docsStatus } from "@/lib/integrations/google";
-import { executeCalendarMove } from "@/lib/connectors/google-calendar-sync";
+import { executeCalendarMove, listCalendarEvents } from "@/lib/connectors/google-calendar-sync";
 import { scheduleRemindAt } from "@/lib/agents/extract";
 
 const ACTION_STATUS: Record<string, ThreadStatus> = {
@@ -36,6 +36,7 @@ export async function applyThreadAction(input: {
     | "postpone"
     | "approve_proposal"
     | "reject_proposal"
+    | "edit_proposal"
     | "delete";
   resolutionKind?:
     | "FULFILLED"
@@ -60,6 +61,15 @@ export async function applyThreadAction(input: {
 
   if (input.action === "postpone") {
     return postponeThread({ user: input.user, thread, when: input.when });
+  }
+
+  if (input.action === "edit_proposal") {
+    return editProposal({
+      user: input.user,
+      threadId: thread.id,
+      proposalId: input.proposalId ?? thread.actionProposals[0]?.id,
+      when: input.when,
+    });
   }
 
   if (input.action === "approve_proposal" || input.action === "reject_proposal") {
@@ -195,13 +205,17 @@ async function postponeThread(input: {
   const advice = evaluatePostponement(input.thread.postponementCount);
   const chosenDue = input.when ? new Date(input.when) : null;
   const calendar = calendarStatus(false);
+  const day = input.thread.dueAt ?? new Date();
+  const events = await listCalendarEvents({ userId: input.user.id, day });
   const intervention = evaluateIntervention({
     dueAt: input.thread.dueAt,
     postponementCount: advice.count,
     calendarConnected: calendar.connected,
-    hasConflict: false,
+    hasConflict: events.length > 0,
     latestEvidence: input.thread.evidence,
+    events,
   });
+  const move = intervention.proposedMove;
   const nextDue =
     chosenDue && !Number.isNaN(chosenDue.getTime()) ? chosenDue : nextDeadlineFrom(input.thread.dueAt);
 
@@ -210,7 +224,7 @@ async function postponeThread(input: {
       userId: input.user.id,
       threadId: input.thread.id,
       reason: intervention.reason,
-      suggestedAction: advice.suggestedAction,
+      suggestedAction: move ? intervention.suggestedAction : advice.suggestedAction,
       confidence: intervention.confidence,
       requiresApproval: true,
       status: "PENDING",
@@ -219,13 +233,16 @@ async function postponeThread(input: {
   });
 
   const redTeam = redTeamExternalAction({
-    proposal: advice.kind === "MOVE_DEADLINE" ? `MOVE DEADLINE ${input.thread.title}` : advice.suggestedAction,
+    proposal: move ? `MOVE ${move.title}` : advice.kind === "MOVE_DEADLINE" ? `MOVE DEADLINE ${input.thread.title}` : advice.suggestedAction,
     evidence: input.thread.evidence,
     stillActive: input.thread.status !== "RESOLVED" && input.thread.status !== "DISMISSED",
+    eventTitle: move?.title,
+    priority: move?.priority,
   });
 
-  const proposalKind =
-    advice.proposalKind === "MOVE_DEADLINE"
+  const proposalKind = move
+    ? "MOVE_CALENDAR_EVENT"
+    : advice.proposalKind === "MOVE_DEADLINE"
       ? "MOVE_DEADLINE"
       : advice.proposalKind === "MICRO_ACTION"
         ? "MICRO_ACTION"
@@ -237,8 +254,8 @@ async function postponeThread(input: {
       threadId: input.thread.id,
       interventionId: interventionRow.id,
       kind: proposalKind,
-      target: input.thread.title,
-      reason: advice.prompt,
+      target: move ? move.title : input.thread.title,
+      reason: move ? intervention.reason : advice.prompt,
       risk: advice.count >= 3 ? "medium" : "low",
       status: redTeam.allowed ? "PENDING" : "BLOCKED",
       requiresApproval: true,
@@ -247,6 +264,17 @@ async function postponeThread(input: {
         calendar: calendar.message,
         docs: docsStatus(false).message,
         nextDue: nextDue.toISOString(),
+        ...(move
+          ? {
+              calendarId: move.calendarId,
+              eventId: move.eventId,
+              start: move.start,
+              end: move.end,
+              source: move.source,
+              fromStart: move.fromStart,
+              fromEnd: move.fromEnd,
+            }
+          : {}),
       } as Prisma.InputJsonValue,
     },
   });
@@ -261,6 +289,7 @@ async function postponeThread(input: {
         output: advice as Prisma.InputJsonValue,
         ok: true,
         confidence: 0.8,
+        provider: "heuristic",
       },
       {
         userId: input.user.id,
@@ -270,6 +299,7 @@ async function postponeThread(input: {
         output: intervention as Prisma.InputJsonValue,
         ok: true,
         confidence: intervention.confidence,
+        provider: "heuristic",
       },
       {
         userId: input.user.id,
@@ -279,6 +309,7 @@ async function postponeThread(input: {
         output: redTeam as Prisma.InputJsonValue,
         ok: redTeam.allowed,
         confidence: redTeam.allowed ? 0.62 : 0.9,
+        provider: "heuristic",
       },
     ],
   });
@@ -287,17 +318,17 @@ async function postponeThread(input: {
     where: { id: input.thread.id },
     data: {
       postponementCount: advice.count,
-      status: "POSTPONED",
-      dueAt: nextDue,
-      suggestedFollowUpAt: nextDue,
-      currentState: advice.prompt,
-      suggestedNextAction: advice.suggestedAction,
+      status: move ? input.thread.status : "POSTPONED",
+      dueAt: move ? input.thread.dueAt : nextDue,
+      suggestedFollowUpAt: move ? input.thread.dueAt : nextDue,
+      currentState: move ? intervention.reason : advice.prompt,
+      suggestedNextAction: move ? intervention.suggestedAction : advice.suggestedAction,
       events: {
         create: {
           userId: input.user.id,
-          kind: "POSTPONED",
-          body: advice.prompt,
-          metadata: { count: advice.count, proposalId: proposal.id } as Prisma.InputJsonValue,
+          kind: move ? "INTERVENTION_PROPOSED" : "POSTPONED",
+          body: move ? intervention.reason : advice.prompt,
+          metadata: { count: advice.count, proposalId: proposal.id, moved: false } as Prisma.InputJsonValue,
         },
       },
     },
@@ -330,9 +361,119 @@ async function postponeThread(input: {
     blockedReason: redTeam.blockedReason,
     calendar: calendar.message,
     message: redTeam.allowed
-      ? advice.prompt
+      ? move
+        ? `${intervention.reason} Nothing has moved.`
+        : advice.prompt
       : redTeam.blockedReason ?? "Still blocked this action.",
   };
+}
+
+export async function proposeThreadResolution(input: {
+  userId: string;
+  threadId: string;
+  evidence: string;
+  confidence: number;
+  resolutionKind?: "FULFILLED" | "CANCELLED";
+}) {
+  const prisma = getPrisma();
+  const existing = await prisma.actionProposal.findFirst({
+    where: {
+      userId: input.userId,
+      threadId: input.threadId,
+      kind: "RESOLVE_THREAD",
+      status: "PENDING",
+    },
+  });
+  if (existing) return { proposalId: existing.id, created: false as const };
+  const quote = input.evidence.replace(/\s+/g, " ").trim().slice(0, 280);
+  const proposal = await prisma.actionProposal.create({
+    data: {
+      userId: input.userId,
+      threadId: input.threadId,
+      kind: "RESOLVE_THREAD",
+      target: input.threadId,
+      reason: `This may be done. "${quote}" Confirm before it closes.`,
+      risk: "low",
+      status: "PENDING",
+      requiresApproval: true,
+      metadata: {
+        evidence: quote,
+        confidence: input.confidence,
+        resolutionKind: input.resolutionKind ?? "FULFILLED",
+      } as Prisma.InputJsonValue,
+    },
+  });
+  await prisma.threadEvent.create({
+    data: {
+      userId: input.userId,
+      threadId: input.threadId,
+      kind: "RESOLUTION_PROPOSED",
+      body: `Paused for approval.\n"${quote}"`,
+      metadata: { proposalId: proposal.id, confidence: input.confidence } as Prisma.InputJsonValue,
+    },
+  });
+  await prisma.agentRun.create({
+    data: {
+      userId: input.userId,
+      threadId: input.threadId,
+      kind: "RESOLUTION",
+      input: { evidence: quote } as Prisma.InputJsonValue,
+      output: { likelyResolved: true, confidence: input.confidence, paused: true } as Prisma.InputJsonValue,
+      ok: true,
+      confidence: input.confidence,
+      provider: "heuristic",
+    },
+  });
+  return { proposalId: proposal.id, created: true as const };
+}
+
+async function editProposal(input: {
+  user: AppUser;
+  threadId: string;
+  proposalId?: string;
+  when?: string;
+}) {
+  const prisma = getPrisma();
+  if (!input.proposalId || !input.when) {
+    return { ok: false as const, message: "Choose a time before editing the proposal." };
+  }
+  const when = new Date(input.when);
+  if (Number.isNaN(when.getTime())) return { ok: false as const, message: "That time is not valid." };
+  const proposal = await prisma.actionProposal.findFirst({
+    where: { id: input.proposalId, userId: input.user.id, threadId: input.threadId, status: "PENDING" },
+  });
+  if (!proposal || proposal.kind !== "MOVE_CALENDAR_EVENT") {
+    return { ok: false as const, message: "There is no calendar proposal to edit." };
+  }
+  const metadata = proposal.metadata;
+  const current =
+    metadata && typeof metadata === "object" && !Array.isArray(metadata)
+      ? (metadata as Record<string, unknown>)
+      : null;
+  const previousStart = typeof current?.start === "string" ? Date.parse(current.start) : NaN;
+  const previousEnd = typeof current?.end === "string" ? Date.parse(current.end) : NaN;
+  const duration =
+    Number.isFinite(previousStart) && Number.isFinite(previousEnd) && previousEnd > previousStart
+      ? previousEnd - previousStart
+      : 30 * 60_000;
+  const next = {
+    ...(current ?? {}),
+    start: when.toISOString(),
+    end: new Date(when.getTime() + duration).toISOString(),
+  };
+  await prisma.actionProposal.update({
+    where: { id: proposal.id },
+    data: { metadata: next as Prisma.InputJsonValue },
+  });
+  await prisma.threadEvent.create({
+    data: {
+      userId: input.user.id,
+      threadId: input.threadId,
+      kind: "PROPOSAL_EDITED",
+      body: "The proposed time was edited. Nothing has moved.",
+    },
+  });
+  return { ok: true as const, message: "The proposed time was edited. Nothing has moved." };
 }
 
 async function decideProposal(input: {
@@ -390,6 +531,57 @@ async function decideProposal(input: {
     return { ok: true as const, message: "Nothing was changed." };
   }
 
+  if (proposal.kind === "RESOLVE_THREAD") {
+    const metadata =
+      proposal.metadata && typeof proposal.metadata === "object" && !Array.isArray(proposal.metadata)
+        ? (proposal.metadata as Record<string, unknown>)
+        : {};
+    const quote = typeof metadata.evidence === "string" ? metadata.evidence : proposal.reason;
+    const resolutionKind = metadata.resolutionKind === "CANCELLED" ? "CANCELLED" : "FULFILLED";
+    await prisma.reminder.updateMany({
+      where: { threadId: input.thread.id, status: "SCHEDULED" },
+      data: { status: "CANCELLED" },
+    });
+    await prisma.resolution.upsert({
+      where: { threadId: input.thread.id },
+      create: {
+        userId: input.user.id,
+        threadId: input.thread.id,
+        kind: resolutionKind,
+        evidence: quote,
+        note: "Confirmed by you.",
+      },
+      update: { kind: resolutionKind, evidence: quote, note: "Confirmed by you." },
+    });
+    await prisma.actionProposal.update({
+      where: { id: proposal.id },
+      data: { status: "APPROVED" },
+    });
+    await prisma.thread.update({
+      where: { id: input.thread.id },
+      data: {
+        status: "RESOLVED",
+        resolvedAt: new Date(),
+        resolutionReason: quote,
+        currentState: "Resolved with your approval.",
+        needsUserReview: false,
+        events: {
+          create: {
+            userId: input.user.id,
+            kind: "RESOLVED",
+            body: `Resolved with your approval.\n"${quote}"`,
+          },
+        },
+      },
+    });
+    await writeAuditLog({
+      userId: input.user.id,
+      action: "THREAD_RESOLVED",
+      target: input.thread.id,
+    });
+    return { ok: true as const, message: "Resolved. It will stop nagging." };
+  }
+
   if (proposal.kind === "MOVE_CALENDAR_EVENT") {
     const moved = await executeCalendarMove({
       userId: input.user.id,
@@ -414,12 +606,18 @@ async function decideProposal(input: {
       where: { id: proposal.id },
       data: { status: "APPROVED" },
     });
-    await prisma.threadEvent.create({
+    await prisma.thread.update({
+      where: { id: input.thread.id },
       data: {
-        userId: input.user.id,
-        threadId: input.thread.id,
-        kind: "CALENDAR_UPDATED",
-        body: moved.message,
+        status: "CHANGED",
+        currentState: moved.message,
+        events: {
+          create: {
+            userId: input.user.id,
+            kind: "CALENDAR_UPDATED",
+            body: moved.message,
+          },
+        },
       },
     });
     await writeAuditLog({

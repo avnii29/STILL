@@ -19,6 +19,7 @@ import type { NormalizedMessage } from "@/lib/sources/types";
 import { beginIngestion, markIngestion } from "@/lib/ingestion/event-bus";
 import { routeContent, shouldInterrupt } from "@/lib/ingestion/router";
 import { applyDeadlineChange } from "@/lib/ingestion/signals";
+import { proposeThreadResolution } from "@/lib/threads/actions";
 import { evaluateIntervention } from "@/lib/threads/lifecycle";
 import { calendarStatus } from "@/lib/integrations/google";
 
@@ -535,77 +536,18 @@ async function maybeResolveFromMessage(input: {
     };
   }
   const quote = input.detection.evidence_span.slice(0, 280);
-  const source = input.provider ?? "source";
   const cancel = routeContent(quote) === "cancellation";
-  const confirmed = input.detection.confidence >= 0.9;
-  if (confirmed) {
-    await prisma.reminder.updateMany({
-      where: { threadId: match.thread.id, status: "SCHEDULED" },
-      data: { status: "CANCELLED" },
-    });
-    await prisma.resolution.upsert({
-      where: { threadId: match.thread.id },
-      create: {
-        userId: input.user.id,
-        threadId: match.thread.id,
-        kind: cancel ? "CANCELLED" : "FULFILLED",
-        evidence: quote,
-        note: source,
-      },
-      update: {
-        kind: cancel ? "CANCELLED" : "FULFILLED",
-        evidence: quote,
-        note: source,
-      },
-    });
-    const commitments = await prisma.commitment.findMany({
-      where: { threadId: match.thread.id },
-      select: { id: true },
-    });
-    if (commitments.length > 0) {
-      await prisma.commitmentEvidence.createMany({
-        data: commitments.map((commitment) => ({
-          userId: input.user.id,
-          commitmentId: commitment.id,
-          exactText: quote,
-          sourceKind: source,
-          sourceProvider: source,
-          confidence: input.detection.confidence,
-        })),
-      });
-    }
-  }
-  await prisma.thread.update({
-    where: { id: match.thread.id },
-    data: {
-      status: confirmed ? "RESOLVED" : "LIKELY_RESOLVED",
-      resolvedAt: confirmed ? new Date() : null,
-      resolutionReason: confirmed ? quote : null,
-      currentState: quote,
-      events: {
-        create: {
-          userId: input.user.id,
-          kind: confirmed ? "RESOLVED" : "LIKELY_RESOLVED",
-          body: confirmed
-            ? `Evidence found\n"${quote}"\nSource\n${source}\nConfidence\n${Math.round(input.detection.confidence * 100)}%`
-            : quote,
-        },
-      },
-    },
+  await proposeThreadResolution({
+    userId: input.user.id,
+    threadId: match.thread.id,
+    evidence: quote,
+    confidence: input.detection.confidence,
+    resolutionKind: cancel ? "CANCELLED" : "FULFILLED",
   });
-  if (confirmed) {
-    await createNotification({
-      userId: input.user.id,
-      title: cancel ? "Commitment cancelled" : "Resolved",
-      body: `"${quote}"\nSource: ${source}`,
-      href: `/threads/${match.thread.id}`,
-      topic: "resolved",
-    });
-  }
   return {
     threadId: match.thread.id,
     reply: {
-      text: confirmed ? "STILL marked this resolved from the source." : "STILL detected a possible resolution.",
+      text: "STILL paused. Confirm if this is done. Nothing was closed.",
       buttons: [{ label: "Open thread", data: `open:${match.thread.id}` }],
     },
   };

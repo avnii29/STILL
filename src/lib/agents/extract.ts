@@ -21,6 +21,10 @@ const CASUAL =
 const HEDGE =
   /\b(i('m| am) thinking|i think (i('ll| will)|maybe)|maybe i('ll| will)|i might|i may|considering|probably|not sure if)\b/i;
 
+const TRYING = /\bi('ll| will) try\b/i;
+
+const AFFIRMATION = /^(yep|yeah|yes|sure|okay|ok)\b/i;
+
 const EXPLICIT =
   /\b(i('ll| will)|i am going to|i'm going to|i told \w+ i('d| would)|i promised)\b/i;
 
@@ -139,11 +143,13 @@ export function extractDeadline(text: string, now = new Date()): DeadlineHit | n
 
 export function normalizeCommitment(text: string, person: string | null, deadline: string | null) {
   let value = text.replace(/\s+/g, " ").trim();
+  value = value.replace(/^(yep|yeah|yes|sure|okay|ok)\s*,?\s+/i, "");
   value = value.replace(/^i told [A-Za-z]+ i('d| would)\s+/i, "");
   value = value.replace(/^(i('ll| will| am going to|'m going to)|i promised( to)?)\s+/i, "");
   if (person) value = value.replace(new RegExp(`\\b${person}\\b`, "gi"), " ");
   if (deadline) value = value.replace(new RegExp(deadline.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), " ");
   value = value.replace(/\b(the|a|an)\b/gi, " ");
+  value = value.replace(/\b(to|by)\b/gi, " ");
   value = value.replace(/^[,\s]+|[.\s]+$/g, "").replace(/\s+/g, " ").trim();
   return value || text.trim();
 }
@@ -151,6 +157,7 @@ export function normalizeCommitment(text: string, person: string | null, deadlin
 export function extractCommitment(input: {
   text: string;
   personHint?: string;
+  context?: string;
   now?: Date;
 }): Extraction {
   const evidence = input.text.replace(/\s+/g, " ").trim();
@@ -175,6 +182,10 @@ export function extractCommitment(input: {
     isCommitment = false;
     uncertain = false;
     confidence = 0.18;
+  } else if (TRYING.test(evidence)) {
+    isCommitment = false;
+    uncertain = false;
+    confidence = 0.22;
   } else if (hedge && explicit) {
     isCommitment = false;
     uncertain = true;
@@ -190,14 +201,31 @@ export function extractCommitment(input: {
     confidence = 0.58;
   }
 
-  const normalized = normalizeCommitment(evidence, person, deadline?.phrase ?? null);
+  let resolvedPerson = person;
+  const contextPerson = input.context ? extractPerson(input.context) : null;
+  if (
+    !isCommitment &&
+    !negated &&
+    !casual &&
+    AFFIRMATION.test(evidence) &&
+    namedTime &&
+    input.context?.trim() &&
+    (resolvedPerson || contextPerson)
+  ) {
+    resolvedPerson = resolvedPerson ?? contextPerson;
+    isCommitment = true;
+    uncertain = false;
+    confidence = 0.74;
+  }
+
+  const normalized = normalizeCommitment(evidence, resolvedPerson, deadline?.phrase ?? null);
 
   return extractionSchema.parse({
     is_commitment: isCommitment,
     confidence,
     commitment_text: evidence,
     normalized_commitment: normalized,
-    person,
+    person: resolvedPerson,
     deadline: deadline?.phrase ?? null,
     deadline_confidence: deadline?.confidence ?? 0,
     due_at: deadline?.dueAt.toISOString() ?? null,

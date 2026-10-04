@@ -5,8 +5,9 @@ import { FadeIn } from "@/components/fade-in";
 import { StatusChip } from "@/components/status-chip";
 import { ThreadActions } from "@/components/thread-actions";
 import { ThreadTimeline } from "@/components/thread-timeline";
+import { WhyPanel } from "@/components/why-panel";
 import { requireOnboardedUser } from "@/lib/auth";
-import { formatQuietDateLong } from "@/lib/copy";
+import { formatQuietDateLong, THREAD_STATUS_COPY } from "@/lib/copy";
 import { calendarStatus } from "@/lib/integrations/google";
 import { getPrisma } from "@/lib/prisma";
 
@@ -30,8 +31,8 @@ export default async function ThreadDetailPage({
       conversation: true,
       reminders: { orderBy: { remindAt: "desc" }, take: 5 },
       interventions: { orderBy: { createdAt: "desc" }, take: 5 },
-      actionProposals: { orderBy: { createdAt: "desc" }, take: 5 },
-      agentRuns: { orderBy: { createdAt: "desc" }, take: 8 },
+      actionProposals: { orderBy: { createdAt: "asc" } },
+      agentRuns: { orderBy: { createdAt: "asc" }, take: 40 },
     },
   });
   if (!thread) notFound();
@@ -82,7 +83,7 @@ export default async function ThreadDetailPage({
         </li>
         <li>
           <p className="label">Status</p>
-          <p className="mt-3 text-lg">{thread.status === "RESOLVED" ? "done." : "Still open."}</p>
+          <p className="mt-3 text-lg">{THREAD_STATUS_COPY[thread.status] ?? thread.status}</p>
         </li>
       </ol>
       <ThreadTimeline
@@ -165,21 +166,39 @@ export default async function ThreadDetailPage({
           </ul>
         )}
       </section>
-      <section className="mt-12 max-w-4xl">
-        <p className="label">Agent reasoning</p>
-        {thread.agentRuns.length === 0 ? (
-          <p className="mt-3 text-ink-soft">No agent run is stored yet.</p>
-        ) : (
-          <ul className="mt-3 space-y-3 text-sm text-ink-soft">
-            {thread.agentRuns.map((run) => (
-              <li key={run.id}>
-                {run.kind.toLowerCase()} · {run.ok ? "ok" : "blocked"} · confidence {run.confidence.toFixed(2)}
-              </li>
-            ))}
-          </ul>
-        )}
-        <p className="mt-6 text-sm text-ink-faint">{calendar.message}</p>
-      </section>
+      <WhyPanel
+        evidence={(commitment?.evidenceItems ?? []).map((item) => ({
+          id: item.id,
+          exactText: item.exactText,
+          sourceKind: item.sourceKind,
+          createdAt: item.createdAt,
+        }))}
+        events={thread.events.map((event) => ({
+          id: event.id,
+          kind: event.kind,
+          body: event.body,
+          createdAt: event.createdAt,
+        }))}
+        runs={thread.agentRuns.map((run) => ({
+          id: run.id,
+          kind: run.kind,
+          ok: run.ok,
+          confidence: run.confidence,
+          provider: run.provider,
+          output: run.output,
+        }))}
+        proposals={thread.actionProposals.map((item) => ({
+          id: item.id,
+          kind: item.kind,
+          status: item.status,
+          reason: item.reason,
+          risk: item.risk,
+          blockedReason: item.blockedReason,
+        }))}
+        overallConfidence={thread.confidence}
+        currentState={thread.currentState}
+      />
+      <p className="mt-6 max-w-4xl text-sm text-ink-faint">{calendar.message}</p>
     </FadeIn>
   );
 }

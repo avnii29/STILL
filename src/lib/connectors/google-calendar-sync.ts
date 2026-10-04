@@ -467,9 +467,111 @@ export async function findCalendarAccountByChannel(channelId: string) {
   );
 }
 
+export type ListedCalendarEvent = {
+  id: string;
+  title: string;
+  startsAt: string;
+  endsAt: string;
+  calendarId: string;
+  source: "google" | "local";
+  priority?: string;
+};
+
+export async function listCalendarEvents(input: { userId: string; day: Date }): Promise<ListedCalendarEvent[]> {
+  const start = new Date(input.day);
+  start.setHours(0, 0, 0, 0);
+  const end = new Date(start);
+  end.setDate(end.getDate() + 1);
+  const local = await listLocalCalendarEvents(input.userId, start, end);
+
+  if (!isGoogleCalendarConfigured()) return local;
+  const prisma = getPrisma();
+  const account = await prisma.integrationAccount.findUnique({
+    where: { userId_provider: { userId: input.userId, provider: "CALENDAR" } },
+  });
+  const stored = readToken(account?.tokenCipher ?? null);
+  if (!account || account.status !== "CONNECTED" || !stored) return local;
+
+  try {
+    const token = await usableToken(account.id, stored);
+    const listed = await listChanges({
+      token: token.accessToken,
+      calendarId: "primary",
+      timeMin: start.toISOString(),
+    });
+    const remote = listed.items.flatMap((item) => {
+      const startsAt = item.start?.dateTime ?? (item.start?.date ? `${item.start.date}T00:00:00` : null);
+      const endsAt = item.end?.dateTime ?? (item.end?.date ? `${item.end.date}T00:00:00` : null);
+      if (!item.id || !startsAt || !endsAt) return [];
+      if (item.status === "cancelled") return [];
+      const when = new Date(startsAt);
+      if (when < start || when >= end) return [];
+      return [
+        {
+          id: item.id,
+          title: item.summary || "Untitled",
+          startsAt: new Date(startsAt).toISOString(),
+          endsAt: new Date(endsAt).toISOString(),
+          calendarId: "primary",
+          source: "google" as const,
+        },
+      ];
+    });
+    return remote.length > 0 ? remote : local;
+  } catch (error) {
+    logger.warn("calendar.list_failed", {
+      message: error instanceof Error ? error.message : "failed",
+    });
+    return local;
+  }
+}
+
+async function listLocalCalendarEvents(userId: string, start: Date, end: Date): Promise<ListedCalendarEvent[]> {
+  const prisma = getPrisma();
+  const rows = await prisma.calendarEvent.findMany({
+    where: {
+      userId,
+      startsAt: { gte: start, lt: end },
+      NOT: { status: "cancelled" },
+    },
+    orderBy: { startsAt: "asc" },
+  });
+  return rows.flatMap((row) => {
+    if (!row.startsAt || !row.endsAt) return [];
+    return [
+      {
+        id: row.id,
+        title: row.title,
+        startsAt: row.startsAt.toISOString(),
+        endsAt: row.endsAt.toISOString(),
+        calendarId: row.calendarId,
+        source: "local" as const,
+        priority: row.status === "high" ? "high" : undefined,
+      },
+    ];
+  });
+}
+
 export async function executeCalendarMove(input: { userId: string; metadata: unknown }) {
   const move = readCalendarMove(input.metadata);
   if (!move) return { ok: false as const, message: "This proposal has no calendar change to apply." };
+  if (move.calendarId === "local") {
+    const prisma = getPrisma();
+    const updated = await prisma.calendarEvent.updateMany({
+      where: { id: move.eventId, userId: input.userId },
+      data: { startsAt: new Date(move.start), endsAt: new Date(move.end) },
+    });
+    if (updated.count !== 1) {
+      return { ok: false as const, message: "That event is not on your calendar." };
+    }
+    await writeAuditLog({
+      userId: input.userId,
+      action: "ACTION_APPROVED",
+      target: move.eventId,
+      metadata: { calendarId: "local" },
+    });
+    return { ok: true as const, message: "The calendar event was updated." };
+  }
   if (!isGoogleCalendarConfigured()) {
     return { ok: false as const, message: "Google Calendar is not configured." };
   }

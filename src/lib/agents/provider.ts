@@ -20,6 +20,7 @@ export function getLanguageModel(): LanguageModel | null {
       return createOpenAiModel({
         apiKey: env.OPENAI_API_KEY,
         model: env.AI_MODEL ?? "gpt-4.1-mini",
+        baseUrl: env.AI_BASE_URL,
       });
     }
     if (env.AI_PROVIDER === "anthropic") {

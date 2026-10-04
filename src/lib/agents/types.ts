@@ -25,7 +25,7 @@ export type LanguageModel = {
 };
 
 export type AgentMeta = {
-  interpretedBy: "heuristic" | "llm";
+  interpretedBy: string;
   provider: string;
   model?: string;
 };
@@ -39,6 +39,7 @@ export type DetectionResult = ThreadDetection & {
   deadlineConfidence?: number;
   uncertain?: boolean;
   meta: AgentMeta;
+  extraction?: import("@/lib/agents/extract").Extraction;
 };
 
 export type ResolutionLook = {

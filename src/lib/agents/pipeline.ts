@@ -1,9 +1,9 @@
 import type { AgentMessage, DetectionResult, LanguageModel } from "@/lib/agents/types";
+import type { CommitmentReading } from "@/lib/agents/read-commitment";
 import { runContextAgent } from "@/lib/agents/context-agent";
 import { runFutureSelfAgent } from "@/lib/agents/future-self-agent";
 import { runSocialContextAgent } from "@/lib/agents/social-context-agent";
 import { runSuggestionAgent } from "@/lib/agents/suggestion-agent";
-import { detectCommitmentHeuristic } from "@/lib/agents/commitment-detector";
 import {
   runActionProposalAgent,
   runEvidenceAgent,
@@ -29,21 +29,26 @@ export type PipelineThread = DetectionResult & {
 export async function detectThreadsFromMessages(input: {
   messages: AgentMessage[];
   personName?: string;
+  context?: string;
   model: LanguageModel | null;
+  reading?: CommitmentReading;
 }): Promise<PipelineThread[]> {
   const results: PipelineThread[] = [];
 
   for (const [index, message] of input.messages.entries()) {
     const routed = runRouterAgent(message);
-    if (routed.output === "ignore") continue;
-    if (!detectCommitmentHeuristic(message)) continue;
+    const prepared =
+      input.reading && input.reading.text === message.body.trim() ? input.reading : undefined;
+    if (!input.model && routed.output === "ignore" && !prepared?.extraction.is_commitment) continue;
 
     const detection = await runContextAgent({
       message,
       messages: input.messages,
       index,
       personName: input.personName,
+      context: input.context,
       model: input.model,
+      reading: input.reading,
     });
     if (!detection) continue;
 

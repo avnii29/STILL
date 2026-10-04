@@ -21,6 +21,7 @@ export const serverEnvSchema = z.object({
     .default("false"),
   AI_PROVIDER: z.enum(["none", "openai", "anthropic"]).optional().default("none"),
   AI_MODEL: z.preprocess(emptyToUndefined, z.string().optional()),
+  AI_BASE_URL: z.preprocess(emptyToUndefined, z.string().url().optional()),
   OPENAI_API_KEY: z.preprocess(emptyToUndefined, z.string().optional()),
   ANTHROPIC_API_KEY: z.preprocess(emptyToUndefined, z.string().optional()),
   EMAIL_PROVIDER: z.enum(["none", "resend", "smtp", "log"]).optional().default("none"),

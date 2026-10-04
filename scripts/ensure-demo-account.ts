@@ -27,7 +27,7 @@ async function main() {
         );
       } else {
         console.error(
-          "Demo account was not created through signup. Add SUPABASE_SERVICE_ROLE_KEY and run npm run demo:account.",
+          `Demo account was not created through signup (${signed.error.code ?? signed.error.status}: ${signed.error.message}). Add SUPABASE_SERVICE_ROLE_KEY and run npm run demo:account.`,
         );
       }
       process.exitCode = 1;
@@ -60,7 +60,9 @@ async function main() {
   } else {
     const text = created.error?.message.toLowerCase() ?? "";
     if (!text.includes("already") && !text.includes("registered") && !text.includes("exists")) {
-      console.error("Demo account was not created. Supabase refused the admin request.");
+      console.error(
+        `Demo account was not created. Supabase refused the admin request (${created.error?.code ?? created.error?.status}: ${created.error?.message}).`,
+      );
       process.exitCode = 1;
       return;
     }
@@ -108,8 +110,10 @@ async function main() {
         where: { userId },
         data: { onboardingCompletedAt: new Date() },
       });
-    } catch {
-      console.error("Auth user is ready. The database profile was not updated.");
+    } catch (error) {
+      console.error(
+        `Auth user is ready. The database profile was not updated (${error instanceof Error ? error.message : String(error)}).`,
+      );
     } finally {
       await prisma.$disconnect();
     }

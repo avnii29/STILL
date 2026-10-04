@@ -2971,6 +2971,7 @@ export const AgentRunScalarFieldEnum = {
   output: 'output',
   ok: 'ok',
   confidence: 'confidence',
+  provider: 'provider',
   createdAt: 'createdAt'
 } as const
 

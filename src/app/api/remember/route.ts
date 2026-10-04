@@ -21,6 +21,7 @@ export async function POST(request: Request) {
       personName: body.personName,
       isSelf: body.isSelf,
       ip: clientIp(request),
+      threadId: body.threadId,
       sourceKind:
         body.sourceKind === "VOICE"
           ? "VOICE"

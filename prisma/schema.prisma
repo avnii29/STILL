@@ -112,6 +112,7 @@ enum ActionProposalKind {
   OPEN_DOCUMENT
   MOVE_DEADLINE
   MICRO_ACTION
+  RESOLVE_THREAD
   NONE
 }
 
@@ -506,6 +507,7 @@ model AgentRun {
   output     Json
   ok         Boolean  @default(true)
   confidence Float    @default(0)
+  provider   String   @default("heuristic")
   createdAt  DateTime @default(now()) @map("created_at")
 
   @@index([userId, createdAt])

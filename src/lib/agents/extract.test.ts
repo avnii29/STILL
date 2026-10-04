@@ -81,14 +81,78 @@ describe("commitment extraction", () => {
     expect(result.person).toBe("Maya");
     expect(result.deadline).toBe("tuesday evening");
     expect(new Date(result.due_at!).getHours()).toBe(18);
+    expect(result.normalized_commitment).toBe("get revised dataset");
   });
 
   it("does not treat You as a person", () => {
     expect(extractPerson("I'll send you the PDF tonight.")).toBeNull();
   });
+
+  it("treats 'I'll try to get to it' as not a commitment", () => {
+    const result = extractCommitment({ text: "I'll try to get to it", now });
+    expect(result.is_commitment).toBe(false);
+    expect(result.confidence).toBeLessThan(0.5);
+  });
+
+  it("treats 'maybe someday' as not a commitment", () => {
+    const result = extractCommitment({ text: "maybe someday", now });
+    expect(result.is_commitment).toBe(false);
+    expect(result.confidence).toBeLessThan(0.5);
+  });
+
+  it("reads a short yes plus a deadline as a commitment when the context names the person", () => {
+    const result = extractCommitment({
+      text: "yep, Tuesday evening",
+      context: "I'll get the revised dataset to Maya",
+      now,
+    });
+    expect(result.is_commitment).toBe(true);
+    expect(result.person).toBe("Maya");
+    expect(result.deadline).toBe("tuesday evening");
+    expect(new Date(result.due_at!).getHours()).toBe(18);
+  });
 });
 
 describe("postponement and intervention", () => {
+  it("proposes moving a same-day event on the first postpone and leaves the slot for approval", () => {
+    const result = evaluateIntervention({
+      dueAt: new Date("2026-10-06T12:30:00.000Z"),
+      postponementCount: 1,
+      calendarConnected: false,
+      hasConflict: true,
+      latestEvidence: "Yep, I'll get the revised dataset to Maya by Tuesday evening.",
+      now: new Date("2026-10-05T08:00:00.000Z"),
+      events: [
+        {
+          id: "evt",
+          title: "Catch-up",
+          startsAt: "2026-10-06T10:30:00.000Z",
+          endsAt: "2026-10-06T11:00:00.000Z",
+          calendarId: "local",
+          source: "local",
+        },
+      ],
+    });
+    expect(result.intervene).toBe(true);
+    expect(result.proposedMove?.title).toBe("Catch-up");
+    expect(result.proposedMove?.start).toBe("2026-10-06T11:30:00.000Z");
+    expect(result.suggestedAction.toLowerCase()).toContain("nothing moves until you approve");
+  });
+
+  it("does not propose a move on a first postpone when the day is empty", () => {
+    const result = evaluateIntervention({
+      dueAt: new Date("2026-10-20T12:30:00.000Z"),
+      postponementCount: 1,
+      calendarConnected: false,
+      hasConflict: false,
+      latestEvidence: "I'll send the report tomorrow.",
+      now: new Date("2026-10-05T08:00:00.000Z"),
+      events: [],
+    });
+    expect(result.proposedMove).toBeNull();
+    expect(result.intervene).toBe(false);
+  });
+
   it("asks to move the deadline on first postponement", () => {
     const first = evaluatePostponement(0);
     expect(first.count).toBe(1);
@@ -144,6 +208,26 @@ describe("red team", () => {
     });
     expect(verdict.allowed).toBe(false);
     expect(verdict.blockedReason?.toLowerCase()).toContain("interview");
+  });
+
+  it("blocks a meeting, a call, and a high-priority event", () => {
+    for (const title of ["Weekly meeting", "Client call"]) {
+      const verdict = redTeamExternalAction({
+        proposal: `MOVE ${title}`,
+        evidence: "Yep, I'll get the revised dataset to Maya by Tuesday evening.",
+        stillActive: true,
+        eventTitle: title,
+      });
+      expect(verdict.allowed).toBe(false);
+    }
+    const high = redTeamExternalAction({
+      proposal: "MOVE Catch-up",
+      evidence: "Yep, I'll get the revised dataset to Maya by Tuesday evening.",
+      stillActive: true,
+      eventTitle: "Catch-up",
+      priority: "high",
+    });
+    expect(high.allowed).toBe(false);
   });
 
   it("allows a reversible non-interview action that is still active", () => {

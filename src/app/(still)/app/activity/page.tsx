@@ -1,8 +1,10 @@
 import { EmptyState } from "@/components/empty-state";
 import { FadeIn } from "@/components/fade-in";
+import { LiveActivity } from "@/components/live-activity";
 import { requireOnboardedUser } from "@/lib/auth";
 import { activityCopy } from "@/lib/copy";
 import { isDatabaseConfigured } from "@/lib/env";
+import { loadLiveNow } from "@/lib/ingestion/live";
 import { getPrisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +16,7 @@ export default async function ActivityPage() {
   }
 
   const prisma = getPrisma();
-  const [events, audits, runs] = await Promise.all([
+  const [events, audits, runs, live] = await Promise.all([
     prisma.threadEvent.findMany({
       where: { userId: user.id },
       include: { thread: { select: { title: true, id: true } } },
@@ -32,6 +34,7 @@ export default async function ActivityPage() {
       orderBy: { createdAt: "desc" },
       take: 40,
     }),
+    loadLiveNow(user.id),
   ]);
 
   const rows = [
@@ -64,6 +67,7 @@ export default async function ActivityPage() {
       <p className="mt-5 max-w-xl text-lg text-ink-soft">
         Every line is a stored event. If this page is empty, Still has not acted yet.
       </p>
+      <LiveActivity initial={live} />
       {rows.length === 0 ? (
         <div className="mt-12">
           <EmptyState
@@ -72,7 +76,7 @@ export default async function ActivityPage() {
           />
         </div>
       ) : (
-        <ol className="mt-14 max-w-2xl space-y-8">
+        <ol className="mt-14 max-w-4xl space-y-8">
           {rows.map((row) => (
             <li key={row.id}>
               <p className="label">

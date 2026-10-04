@@ -53,8 +53,10 @@ export function FirstRunExperience() {
     };
     const SpeechRecognition = host.SpeechRecognition ?? host.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      setMessage("This browser cannot listen. Type instead. Audio was not stored.");
-      setMode("TEXT");
+      queueMicrotask(() => {
+        setMessage("This browser cannot listen. Type instead. Audio was not stored.");
+        setMode("TEXT");
+      });
       return;
     }
     const instance = new SpeechRecognition();
@@ -76,7 +78,7 @@ export function FirstRunExperience() {
     try {
       instance.start();
     } catch {
-      setMode("TEXT");
+      queueMicrotask(() => setMode("TEXT"));
     }
     return () => {
       try {

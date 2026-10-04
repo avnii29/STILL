@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { BottomNav, MobileTopBar, SideNav } from "@/components/nav";
 import { CaptureFab } from "@/components/capture-fab";
+import { LiveNotices } from "@/components/live-notices";
 import { ThreadsRealtime } from "@/components/threads-realtime";
 
 export function AppShell({
@@ -19,8 +20,9 @@ export function AppShell({
       </a>
       <SideNav />
       <div className="flex min-w-0 flex-1 flex-col">
-        <main id="still-main" className="mx-auto w-full max-w-5xl flex-1 px-5 pb-32 pt-6 sm:px-10 lg:pb-16 lg:pt-14">
+        <main id="still-main" className="w-full min-w-0 flex-1 px-[clamp(1.25rem,3.2vw,4rem)] pb-32 pt-6 lg:pb-16 lg:pt-14">
           <MobileTopBar />
+          <LiveNotices />
           {children}
         </main>
       </div>

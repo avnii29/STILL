@@ -8,12 +8,30 @@ export function SettingsForm({
   emailNotifications,
   webPushEnabled,
   followUpDays,
+  notifyCommitment,
+  notifyDeadline,
+  notifyBlocked,
+  notifyDeadlineChange,
+  notifyResolved,
+  notifyMinorContext,
+  notifyInApp,
+  quietHoursStart,
+  quietHoursEnd,
 }: {
   displayName: string;
   timezone: string;
   emailNotifications: boolean;
   webPushEnabled: boolean;
   followUpDays: number;
+  notifyCommitment: boolean;
+  notifyDeadline: boolean;
+  notifyBlocked: boolean;
+  notifyDeadlineChange: boolean;
+  notifyResolved: boolean;
+  notifyMinorContext: boolean;
+  notifyInApp: boolean;
+  quietHoursStart: string;
+  quietHoursEnd: string;
 }) {
   const [state, setState] = useState({
     displayName,
@@ -21,6 +39,15 @@ export function SettingsForm({
     emailNotifications,
     webPushEnabled,
     followUpDays,
+    notifyCommitment,
+    notifyDeadline,
+    notifyBlocked,
+    notifyDeadlineChange,
+    notifyResolved,
+    notifyMinorContext,
+    notifyInApp,
+    quietHoursStart,
+    quietHoursEnd,
   });
   const [message, setMessage] = useState<string | null>(null);
 
@@ -64,8 +91,59 @@ export function SettingsForm({
             setState({ ...state, emailNotifications: event.target.checked })
           }
         />
-        Email when something still needs you
+        Email
       </label>
+      <label className="flex items-center gap-3 text-sm">
+        <input
+          type="checkbox"
+          checked={state.webPushEnabled}
+          onChange={(event) => setState({ ...state, webPushEnabled: event.target.checked })}
+        />
+        Browser, after permission is granted
+      </label>
+      <fieldset className="space-y-3">
+        <legend className="label">Notify me when</legend>
+        {(
+          [
+            ["notifyCommitment", "A commitment is detected"],
+            ["notifyDeadline", "A deadline is approaching"],
+            ["notifyBlocked", "A commitment appears blocked"],
+            ["notifyDeadlineChange", "A deadline changes"],
+            ["notifyResolved", "Something is resolved"],
+            ["notifyMinorContext", "Every minor context change"],
+            ["notifyInApp", "In the app"],
+          ] as const
+        ).map(([key, label]) => (
+          <label key={key} className="flex items-center gap-3 text-sm">
+            <input
+              type="checkbox"
+              checked={state[key]}
+              onChange={(event) => setState({ ...state, [key]: event.target.checked })}
+            />
+            {label}
+          </label>
+        ))}
+      </fieldset>
+      <div className="flex flex-wrap gap-4">
+        <label className="flex flex-col gap-2 text-sm text-ink-soft">
+          Quiet hours start
+          <input
+            type="time"
+            value={state.quietHoursStart}
+            onChange={(event) => setState({ ...state, quietHoursStart: event.target.value })}
+            className="min-h-12 rounded-md border border-line bg-paper px-3"
+          />
+        </label>
+        <label className="flex flex-col gap-2 text-sm text-ink-soft">
+          Quiet hours end
+          <input
+            type="time"
+            value={state.quietHoursEnd}
+            onChange={(event) => setState({ ...state, quietHoursEnd: event.target.value })}
+            className="min-h-12 rounded-md border border-line bg-paper px-3"
+          />
+        </label>
+      </div>
       <label className="flex flex-col gap-2 text-sm text-ink-soft">
         Days before a gentle follow-up
         <input

@@ -157,3 +157,13 @@ export type ConsentEvent = Prisma.ConsentEventModel
  * 
  */
 export type ProviderEvent = Prisma.ProviderEventModel
+/**
+ * Model IngestionEvent
+ * 
+ */
+export type IngestionEvent = Prisma.IngestionEventModel
+/**
+ * Model CalendarEvent
+ * 
+ */
+export type CalendarEvent = Prisma.CalendarEventModel

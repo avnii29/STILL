@@ -16,7 +16,7 @@ export function calendarStatus(connected: boolean) {
       configured: false,
       connected: false,
       events: [] as const,
-      message: "Connect Google Calendar to let STILL reason about schedule conflicts.",
+      message: "Not yet configured. Google Calendar OAuth credentials are missing.",
     };
   }
   if (!connected) {

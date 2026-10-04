@@ -12,6 +12,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "trust:check": "tsx scripts/trust-check.ts",
+    "demo:account": "node --env-file=.env --env-file=.env.local --import tsx scripts/ensure-demo-account.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",

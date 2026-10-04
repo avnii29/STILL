@@ -160,6 +160,9 @@ describe("authorization surface", () => {
     expect(isPublicPath("/auth/sign-up")).toBe(true);
     expect(isPublicPath("/auth/forgot-password")).toBe(true);
     expect(isPublicPath("/login")).toBe(true);
+    expect(isPublicPath("/signup")).toBe(true);
+    expect(isPublicPath("/forgot-password")).toBe(true);
+    expect(isPublicPath("/reset-password")).toBe(true);
     expect(isPublicPath("/api/extract")).toBe(true);
     expect(isPublicPath("/try")).toBe(true);
     expect(isPublicPath("/still")).toBe(true);
@@ -204,6 +207,8 @@ describe("RLS policy file", () => {
       "source_messages",
       "memory_candidates",
       "provider_events",
+      "ingestion_events",
+      "calendar_events",
     ]) {
       expect(sql).toContain(`alter table ${table} enable row level security`);
     }

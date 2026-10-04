@@ -49,7 +49,9 @@ export function CaptureStudio({ defaultMode = "TEXT" }: { defaultMode?: Mode }) 
     };
     const SpeechRecognition = host.SpeechRecognition ?? host.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      setMessage("This browser cannot listen. Type instead. Audio was not stored.");
+      queueMicrotask(() => {
+        setMessage("This browser cannot listen. Type instead. Audio was not stored.");
+      });
       return;
     }
     const instance = new SpeechRecognition();

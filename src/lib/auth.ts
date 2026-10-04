@@ -121,7 +121,7 @@ export class AuthRequiredError extends Error {
 export async function requireUser(): Promise<AppUser> {
   const user = await getCurrentUser();
   if (!user) {
-    redirect("/auth/sign-in");
+    redirect("/login");
   }
   return user;
 }
@@ -147,4 +147,29 @@ export async function recordSignIn(userId: string, ip?: string) {
     target: "session",
     ip,
   });
+}
+
+export async function openAppAccess(userId: string, timezone?: string) {
+  if (!isDatabaseConfigured()) return;
+  const prisma = getPrisma();
+  const profile = await prisma.profile.findUnique({ where: { userId } });
+  if (!profile || profile.onboardingCompletedAt) return;
+  const zone = timezone && isKnownTimezone(timezone) ? timezone : undefined;
+  await prisma.profile.update({
+    where: { userId },
+    data: {
+      onboardingCompletedAt: new Date(),
+      ...(zone ? { timezone: zone } : {}),
+    },
+  });
+}
+
+function isKnownTimezone(value: string) {
+  if (value.length > 64) return false;
+  try {
+    Intl.DateTimeFormat(undefined, { timeZone: value });
+    return true;
+  } catch {
+    return false;
+  }
 }

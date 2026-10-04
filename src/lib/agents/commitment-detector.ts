@@ -6,7 +6,7 @@ const SOMEDAY =
   /\b(someday|sometime|some time|one day|at some point|whenever|if we ever|we should totally)\b/i;
 
 const EXPLICIT_PROMISE =
-  /\b(i('ll| will)|i am going to|i'm going to|i told \w+ i('d| would))\s+(send|share|forward|pay|transfer|call|text|message|introduce|handle|do|bring|drop|email|start|finish|apply|write|complete|review|submit|deliver|ship)\b/i;
+  /\b(i('ll| will)|i am going to|i'm going to|i told \w+ i('d| would))\s+(send|share|forward|pay|transfer|call|text|message|introduce|handle|do|bring|drop|email|start|finish|apply|write|complete|review|submit|deliver|ship|get)\b/i;
 
 const REQUEST =
   /\b(can you|could you|would you|please)\b.+\b(send|call|share|remind|introduce|pay)\b/i;
@@ -40,6 +40,9 @@ export function detectCommitmentHeuristic(
 
   if (REMINDER.test(text)) {
     return { type: "REMINDER_REQUEST", confidence: vague ? 0.35 : 0.78, owner: "SELF" };
+  }
+  if (/\bif i (get|have|find) time\b/i.test(text)) {
+    return { type: "FUTURE_INTENTION", confidence: 0.4, owner: message.isFromUser ? "ME" : "THEM" };
   }
   if (EXPLICIT_PROMISE.test(text)) {
     const owner = message.isFromUser ? "ME" : "THEM";

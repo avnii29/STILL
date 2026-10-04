@@ -30,6 +30,8 @@ alter table source_messages enable row level security;
 alter table memory_candidates enable row level security;
 alter table provider_events enable row level security;
 alter table consent_events enable row level security;
+alter table ingestion_events enable row level security;
+alter table calendar_events enable row level security;
 
 drop policy if exists "users_self" on users;
 create policy "users_self" on users
@@ -149,4 +151,15 @@ alter table people replica identity full;
 alter table reminders replica identity full;
 alter table interventions replica identity full;
 alter table memory_candidates replica identity full;
+
+drop policy if exists "ingestion_events_self" on ingestion_events;
+create policy "ingestion_events_self" on ingestion_events
+  for all using (user_id = auth.uid()) with check (user_id = auth.uid());
+
+drop policy if exists "calendar_events_self" on calendar_events;
+create policy "calendar_events_self" on calendar_events
+  for all using (user_id = auth.uid()) with check (user_id = auth.uid());
+
 alter table source_messages replica identity full;
+alter table ingestion_events replica identity full;
+alter table calendar_events replica identity full;

@@ -50,6 +50,13 @@ export type UserPreferenceMinAggregateOutputType = {
   rememberContext: boolean | null
   autoRememberClear: boolean | null
   conversationRetention: string | null
+  notifyCommitment: boolean | null
+  notifyDeadline: boolean | null
+  notifyBlocked: boolean | null
+  notifyDeadlineChange: boolean | null
+  notifyResolved: boolean | null
+  notifyMinorContext: boolean | null
+  notifyInApp: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -70,6 +77,13 @@ export type UserPreferenceMaxAggregateOutputType = {
   rememberContext: boolean | null
   autoRememberClear: boolean | null
   conversationRetention: string | null
+  notifyCommitment: boolean | null
+  notifyDeadline: boolean | null
+  notifyBlocked: boolean | null
+  notifyDeadlineChange: boolean | null
+  notifyResolved: boolean | null
+  notifyMinorContext: boolean | null
+  notifyInApp: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -90,6 +104,13 @@ export type UserPreferenceCountAggregateOutputType = {
   rememberContext: number
   autoRememberClear: number
   conversationRetention: number
+  notifyCommitment: number
+  notifyDeadline: number
+  notifyBlocked: number
+  notifyDeadlineChange: number
+  notifyResolved: number
+  notifyMinorContext: number
+  notifyInApp: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -120,6 +141,13 @@ export type UserPreferenceMinAggregateInputType = {
   rememberContext?: true
   autoRememberClear?: true
   conversationRetention?: true
+  notifyCommitment?: true
+  notifyDeadline?: true
+  notifyBlocked?: true
+  notifyDeadlineChange?: true
+  notifyResolved?: true
+  notifyMinorContext?: true
+  notifyInApp?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -140,6 +168,13 @@ export type UserPreferenceMaxAggregateInputType = {
   rememberContext?: true
   autoRememberClear?: true
   conversationRetention?: true
+  notifyCommitment?: true
+  notifyDeadline?: true
+  notifyBlocked?: true
+  notifyDeadlineChange?: true
+  notifyResolved?: true
+  notifyMinorContext?: true
+  notifyInApp?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -160,6 +195,13 @@ export type UserPreferenceCountAggregateInputType = {
   rememberContext?: true
   autoRememberClear?: true
   conversationRetention?: true
+  notifyCommitment?: true
+  notifyDeadline?: true
+  notifyBlocked?: true
+  notifyDeadlineChange?: true
+  notifyResolved?: true
+  notifyMinorContext?: true
+  notifyInApp?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -267,6 +309,13 @@ export type UserPreferenceGroupByOutputType = {
   rememberContext: boolean
   autoRememberClear: boolean
   conversationRetention: string
+  notifyCommitment: boolean
+  notifyDeadline: boolean
+  notifyBlocked: boolean
+  notifyDeadlineChange: boolean
+  notifyResolved: boolean
+  notifyMinorContext: boolean
+  notifyInApp: boolean
   createdAt: Date
   updatedAt: Date
   _count: UserPreferenceCountAggregateOutputType | null
@@ -310,6 +359,13 @@ export type UserPreferenceWhereInput = {
   rememberContext?: Prisma.BoolFilter<"UserPreference"> | boolean
   autoRememberClear?: Prisma.BoolFilter<"UserPreference"> | boolean
   conversationRetention?: Prisma.StringFilter<"UserPreference"> | string
+  notifyCommitment?: Prisma.BoolFilter<"UserPreference"> | boolean
+  notifyDeadline?: Prisma.BoolFilter<"UserPreference"> | boolean
+  notifyBlocked?: Prisma.BoolFilter<"UserPreference"> | boolean
+  notifyDeadlineChange?: Prisma.BoolFilter<"UserPreference"> | boolean
+  notifyResolved?: Prisma.BoolFilter<"UserPreference"> | boolean
+  notifyMinorContext?: Prisma.BoolFilter<"UserPreference"> | boolean
+  notifyInApp?: Prisma.BoolFilter<"UserPreference"> | boolean
   createdAt?: Prisma.DateTimeFilter<"UserPreference"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserPreference"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -331,6 +387,13 @@ export type UserPreferenceOrderByWithRelationInput = {
   rememberContext?: Prisma.SortOrder
   autoRememberClear?: Prisma.SortOrder
   conversationRetention?: Prisma.SortOrder
+  notifyCommitment?: Prisma.SortOrder
+  notifyDeadline?: Prisma.SortOrder
+  notifyBlocked?: Prisma.SortOrder
+  notifyDeadlineChange?: Prisma.SortOrder
+  notifyResolved?: Prisma.SortOrder
+  notifyMinorContext?: Prisma.SortOrder
+  notifyInApp?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -355,6 +418,13 @@ export type UserPreferenceWhereUniqueInput = Prisma.AtLeast<{
   rememberContext?: Prisma.BoolFilter<"UserPreference"> | boolean
   autoRememberClear?: Prisma.BoolFilter<"UserPreference"> | boolean
   conversationRetention?: Prisma.StringFilter<"UserPreference"> | string
+  notifyCommitment?: Prisma.BoolFilter<"UserPreference"> | boolean
+  notifyDeadline?: Prisma.BoolFilter<"UserPreference"> | boolean
+  notifyBlocked?: Prisma.BoolFilter<"UserPreference"> | boolean
+  notifyDeadlineChange?: Prisma.BoolFilter<"UserPreference"> | boolean
+  notifyResolved?: Prisma.BoolFilter<"UserPreference"> | boolean
+  notifyMinorContext?: Prisma.BoolFilter<"UserPreference"> | boolean
+  notifyInApp?: Prisma.BoolFilter<"UserPreference"> | boolean
   createdAt?: Prisma.DateTimeFilter<"UserPreference"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserPreference"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -376,6 +446,13 @@ export type UserPreferenceOrderByWithAggregationInput = {
   rememberContext?: Prisma.SortOrder
   autoRememberClear?: Prisma.SortOrder
   conversationRetention?: Prisma.SortOrder
+  notifyCommitment?: Prisma.SortOrder
+  notifyDeadline?: Prisma.SortOrder
+  notifyBlocked?: Prisma.SortOrder
+  notifyDeadlineChange?: Prisma.SortOrder
+  notifyResolved?: Prisma.SortOrder
+  notifyMinorContext?: Prisma.SortOrder
+  notifyInApp?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserPreferenceCountOrderByAggregateInput
@@ -404,6 +481,13 @@ export type UserPreferenceScalarWhereWithAggregatesInput = {
   rememberContext?: Prisma.BoolWithAggregatesFilter<"UserPreference"> | boolean
   autoRememberClear?: Prisma.BoolWithAggregatesFilter<"UserPreference"> | boolean
   conversationRetention?: Prisma.StringWithAggregatesFilter<"UserPreference"> | string
+  notifyCommitment?: Prisma.BoolWithAggregatesFilter<"UserPreference"> | boolean
+  notifyDeadline?: Prisma.BoolWithAggregatesFilter<"UserPreference"> | boolean
+  notifyBlocked?: Prisma.BoolWithAggregatesFilter<"UserPreference"> | boolean
+  notifyDeadlineChange?: Prisma.BoolWithAggregatesFilter<"UserPreference"> | boolean
+  notifyResolved?: Prisma.BoolWithAggregatesFilter<"UserPreference"> | boolean
+  notifyMinorContext?: Prisma.BoolWithAggregatesFilter<"UserPreference"> | boolean
+  notifyInApp?: Prisma.BoolWithAggregatesFilter<"UserPreference"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserPreference"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UserPreference"> | Date | string
 }
@@ -423,6 +507,13 @@ export type UserPreferenceCreateInput = {
   rememberContext?: boolean
   autoRememberClear?: boolean
   conversationRetention?: string
+  notifyCommitment?: boolean
+  notifyDeadline?: boolean
+  notifyBlocked?: boolean
+  notifyDeadlineChange?: boolean
+  notifyResolved?: boolean
+  notifyMinorContext?: boolean
+  notifyInApp?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPreferenceInput
@@ -444,6 +535,13 @@ export type UserPreferenceUncheckedCreateInput = {
   rememberContext?: boolean
   autoRememberClear?: boolean
   conversationRetention?: string
+  notifyCommitment?: boolean
+  notifyDeadline?: boolean
+  notifyBlocked?: boolean
+  notifyDeadlineChange?: boolean
+  notifyResolved?: boolean
+  notifyMinorContext?: boolean
+  notifyInApp?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -463,6 +561,13 @@ export type UserPreferenceUpdateInput = {
   rememberContext?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autoRememberClear?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conversationRetention?: Prisma.StringFieldUpdateOperationsInput | string
+  notifyCommitment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyDeadline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyDeadlineChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyResolved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyMinorContext?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyInApp?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPreferenceNestedInput
@@ -484,6 +589,13 @@ export type UserPreferenceUncheckedUpdateInput = {
   rememberContext?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autoRememberClear?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conversationRetention?: Prisma.StringFieldUpdateOperationsInput | string
+  notifyCommitment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyDeadline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyDeadlineChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyResolved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyMinorContext?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyInApp?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -504,6 +616,13 @@ export type UserPreferenceCreateManyInput = {
   rememberContext?: boolean
   autoRememberClear?: boolean
   conversationRetention?: string
+  notifyCommitment?: boolean
+  notifyDeadline?: boolean
+  notifyBlocked?: boolean
+  notifyDeadlineChange?: boolean
+  notifyResolved?: boolean
+  notifyMinorContext?: boolean
+  notifyInApp?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -523,6 +642,13 @@ export type UserPreferenceUpdateManyMutationInput = {
   rememberContext?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autoRememberClear?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conversationRetention?: Prisma.StringFieldUpdateOperationsInput | string
+  notifyCommitment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyDeadline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyDeadlineChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyResolved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyMinorContext?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyInApp?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -543,6 +669,13 @@ export type UserPreferenceUncheckedUpdateManyInput = {
   rememberContext?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autoRememberClear?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conversationRetention?: Prisma.StringFieldUpdateOperationsInput | string
+  notifyCommitment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyDeadline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyDeadlineChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyResolved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyMinorContext?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyInApp?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -568,6 +701,13 @@ export type UserPreferenceCountOrderByAggregateInput = {
   rememberContext?: Prisma.SortOrder
   autoRememberClear?: Prisma.SortOrder
   conversationRetention?: Prisma.SortOrder
+  notifyCommitment?: Prisma.SortOrder
+  notifyDeadline?: Prisma.SortOrder
+  notifyBlocked?: Prisma.SortOrder
+  notifyDeadlineChange?: Prisma.SortOrder
+  notifyResolved?: Prisma.SortOrder
+  notifyMinorContext?: Prisma.SortOrder
+  notifyInApp?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -592,6 +732,13 @@ export type UserPreferenceMaxOrderByAggregateInput = {
   rememberContext?: Prisma.SortOrder
   autoRememberClear?: Prisma.SortOrder
   conversationRetention?: Prisma.SortOrder
+  notifyCommitment?: Prisma.SortOrder
+  notifyDeadline?: Prisma.SortOrder
+  notifyBlocked?: Prisma.SortOrder
+  notifyDeadlineChange?: Prisma.SortOrder
+  notifyResolved?: Prisma.SortOrder
+  notifyMinorContext?: Prisma.SortOrder
+  notifyInApp?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -612,6 +759,13 @@ export type UserPreferenceMinOrderByAggregateInput = {
   rememberContext?: Prisma.SortOrder
   autoRememberClear?: Prisma.SortOrder
   conversationRetention?: Prisma.SortOrder
+  notifyCommitment?: Prisma.SortOrder
+  notifyDeadline?: Prisma.SortOrder
+  notifyBlocked?: Prisma.SortOrder
+  notifyDeadlineChange?: Prisma.SortOrder
+  notifyResolved?: Prisma.SortOrder
+  notifyMinorContext?: Prisma.SortOrder
+  notifyInApp?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -667,6 +821,13 @@ export type UserPreferenceCreateWithoutUserInput = {
   rememberContext?: boolean
   autoRememberClear?: boolean
   conversationRetention?: string
+  notifyCommitment?: boolean
+  notifyDeadline?: boolean
+  notifyBlocked?: boolean
+  notifyDeadlineChange?: boolean
+  notifyResolved?: boolean
+  notifyMinorContext?: boolean
+  notifyInApp?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -686,6 +847,13 @@ export type UserPreferenceUncheckedCreateWithoutUserInput = {
   rememberContext?: boolean
   autoRememberClear?: boolean
   conversationRetention?: string
+  notifyCommitment?: boolean
+  notifyDeadline?: boolean
+  notifyBlocked?: boolean
+  notifyDeadlineChange?: boolean
+  notifyResolved?: boolean
+  notifyMinorContext?: boolean
+  notifyInApp?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -721,6 +889,13 @@ export type UserPreferenceUpdateWithoutUserInput = {
   rememberContext?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autoRememberClear?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conversationRetention?: Prisma.StringFieldUpdateOperationsInput | string
+  notifyCommitment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyDeadline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyDeadlineChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyResolved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyMinorContext?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyInApp?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -740,6 +915,13 @@ export type UserPreferenceUncheckedUpdateWithoutUserInput = {
   rememberContext?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autoRememberClear?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conversationRetention?: Prisma.StringFieldUpdateOperationsInput | string
+  notifyCommitment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyDeadline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyDeadlineChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyResolved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyMinorContext?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyInApp?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -762,6 +944,13 @@ export type UserPreferenceSelect<ExtArgs extends runtime.Types.Extensions.Intern
   rememberContext?: boolean
   autoRememberClear?: boolean
   conversationRetention?: boolean
+  notifyCommitment?: boolean
+  notifyDeadline?: boolean
+  notifyBlocked?: boolean
+  notifyDeadlineChange?: boolean
+  notifyResolved?: boolean
+  notifyMinorContext?: boolean
+  notifyInApp?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -783,6 +972,13 @@ export type UserPreferenceSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   rememberContext?: boolean
   autoRememberClear?: boolean
   conversationRetention?: boolean
+  notifyCommitment?: boolean
+  notifyDeadline?: boolean
+  notifyBlocked?: boolean
+  notifyDeadlineChange?: boolean
+  notifyResolved?: boolean
+  notifyMinorContext?: boolean
+  notifyInApp?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -804,6 +1000,13 @@ export type UserPreferenceSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   rememberContext?: boolean
   autoRememberClear?: boolean
   conversationRetention?: boolean
+  notifyCommitment?: boolean
+  notifyDeadline?: boolean
+  notifyBlocked?: boolean
+  notifyDeadlineChange?: boolean
+  notifyResolved?: boolean
+  notifyMinorContext?: boolean
+  notifyInApp?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -825,11 +1028,18 @@ export type UserPreferenceSelectScalar = {
   rememberContext?: boolean
   autoRememberClear?: boolean
   conversationRetention?: boolean
+  notifyCommitment?: boolean
+  notifyDeadline?: boolean
+  notifyBlocked?: boolean
+  notifyDeadlineChange?: boolean
+  notifyResolved?: boolean
+  notifyMinorContext?: boolean
+  notifyInApp?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserPreferenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "emailNotifications" | "webPushEnabled" | "quietHoursStart" | "quietHoursEnd" | "followUpDays" | "rememberReminders" | "rememberCommitments" | "rememberPossible" | "rememberDeadlines" | "rememberResolution" | "rememberContext" | "autoRememberClear" | "conversationRetention" | "createdAt" | "updatedAt", ExtArgs["result"]["userPreference"]>
+export type UserPreferenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "emailNotifications" | "webPushEnabled" | "quietHoursStart" | "quietHoursEnd" | "followUpDays" | "rememberReminders" | "rememberCommitments" | "rememberPossible" | "rememberDeadlines" | "rememberResolution" | "rememberContext" | "autoRememberClear" | "conversationRetention" | "notifyCommitment" | "notifyDeadline" | "notifyBlocked" | "notifyDeadlineChange" | "notifyResolved" | "notifyMinorContext" | "notifyInApp" | "createdAt" | "updatedAt", ExtArgs["result"]["userPreference"]>
 export type UserPreferenceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -861,6 +1071,13 @@ export type $UserPreferencePayload<ExtArgs extends runtime.Types.Extensions.Inte
     rememberContext: boolean
     autoRememberClear: boolean
     conversationRetention: string
+    notifyCommitment: boolean
+    notifyDeadline: boolean
+    notifyBlocked: boolean
+    notifyDeadlineChange: boolean
+    notifyResolved: boolean
+    notifyMinorContext: boolean
+    notifyInApp: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["userPreference"]>
@@ -1302,6 +1519,13 @@ export interface UserPreferenceFieldRefs {
   readonly rememberContext: Prisma.FieldRef<"UserPreference", 'Boolean'>
   readonly autoRememberClear: Prisma.FieldRef<"UserPreference", 'Boolean'>
   readonly conversationRetention: Prisma.FieldRef<"UserPreference", 'String'>
+  readonly notifyCommitment: Prisma.FieldRef<"UserPreference", 'Boolean'>
+  readonly notifyDeadline: Prisma.FieldRef<"UserPreference", 'Boolean'>
+  readonly notifyBlocked: Prisma.FieldRef<"UserPreference", 'Boolean'>
+  readonly notifyDeadlineChange: Prisma.FieldRef<"UserPreference", 'Boolean'>
+  readonly notifyResolved: Prisma.FieldRef<"UserPreference", 'Boolean'>
+  readonly notifyMinorContext: Prisma.FieldRef<"UserPreference", 'Boolean'>
+  readonly notifyInApp: Prisma.FieldRef<"UserPreference", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"UserPreference", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"UserPreference", 'DateTime'>
 }

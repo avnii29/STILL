@@ -97,7 +97,8 @@ function mixRgba(from: string, to: string, t: number) {
   const parse = (value: string) => {
     const match = value.match(/rgba?\(([^)]+)\)/);
     if (!match) return [0, 0, 0, 1];
-    const [r, g, b, a = "1"] = match[1].split(",").map((part) => Number(part.trim()));
+    const parts = match[1].split(",").map((part) => Number(part.trim()));
+    const [r = 0, g = 0, b = 0, a = 1] = parts;
     return [r, g, b, a];
   };
   const a = parse(from);

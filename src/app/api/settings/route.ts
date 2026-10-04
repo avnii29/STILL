@@ -49,6 +49,15 @@ export async function PATCH(request: Request) {
           emailNotifications: body.emailNotifications,
           webPushEnabled: body.webPushEnabled,
           followUpDays: body.followUpDays,
+          ...(body.notifyCommitment === undefined ? {} : { notifyCommitment: body.notifyCommitment }),
+          ...(body.notifyDeadline === undefined ? {} : { notifyDeadline: body.notifyDeadline }),
+          ...(body.notifyBlocked === undefined ? {} : { notifyBlocked: body.notifyBlocked }),
+          ...(body.notifyDeadlineChange === undefined ? {} : { notifyDeadlineChange: body.notifyDeadlineChange }),
+          ...(body.notifyResolved === undefined ? {} : { notifyResolved: body.notifyResolved }),
+          ...(body.notifyMinorContext === undefined ? {} : { notifyMinorContext: body.notifyMinorContext }),
+          ...(body.notifyInApp === undefined ? {} : { notifyInApp: body.notifyInApp }),
+          ...(body.quietHoursStart === undefined ? {} : { quietHoursStart: body.quietHoursStart }),
+          ...(body.quietHoursEnd === undefined ? {} : { quietHoursEnd: body.quietHoursEnd }),
         },
       });
     }

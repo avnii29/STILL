@@ -12,7 +12,7 @@ export default async function StillGuestLayout({ children }: { children: ReactNo
       <TimeLandscape />
       <div className="relative z-10 flex min-h-dvh flex-col">
         <GuestHeader signedIn={Boolean(user)} />
-        <main id="main" className="mx-auto w-full max-w-2xl flex-1 px-6 pb-20 pt-6 sm:px-12">
+        <main id="main" className="still-frame w-full flex-1 pb-20 pt-8">
           {children}
         </main>
       </div>

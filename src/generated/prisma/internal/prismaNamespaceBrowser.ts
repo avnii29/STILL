@@ -78,7 +78,9 @@ export const ModelName = {
   SourceMessage: 'SourceMessage',
   MemoryCandidate: 'MemoryCandidate',
   ConsentEvent: 'ConsentEvent',
-  ProviderEvent: 'ProviderEvent'
+  ProviderEvent: 'ProviderEvent',
+  IngestionEvent: 'IngestionEvent',
+  CalendarEvent: 'CalendarEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -324,6 +326,13 @@ export const UserPreferenceScalarFieldEnum = {
   rememberContext: 'rememberContext',
   autoRememberClear: 'autoRememberClear',
   conversationRetention: 'conversationRetention',
+  notifyCommitment: 'notifyCommitment',
+  notifyDeadline: 'notifyDeadline',
+  notifyBlocked: 'notifyBlocked',
+  notifyDeadlineChange: 'notifyDeadlineChange',
+  notifyResolved: 'notifyResolved',
+  notifyMinorContext: 'notifyMinorContext',
+  notifyInApp: 'notifyInApp',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -560,6 +569,47 @@ export const ProviderEventScalarFieldEnum = {
 } as const
 
 export type ProviderEventScalarFieldEnum = (typeof ProviderEventScalarFieldEnum)[keyof typeof ProviderEventScalarFieldEnum]
+
+
+export const IngestionEventScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  connectorId: 'connectorId',
+  provider: 'provider',
+  externalEventId: 'externalEventId',
+  eventType: 'eventType',
+  payloadHash: 'payloadHash',
+  occurredAt: 'occurredAt',
+  receivedAt: 'receivedAt',
+  processingStatus: 'processingStatus',
+  processedAt: 'processedAt',
+  error: 'error',
+  route: 'route',
+  summary: 'summary',
+  createdAt: 'createdAt'
+} as const
+
+export type IngestionEventScalarFieldEnum = (typeof IngestionEventScalarFieldEnum)[keyof typeof IngestionEventScalarFieldEnum]
+
+
+export const CalendarEventScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  accountId: 'accountId',
+  calendarId: 'calendarId',
+  externalId: 'externalId',
+  title: 'title',
+  status: 'status',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  timeZone: 'timeZone',
+  htmlLink: 'htmlLink',
+  updatedRemote: 'updatedRemote',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CalendarEventScalarFieldEnum = (typeof CalendarEventScalarFieldEnum)[keyof typeof CalendarEventScalarFieldEnum]
 
 
 export const SortOrder = {

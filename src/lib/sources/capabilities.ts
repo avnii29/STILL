@@ -43,7 +43,7 @@ export function whatsappCapability(): ProviderCapability {
       available: false,
       limited: true,
       connectable: false,
-      capability: "STILL can only access WhatsApp data that the official connection permits.",
+      capability: "Availability depends on the official Meta API and the permissions that account can grant.",
       alternative: PASTE_FALLBACK,
       unavailableReason: "Official Meta/WhatsApp Cloud API credentials are not configured.",
     };
@@ -72,7 +72,7 @@ export function instagramCapability(): ProviderCapability {
       connectable: false,
       capability: "Instagram messaging isn't available for your account through the supported connection.",
       alternative: PASTE_FALLBACK,
-      unavailableReason: "Official Meta Instagram messaging credentials are not configured.",
+      unavailableReason: "Requires a supported professional or business account through the official API. Credentials are not configured.",
     };
   }
   return {
@@ -111,9 +111,13 @@ export function calendarCapability(): ProviderCapability {
     available: status.configured,
     limited: true,
     connectable: status.configured,
-    capability: status.message,
+    capability: status.configured
+      ? "Read events, receive change notifications, and propose updates. Calendar is not a notification channel."
+      : "Not yet configured.",
     alternative: "STILL can still remember deadlines you type or speak.",
-    unavailableReason: status.configured ? undefined : status.message,
+    unavailableReason: status.configured
+      ? undefined
+      : "Google OAuth client id and secret are missing. STILL will not show this source as connected.",
   };
 }
 

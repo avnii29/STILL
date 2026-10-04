@@ -21,8 +21,8 @@ export const operator: OperatorConfig = {
   supportEmail: emptyToNull(process.env.STILL_SUPPORT_EMAIL),
   businessAddress: emptyToNull(process.env.STILL_BUSINESS_ADDRESS),
   jurisdiction: emptyToNull(process.env.STILL_JURISDICTION),
-  effectiveDate: "2026-09-21",
-  policyVersion: "2026-09-21",
+  effectiveDate: "2026-10-04",
+  policyVersion: "2026-10-04",
 };
 
 export function isOperatorReady(config: OperatorConfig = operator) {

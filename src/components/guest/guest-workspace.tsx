@@ -109,8 +109,10 @@ export function GuestWorkspace({
     };
     const SpeechRecognition = host.SpeechRecognition ?? host.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      setMessage("This browser cannot listen. Type instead. Audio was not stored.");
-      setInputMode("TEXT");
+      queueMicrotask(() => {
+        setMessage("This browser cannot listen. Type instead. Audio was not stored.");
+        setInputMode("TEXT");
+      });
       return;
     }
     const instance = new SpeechRecognition();
@@ -132,7 +134,7 @@ export function GuestWorkspace({
     try {
       instance.start();
     } catch {
-      setInputMode("TEXT");
+      queueMicrotask(() => setInputMode("TEXT"));
     }
     return () => {
       try {

@@ -59,7 +59,7 @@ export function EvidenceDrawer({
   }
 
   return (
-    <section className="mt-16 max-w-2xl border-t border-line pt-8">
+    <section className="mt-16 max-w-4xl border-t border-line pt-8">
       <button
         ref={buttonRef}
         type="button"

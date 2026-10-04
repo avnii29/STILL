@@ -424,7 +424,9 @@ export const ModelName = {
   SourceMessage: 'SourceMessage',
   MemoryCandidate: 'MemoryCandidate',
   ConsentEvent: 'ConsentEvent',
-  ProviderEvent: 'ProviderEvent'
+  ProviderEvent: 'ProviderEvent',
+  IngestionEvent: 'IngestionEvent',
+  CalendarEvent: 'CalendarEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -440,7 +442,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "profile" | "person" | "conversationSource" | "conversation" | "message" | "thread" | "commitment" | "commitmentEvidence" | "threadEvent" | "resolution" | "reminder" | "notification" | "userPreference" | "integration" | "agentRun" | "intervention" | "actionProposal" | "actionApproval" | "auditLog" | "pushSubscription" | "integrationAccount" | "sourcePermission" | "sourceConversation" | "sourceMessage" | "memoryCandidate" | "consentEvent" | "providerEvent"
+    modelProps: "user" | "profile" | "person" | "conversationSource" | "conversation" | "message" | "thread" | "commitment" | "commitmentEvidence" | "threadEvent" | "resolution" | "reminder" | "notification" | "userPreference" | "integration" | "agentRun" | "intervention" | "actionProposal" | "actionApproval" | "auditLog" | "pushSubscription" | "integrationAccount" | "sourcePermission" | "sourceConversation" | "sourceMessage" | "memoryCandidate" | "consentEvent" | "providerEvent" | "ingestionEvent" | "calendarEvent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2516,6 +2518,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    IngestionEvent: {
+      payload: Prisma.$IngestionEventPayload<ExtArgs>
+      fields: Prisma.IngestionEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IngestionEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IngestionEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IngestionEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IngestionEventPayload>
+        }
+        findFirst: {
+          args: Prisma.IngestionEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IngestionEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IngestionEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IngestionEventPayload>
+        }
+        findMany: {
+          args: Prisma.IngestionEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IngestionEventPayload>[]
+        }
+        create: {
+          args: Prisma.IngestionEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IngestionEventPayload>
+        }
+        createMany: {
+          args: Prisma.IngestionEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IngestionEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IngestionEventPayload>[]
+        }
+        delete: {
+          args: Prisma.IngestionEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IngestionEventPayload>
+        }
+        update: {
+          args: Prisma.IngestionEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IngestionEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.IngestionEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IngestionEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IngestionEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IngestionEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.IngestionEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IngestionEventPayload>
+        }
+        aggregate: {
+          args: Prisma.IngestionEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIngestionEvent>
+        }
+        groupBy: {
+          args: Prisma.IngestionEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IngestionEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IngestionEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IngestionEventCountAggregateOutputType> | number
+        }
+      }
+    }
+    CalendarEvent: {
+      payload: Prisma.$CalendarEventPayload<ExtArgs>
+      fields: Prisma.CalendarEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CalendarEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CalendarEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarEventPayload>
+        }
+        findFirst: {
+          args: Prisma.CalendarEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CalendarEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarEventPayload>
+        }
+        findMany: {
+          args: Prisma.CalendarEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarEventPayload>[]
+        }
+        create: {
+          args: Prisma.CalendarEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarEventPayload>
+        }
+        createMany: {
+          args: Prisma.CalendarEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CalendarEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarEventPayload>[]
+        }
+        delete: {
+          args: Prisma.CalendarEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarEventPayload>
+        }
+        update: {
+          args: Prisma.CalendarEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.CalendarEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CalendarEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CalendarEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.CalendarEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarEventPayload>
+        }
+        aggregate: {
+          args: Prisma.CalendarEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCalendarEvent>
+        }
+        groupBy: {
+          args: Prisma.CalendarEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CalendarEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CalendarEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CalendarEventCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2782,6 +2932,13 @@ export const UserPreferenceScalarFieldEnum = {
   rememberContext: 'rememberContext',
   autoRememberClear: 'autoRememberClear',
   conversationRetention: 'conversationRetention',
+  notifyCommitment: 'notifyCommitment',
+  notifyDeadline: 'notifyDeadline',
+  notifyBlocked: 'notifyBlocked',
+  notifyDeadlineChange: 'notifyDeadlineChange',
+  notifyResolved: 'notifyResolved',
+  notifyMinorContext: 'notifyMinorContext',
+  notifyInApp: 'notifyInApp',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -3018,6 +3175,47 @@ export const ProviderEventScalarFieldEnum = {
 } as const
 
 export type ProviderEventScalarFieldEnum = (typeof ProviderEventScalarFieldEnum)[keyof typeof ProviderEventScalarFieldEnum]
+
+
+export const IngestionEventScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  connectorId: 'connectorId',
+  provider: 'provider',
+  externalEventId: 'externalEventId',
+  eventType: 'eventType',
+  payloadHash: 'payloadHash',
+  occurredAt: 'occurredAt',
+  receivedAt: 'receivedAt',
+  processingStatus: 'processingStatus',
+  processedAt: 'processedAt',
+  error: 'error',
+  route: 'route',
+  summary: 'summary',
+  createdAt: 'createdAt'
+} as const
+
+export type IngestionEventScalarFieldEnum = (typeof IngestionEventScalarFieldEnum)[keyof typeof IngestionEventScalarFieldEnum]
+
+
+export const CalendarEventScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  accountId: 'accountId',
+  calendarId: 'calendarId',
+  externalId: 'externalId',
+  title: 'title',
+  status: 'status',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  timeZone: 'timeZone',
+  htmlLink: 'htmlLink',
+  updatedRemote: 'updatedRemote',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CalendarEventScalarFieldEnum = (typeof CalendarEventScalarFieldEnum)[keyof typeof CalendarEventScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -3539,6 +3737,8 @@ export type GlobalOmitConfig = {
   memoryCandidate?: Prisma.MemoryCandidateOmit
   consentEvent?: Prisma.ConsentEventOmit
   providerEvent?: Prisma.ProviderEventOmit
+  ingestionEvent?: Prisma.IngestionEventOmit
+  calendarEvent?: Prisma.CalendarEventOmit
 }
 
 /* Types for Logging */

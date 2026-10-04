@@ -13,9 +13,9 @@ export default async function OnboardingPage() {
   return (
     <div className="relative min-h-dvh overflow-hidden">
       <AmbientLandscape />
-      <div className="relative z-10 px-6 py-10 sm:px-12">
+      <div className="relative z-10 still-frame py-10 sm:py-14">
         <StillMark href="/" title="STILL" />
-        <div className="mx-auto mt-20 max-w-2xl">
+        <div className="mt-14 max-w-2xl">
           <p className="label mb-6">Begin</p>
           <FirstRunExperience />
         </div>

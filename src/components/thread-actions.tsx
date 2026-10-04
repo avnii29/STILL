@@ -10,6 +10,7 @@ type Proposal = {
   reason: string;
   status: string;
   blockedReason: string | null;
+  risk?: string | null;
 };
 
 export function ThreadActions({
@@ -91,7 +92,7 @@ export function ThreadActions({
   const repeated = postponementCount >= 1;
 
   return (
-    <div className="mt-14 max-w-2xl">
+    <div className="mt-14 max-w-4xl">
       <p className="label mb-3">Next moment</p>
       <p className="font-display text-3xl leading-tight tracking-tight">{suggestedAction}</p>
       {postponementCount > 0 ? (
@@ -105,10 +106,9 @@ export function ThreadActions({
 
       {pendingProposal ? (
         <div className="mt-8 rounded-md border border-line bg-paper p-5">
-          <p className="label">
-            {pendingProposal.status === "BLOCKED" ? "I checked again." : "Something changed."}
-          </p>
+          <p className="label">Still paused</p>
           <p className="mt-3 font-display text-2xl tracking-tight">{pendingProposal.reason}</p>
+          <p className="mt-3 text-sm text-ink-faint">Risk {pendingProposal.risk ?? "medium"}</p>
           {pendingProposal.status === "BLOCKED" ? (
             <p className="mt-3 text-sm text-ink-soft">
               {pendingProposal.blockedReason ?? "That looked important, so I left it alone."} Nothing
@@ -122,7 +122,7 @@ export function ThreadActions({
                 onClick={() => act("approve_proposal", { proposalId: pendingProposal.id })}
                 className="min-h-11 rounded-md bg-ink px-4 text-sm text-paper disabled:opacity-60"
               >
-                Approve change
+                Move it
               </button>
               <button
                 type="button"
@@ -130,7 +130,7 @@ export function ThreadActions({
                 onClick={() => act("reject_proposal", { proposalId: pendingProposal.id })}
                 className="min-h-11 rounded-md border border-line px-4 text-sm"
               >
-                Cancel
+                Not now
               </button>
             </div>
           )}

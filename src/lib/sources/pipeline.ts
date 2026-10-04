@@ -16,6 +16,9 @@ import { inputHash } from "@/lib/sources/hash";
 import { canIngest, ingestionStoppedReason } from "@/lib/sources/permission";
 import { bestThreadMatch } from "@/lib/sources/thread-match";
 import type { NormalizedMessage } from "@/lib/sources/types";
+import { beginIngestion, markIngestion } from "@/lib/ingestion/event-bus";
+import { routeContent, shouldInterrupt } from "@/lib/ingestion/router";
+import { applyDeadlineChange } from "@/lib/ingestion/signals";
 import { evaluateIntervention } from "@/lib/threads/lifecycle";
 import { calendarStatus } from "@/lib/integrations/google";
 
@@ -137,13 +140,40 @@ export async function processNormalizedMessage(
     };
   }
 
+  const route = routeContent(message.content);
+  const interrupt = shouldInterrupt(route);
+  const tracked = account
+    ? await beginIngestion({
+        userId: message.userId,
+        connectorId: account.id,
+        provider: message.provider,
+        externalEventId: message.externalMessageId,
+        eventType: "message",
+        occurredAt: message.timestamp ?? new Date(),
+        payload: message.content,
+        route,
+        summary: interrupt.reason,
+      }).catch(() => null)
+    : null;
+  if (tracked?.duplicate) return { duplicate: true };
+
+  const settle = async (result: PipelineResult, summary: string) => {
+    if (tracked && !tracked.duplicate) {
+      await markIngestion(tracked.id, result.threadId ? "THREAD_UPDATED" : "PROCESSED", {
+        route,
+        summary,
+      }).catch(() => undefined);
+    }
+    return result;
+  };
+
   const relevance = scoreRelevance(message.content);
   if (relevance === "NONE") {
-    return { skipped: "irrelevant" };
+    return settle({ skipped: "irrelevant" }, interrupt.reason);
   }
 
   const user = await loadAppUserById(message.userId);
-  if (!user) return { skipped: "unknown_user" };
+  if (!user) return settle({ skipped: "unknown_user" }, "Unknown user.");
 
   const preference = await prisma.userPreference.findUnique({
     where: { userId: user.id },
@@ -192,31 +222,63 @@ export async function processNormalizedMessage(
     },
   });
 
+  if (route === "deadline_change") {
+    const changed = await applyDeadlineChange({
+      user,
+      content: message.content,
+      provider: message.provider,
+      now: message.timestamp ?? new Date(),
+    });
+    if (changed.changed) {
+      return settle(
+        {
+          threadId: changed.threadId,
+          classification: detection.classification,
+          reply: changed.reply,
+        },
+        `Deadline changed. ${interrupt.reason}`,
+      );
+    }
+  }
+
   if (detection.classification === "NON_COMMITMENT") {
-    return { skipped: "non_commitment", classification: detection.classification };
+    return settle(
+      { skipped: "non_commitment", classification: detection.classification },
+      interrupt.reason,
+    );
   }
 
   if (detection.classification === "EXTERNAL_COMMITMENT") {
-    return {
-      skipped: "external",
-      classification: detection.classification,
-    };
+    return settle(
+      {
+        skipped: "external",
+        classification: detection.classification,
+      },
+      "Someone else's promise. No intervention.",
+    );
   }
 
   if (detection.classification === "RESOLUTION_SIGNAL") {
     if (!policy.rememberResolution) {
       return { skipped: "policy", classification: detection.classification };
     }
-    const resolved = await maybeResolveFromMessage({ user, detection });
-    return {
-      classification: detection.classification,
-      threadId: resolved.threadId,
-      reply: resolved.reply,
-    };
+    const resolved = await maybeResolveFromMessage({
+      user,
+      detection,
+      provider: message.provider,
+    });
+    return settle(
+      {
+        classification: detection.classification,
+        threadId: resolved.threadId,
+        reply: resolved.reply,
+      },
+      resolved.threadId ? "Resolution evidence recorded." : "No matching thread.",
+    );
   }
 
   if (!policyAllows(detection, policy)) {
-    return { skipped: "policy", classification: detection.classification };
+    return settle({ skipped: "policy", classification: detection.classification }, "Memory policy skipped this.");
   }
 
   const stored = await persistSourceMinimum({
@@ -254,15 +316,18 @@ export async function processNormalizedMessage(
       candidateId: candidate.id,
       automatic: true,
     });
-    return {
-      candidateId: candidate.id,
-      threadId: memory.threadId,
-      classification: detection.classification,
-      reply: {
-        text: `STILL remembered something.\n${detection.normalized_commitment}`,
-        buttons: [{ label: "Undo", data: `undo:${candidate.id}` }],
+    return settle(
+      {
+        candidateId: candidate.id,
+        threadId: memory.threadId,
+        classification: detection.classification,
+        reply: {
+          text: `STILL remembered something.\n${detection.normalized_commitment}`,
+          buttons: [{ label: "Undo", data: `undo:${candidate.id}` }],
+        },
       },
-    };
+      interrupt.reason,
+    );
   }
 
   await createNotification({
@@ -272,11 +337,14 @@ export async function processNormalizedMessage(
     href: "/home",
   });
 
-  return {
-    candidateId: candidate.id,
-    classification: detection.classification,
-    reply: confirmationReply(detection, candidate.id),
-  };
+  return settle(
+    {
+      candidateId: candidate.id,
+      classification: detection.classification,
+      reply: confirmationReply(detection, candidate.id),
+    },
+    interrupt.reason,
+  );
 }
 
 function policyAllows(detection: CommitmentDetection, policy: MemoryPolicy) {
@@ -408,6 +476,7 @@ async function persistSourceMinimum(input: {
 async function maybeResolveFromMessage(input: {
   user: AppUser;
   detection: CommitmentDetection;
+  provider?: string;
 }) {
   const prisma = getPrisma();
   const open = await prisma.thread.findMany({
@@ -465,24 +534,78 @@ async function maybeResolveFromMessage(input: {
       },
     };
   }
+  const quote = input.detection.evidence_span.slice(0, 280);
+  const source = input.provider ?? "source";
+  const cancel = routeContent(quote) === "cancellation";
+  const confirmed = input.detection.confidence >= 0.9;
+  if (confirmed) {
+    await prisma.reminder.updateMany({
+      where: { threadId: match.thread.id, status: "SCHEDULED" },
+      data: { status: "CANCELLED" },
+    });
+    await prisma.resolution.upsert({
+      where: { threadId: match.thread.id },
+      create: {
+        userId: input.user.id,
+        threadId: match.thread.id,
+        kind: cancel ? "CANCELLED" : "FULFILLED",
+        evidence: quote,
+        note: source,
+      },
+      update: {
+        kind: cancel ? "CANCELLED" : "FULFILLED",
+        evidence: quote,
+        note: source,
+      },
+    });
+    const commitments = await prisma.commitment.findMany({
+      where: { threadId: match.thread.id },
+      select: { id: true },
+    });
+    if (commitments.length > 0) {
+      await prisma.commitmentEvidence.createMany({
+        data: commitments.map((commitment) => ({
+          userId: input.user.id,
+          commitmentId: commitment.id,
+          exactText: quote,
+          sourceKind: source,
+          sourceProvider: source,
+          confidence: input.detection.confidence,
+        })),
+      });
+    }
+  }
   await prisma.thread.update({
     where: { id: match.thread.id },
     data: {
-      status: "LIKELY_RESOLVED",
-      currentState: input.detection.evidence_span,
+      status: confirmed ? "RESOLVED" : "LIKELY_RESOLVED",
+      resolvedAt: confirmed ? new Date() : null,
+      resolutionReason: confirmed ? quote : null,
+      currentState: quote,
       events: {
         create: {
           userId: input.user.id,
-          kind: "LIKELY_RESOLVED",
-          body: input.detection.evidence_span,
+          kind: confirmed ? "RESOLVED" : "LIKELY_RESOLVED",
+          body: confirmed
+            ? `Evidence found\n"${quote}"\nSource\n${source}\nConfidence\n${Math.round(input.detection.confidence * 100)}%`
+            : quote,
         },
       },
     },
   });
+  if (confirmed) {
+    await createNotification({
+      userId: input.user.id,
+      title: cancel ? "Commitment cancelled" : "Resolved",
+      body: `"${quote}"\nSource: ${source}`,
+      href: `/threads/${match.thread.id}`,
+      topic: "resolved",
+    });
+  }
   return {
     threadId: match.thread.id,
     reply: {
-      text: "STILL detected a possible resolution.",
+      text: confirmed ? "STILL marked this resolved from the source." : "STILL detected a possible resolution.",
       buttons: [{ label: "Open thread", data: `open:${match.thread.id}` }],
     },
   };

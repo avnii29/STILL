@@ -41,10 +41,13 @@ describe("guest workspace parse", () => {
   });
 
   it("keeps a valid workspace and ignores a forged id", () => {
-    const parsed = parseGuestWorkspace({
-      ...emptyGuestWorkspace(new Date("2026-09-25T10:00:00.000Z")),
-      threads: [thread(), { ...thread(), id: "not-guest" }],
-    });
+    const parsed = parseGuestWorkspace(
+      {
+        ...emptyGuestWorkspace(new Date("2026-09-25T10:00:00.000Z")),
+        threads: [thread(), { ...thread(), id: "not-guest" }],
+      },
+      new Date("2026-09-25T12:00:00.000Z"),
+    );
     expect(parsed?.threads).toHaveLength(1);
     expect(parsed?.threads[0]?.id).toBe("g_test");
   });

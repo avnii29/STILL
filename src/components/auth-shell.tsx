@@ -46,7 +46,7 @@ export function AuthShell({
           <div className="lg:hidden">
             <StillMark href="/" title="STILL" />
           </div>
-          <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center pt-10 lg:pt-0">
+          <div className="mx-auto flex w-full max-w-[32rem] flex-1 flex-col justify-center pt-10 lg:mx-0 lg:pt-0">
             <p className="label mb-5">{eyebrow}</p>
             <h1 className="font-display text-[clamp(2.4rem,6vw,3.6rem)] leading-[0.95] tracking-tight">
               {title}

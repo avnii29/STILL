@@ -12,6 +12,7 @@ import {
   redTeamExternalAction,
 } from "@/lib/threads/lifecycle";
 import { calendarStatus, docsStatus } from "@/lib/integrations/google";
+import { executeCalendarMove } from "@/lib/connectors/google-calendar-sync";
 import { scheduleRemindAt } from "@/lib/agents/extract";
 
 const ACTION_STATUS: Record<string, ThreadStatus> = {
@@ -390,20 +391,43 @@ async function decideProposal(input: {
   }
 
   if (proposal.kind === "MOVE_CALENDAR_EVENT") {
-    const calendar = calendarStatus(false);
+    const moved = await executeCalendarMove({
+      userId: input.user.id,
+      metadata: proposal.metadata,
+    });
+    if (!moved.ok) {
+      await prisma.actionProposal.update({
+        where: { id: proposal.id },
+        data: { status: "BLOCKED", blockedReason: moved.message },
+      });
+      await prisma.threadEvent.create({
+        data: {
+          userId: input.user.id,
+          threadId: input.thread.id,
+          kind: "ACTION_BLOCKED",
+          body: moved.message,
+        },
+      });
+      return { ok: false as const, message: moved.message };
+    }
     await prisma.actionProposal.update({
       where: { id: proposal.id },
-      data: { status: "BLOCKED", blockedReason: calendar.message },
+      data: { status: "APPROVED" },
     });
     await prisma.threadEvent.create({
       data: {
         userId: input.user.id,
         threadId: input.thread.id,
-        kind: "ACTION_BLOCKED",
-        body: calendar.message,
+        kind: "CALENDAR_UPDATED",
+        body: moved.message,
       },
     });
-    return { ok: false as const, message: calendar.message };
+    await writeAuditLog({
+      userId: input.user.id,
+      action: "ACTION_APPROVED",
+      target: proposal.id,
+    });
+    return { ok: true as const, message: moved.message };
   }
 
   if (proposal.kind === "OPEN_DOCUMENT") {

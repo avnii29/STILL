@@ -3,7 +3,7 @@ import { StillMark } from "@/components/still-mark";
 
 export function GuestHeader({ signedIn }: { signedIn: boolean }) {
   return (
-    <header className="guest-header">
+    <header className="guest-header still-frame">
       <StillMark href="/still" title="STILL" />
       <nav aria-label="Guest STILL" className="ml-auto flex flex-wrap items-center gap-4 text-sm">
         <Link href="/still" className="min-h-11 inline-flex items-center">

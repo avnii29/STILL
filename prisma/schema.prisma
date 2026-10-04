@@ -189,6 +189,8 @@ model User {
   providerEvents      ProviderEvent[]
   sourcePermissions   SourcePermission[]
   consentEvents       ConsentEvent[]
+  ingestionEvents     IngestionEvent[]
+  calendarEvents      CalendarEvent[]
 
   @@map("users")
 }
@@ -463,6 +465,13 @@ model UserPreference {
   rememberContext          Boolean  @default(false) @map("remember_context")
   autoRememberClear        Boolean  @default(false) @map("auto_remember_clear")
   conversationRetention    String   @default("EVIDENCE_ONLY") @map("conversation_retention")
+  notifyCommitment         Boolean  @default(true) @map("notify_commitment")
+  notifyDeadline           Boolean  @default(true) @map("notify_deadline")
+  notifyBlocked            Boolean  @default(true) @map("notify_blocked")
+  notifyDeadlineChange     Boolean  @default(true) @map("notify_deadline_change")
+  notifyResolved           Boolean  @default(true) @map("notify_resolved")
+  notifyMinorContext       Boolean  @default(false) @map("notify_minor_context")
+  notifyInApp              Boolean  @default(true) @map("notify_in_app")
   createdAt                DateTime @default(now()) @map("created_at")
   updatedAt                DateTime @updatedAt @map("updated_at")
 
@@ -632,6 +641,8 @@ model IntegrationAccount {
   sourceConversations SourceConversation[]
   memoryCandidates    MemoryCandidate[]
   providerEvents      ProviderEvent[]
+  ingestionEvents     IngestionEvent[]
+  calendarEvents      CalendarEvent[]
 
   @@unique([userId, provider])
   @@index([userId, status])
@@ -760,4 +771,51 @@ model ProviderEvent {
   @@unique([provider, externalEventId])
   @@index([provider, createdAt])
   @@map("provider_events")
+}
+
+model IngestionEvent {
+  id               String             @id @default(cuid())
+  userId           String             @map("user_id") @db.Uuid
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connectorId      String             @map("connector_id")
+  account          IntegrationAccount @relation(fields: [connectorId], references: [id], onDelete: Cascade)
+  provider         String
+  externalEventId  String             @map("external_event_id")
+  eventType        String             @map("event_type")
+  payloadHash      String             @map("payload_hash")
+  occurredAt       DateTime           @map("occurred_at")
+  receivedAt       DateTime           @default(now()) @map("received_at")
+  processingStatus String             @default("RECEIVED") @map("processing_status")
+  processedAt      DateTime?          @map("processed_at")
+  error            String?            @db.Text
+  route            String?
+  summary          String?            @db.Text
+  createdAt        DateTime           @default(now()) @map("created_at")
+
+  @@unique([connectorId, externalEventId])
+  @@index([userId, receivedAt])
+  @@map("ingestion_events")
+}
+
+model CalendarEvent {
+  id            String             @id @default(cuid())
+  userId        String             @map("user_id") @db.Uuid
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId     String             @map("account_id")
+  account       IntegrationAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  calendarId    String             @map("calendar_id")
+  externalId    String             @map("external_id")
+  title         String
+  status        String
+  startsAt      DateTime?          @map("starts_at")
+  endsAt        DateTime?          @map("ends_at")
+  timeZone      String?            @map("time_zone")
+  htmlLink      String?            @map("html_link")
+  updatedRemote String?            @map("updated_remote")
+  createdAt     DateTime           @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+
+  @@unique([accountId, externalId])
+  @@index([userId, startsAt])
+  @@map("calendar_events")
 }

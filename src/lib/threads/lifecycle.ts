@@ -28,12 +28,21 @@ export function evaluatePostponement(currentCount: number): PostponeAdvice {
       proposalKind: "NONE",
     };
   }
+  if (count === 3) {
+    return {
+      count,
+      kind: "MICRO_ACTION",
+      prompt: "Open the document and write the first three lines.",
+      suggestedAction: "Open the document and write the first three lines.",
+      proposalKind: "MICRO_ACTION",
+    };
+  }
   return {
     count,
     kind: "MICRO_ACTION",
-    prompt: "Open the document and write the first three lines.",
-    suggestedAction: "Open the document and write the first three lines.",
-    proposalKind: "MICRO_ACTION",
+    prompt: "You've moved this enough times that it may no longer be real. Keep it, change it, or let it go?",
+    suggestedAction: "Keep the commitment, change the deadline, or let it go.",
+    proposalKind: "NONE",
   };
 }
 

@@ -139,7 +139,7 @@ function MemoryItem({
     <article className={`border-b border-line py-8 last:border-b-0 ${quiet ? "opacity-70" : ""}`}>
       <h3 className="font-display text-2xl tracking-tight">{title}</h3>
       {meta ? <p className="mt-2 text-sm text-ink-soft">{meta}</p> : null}
-      <p className="mt-3 max-w-2xl text-ink-soft">
+      <p className="mt-3 max-w-4xl text-ink-soft">
         <span className="label mr-2">Why</span>
         {why}
       </p>

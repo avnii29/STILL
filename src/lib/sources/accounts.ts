@@ -27,6 +27,15 @@ export async function startProviderConnect(input: {
   }
 
   const prisma = getPrisma();
+  if (input.provider === "CALENDAR") {
+    return {
+      ok: false as const,
+      status: "REQUIRES_ACTION" as const,
+      message: "Google Calendar connects through Google's OAuth screen.",
+      alternative: capability.alternative,
+    };
+  }
+
   if (input.provider !== "TELEGRAM") {
     const account = await prisma.integrationAccount.upsert({
       where: {
@@ -147,6 +156,10 @@ export async function disconnectProvider(input: {
   const account = await prisma.integrationAccount.findUnique({
     where: { userId_provider: { userId: input.userId, provider: input.provider } },
   });
+  if (account && input.provider === "CALENDAR") {
+    const { stopGoogleWatches } = await import("@/lib/connectors/google-calendar-sync");
+    await stopGoogleWatches(account).catch(() => undefined);
+  }
   if (!account) {
     await prisma.integrationAccount.create({
       data: {

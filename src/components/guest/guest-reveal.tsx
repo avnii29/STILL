@@ -38,6 +38,10 @@ export function GuestReveal({
           {extraction.deadline.toUpperCase()}
         </p>
       ) : null}
+      {extraction.evidence && extraction.evidence.trim() !== original.trim() ? (
+        <p className="mt-8 max-w-md text-lg text-ink-soft">“{extraction.evidence}”</p>
+      ) : null}
+      <p className="mt-3 text-sm text-ink-faint">{Math.round(extraction.confidence * 100)}%</p>
       <p className="mt-12 font-display text-2xl tracking-tight">
         {found ? "I found something worth keeping." : "STILL will not invent a commitment from this."}
       </p>

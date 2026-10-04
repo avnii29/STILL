@@ -25,7 +25,7 @@ export function EditorialCard({ thread }: { thread: EditorialCardData }) {
   return (
     <article className="border-b border-line py-10 last:border-b-0">
       <p className="label">{withLabel}</p>
-      <h2 className="mt-3 max-w-2xl font-display text-[clamp(1.8rem,4vw,3rem)] leading-[1.05] tracking-tight">
+      <h2 className="mt-3 max-w-4xl font-display text-[clamp(1.8rem,4vw,3rem)] leading-[1.05] tracking-tight">
         {thread.title}
       </h2>
       <p className="mt-4 flex flex-wrap items-center gap-3 text-sm text-ink-faint">

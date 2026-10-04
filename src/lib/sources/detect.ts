@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { extractPerson, normalizeCommitment } from "@/lib/agents/extract";
+import { routeContent } from "@/lib/ingestion/router";
 import { resolveTemporal, type DeadlinePrecision } from "@/lib/sources/temporal";
 
 export const commitmentDetectionSchema = z.object({
@@ -43,11 +44,16 @@ const THIRD_PARTY =
 const HEDGE = /\b(i might|i may|maybe i('ll| will)|i('m| am) thinking|probably|not sure)\b/i;
 const EXPLICIT = /\b(i('ll| will)|i am going to|i'm going to|i told \w+ i('d| would)|i promised)\b/i;
 const ACTION =
-  /\b(send|share|forward|pay|call|text|submit|finish|start|apply|write|deliver|bring|email|handle)\b/i;
+  /\b(send|share|forward|pay|call|text|submit|finish|start|apply|write|deliver|bring|email|handle|get)\b/i;
+const CONDITIONAL = /\bif i (get|have|find) time\b/i;
 const RESOLUTION = /\b(i sent it|sent it|it's done|its done|done\.|here's the|just emailed|already sent)\b/i;
 const CASUAL = /\b(sometime|someday|we should (probably )?(meet|get coffee|hang))\b/i;
 
 export function scoreRelevance(text: string) {
+  const routed = routeContent(text);
+  if (routed === "fulfillment" || routed === "cancellation" || routed === "deadline_change") {
+    return "HIGH" as const;
+  }
   const lower = text.toLowerCase();
   if (REMINDER.test(lower) || EXPLICIT.test(lower) || RESOLUTION.test(lower)) return "HIGH" as const;
   if (REQUEST_TO_OTHER.test(lower) || HEDGE.test(lower) || /\b(tomorrow|tonight|friday|deadline)\b/i.test(lower)) {
@@ -76,8 +82,12 @@ export function detectCommitment(input: {
   const request = REQUEST_TO_OTHER.test(evidence);
   const third = evidence.match(THIRD_PARTY);
   const hedge = HEDGE.test(evidence);
-  const explicit = EXPLICIT.test(evidence) && ACTION.test(evidence);
-  const resolution = RESOLUTION.test(evidence);
+  const conditional = CONDITIONAL.test(evidence);
+  const explicit = EXPLICIT.test(evidence) && ACTION.test(evidence) && !conditional;
+  const routed = routeContent(evidence);
+  const resolution =
+    RESOLUTION.test(evidence) ||
+    ((routed === "fulfillment" || routed === "cancellation") && !negated);
   const casual = CASUAL.test(evidence) && !/\b(tonight|tomorrow|today|friday)\b/i.test(evidence);
 
   let classification: CommitmentDetection["classification"] = "NON_COMMITMENT";
@@ -108,14 +118,19 @@ export function detectCommitment(input: {
       : "Someone asked you. Confirm if you want STILL to keep it.";
   } else if (resolution) {
     classification = "RESOLUTION_SIGNAL";
-    confidence = 0.7;
+    confidence = routed === "fulfillment" || routed === "cancellation" ? 0.94 : 0.7;
     actor = "ME";
     reasoning = "This may close an existing thread. STILL will not invent a new one.";
   } else if (casual) {
     classification = "NON_COMMITMENT";
     confidence = 0.8;
     reasoning = "This is open-ended conversation, not a commitment.";
-  } else if (hedge && (explicit || temporal)) {
+  } else if (conditional) {
+    classification = "POSSIBLE_COMMITMENT";
+    confidence = 0.42;
+    actor = "ME";
+    reasoning = "This depends on having time. STILL will not store it unless you confirm.";
+  } else if (hedge && (EXPLICIT.test(evidence) || temporal)) {
     classification = "POSSIBLE_COMMITMENT";
     confidence = 0.44;
     actor = "ME";

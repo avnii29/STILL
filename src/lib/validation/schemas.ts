@@ -121,6 +121,15 @@ export const preferenceUpdateSchema = z.object({
   emailNotifications: z.boolean(),
   webPushEnabled: z.boolean(),
   followUpDays: z.number().int().min(1).max(30),
+  notifyCommitment: z.boolean().optional(),
+  notifyDeadline: z.boolean().optional(),
+  notifyBlocked: z.boolean().optional(),
+  notifyDeadlineChange: z.boolean().optional(),
+  notifyResolved: z.boolean().optional(),
+  notifyMinorContext: z.boolean().optional(),
+  notifyInApp: z.boolean().optional(),
+  quietHoursStart: z.string().regex(/^\d{2}:\d{2}$/).nullable().optional(),
+  quietHoursEnd: z.string().regex(/^\d{2}:\d{2}$/).nullable().optional(),
 });
 
 export const memoryPolicySchema = z.object({

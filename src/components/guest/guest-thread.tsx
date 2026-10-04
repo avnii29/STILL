@@ -74,7 +74,7 @@ export function GuestThreadView({ id }: { id: string }) {
         {thread.dueAt ? <span>due {formatQuietDateLong(thread.dueAt)}</span> : null}
       </p>
 
-      <ol className="mt-12 max-w-2xl space-y-8">
+      <ol className="mt-12 max-w-4xl space-y-8">
         <li>
           <p className="label">You said</p>
           <blockquote className="mt-3 border-l border-accent/40 pl-4 text-lg leading-relaxed">
@@ -159,7 +159,7 @@ export function GuestThreadView({ id }: { id: string }) {
         <p className="mt-12 font-display text-3xl tracking-tight">done.</p>
       )}
 
-      <section className="mt-16 max-w-2xl border-t border-line pt-8">
+      <section className="mt-16 max-w-4xl border-t border-line pt-8">
         <button
           ref={buttonRef}
           type="button"

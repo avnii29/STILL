@@ -1,225 +1,198 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LegalShell, UnsetField } from "@/components/legal/legal-shell";
-import { getServerEnv } from "@/lib/env";
+import { LegalShell } from "@/components/legal/legal-shell";
 import { operator } from "@/config/operator";
 
 export const metadata: Metadata = {
   title: "Privacy",
-  description: "What STILL collects, why, and what you can do about it.",
+  description: "How STILL handles information you authorize.",
 };
 
-export default function PrivacyPolicyPage() {
-  const env = getServerEnv();
-  const ai =
-    env.AI_PROVIDER === "openai"
-      ? "OpenAI"
-      : env.AI_PROVIDER === "anthropic"
-        ? "Anthropic"
-        : null;
-  const email =
-    env.EMAIL_PROVIDER === "resend"
-      ? "Resend"
-      : env.EMAIL_PROVIDER === "smtp"
-        ? "an SMTP server configured by the operator"
-        : null;
-  const push = Boolean(env.NEXT_PUBLIC_VAPID_PUBLIC_KEY);
+export default function PrivacyPage() {
+  const operatorName = operator.operatorLegalName;
+  const contact = operator.contactEmail;
 
   return (
     <LegalShell title="Privacy">
-      <section>
-        <h2>Who operates STILL</h2>
-        <p>
-          {operator.operatorLegalName ? (
-            <>{operator.operatorLegalName} operates STILL.</>
-          ) : (
-            <>
-              The legal operator has not been published. <UnsetField label="OPERATOR LEGAL NAME" />
-            </>
-          )}
-        </p>
-        <p>
-          Contact:{" "}
-          {operator.contactEmail ? (
-            <a href={`mailto:${operator.contactEmail}`}>{operator.contactEmail}</a>
-          ) : (
-            <UnsetField label="CONTACT EMAIL" />
-          )}
-        </p>
-        {operator.businessAddress ? (
-          <p>Address: {operator.businessAddress}</p>
-        ) : (
-          <p>
-            A business address has not been published. <UnsetField label="BUSINESS ADDRESS" />
-          </p>
-        )}
-      </section>
+      <p>Last updated: {operator.effectiveDate}.</p>
+      <p>
+        {operatorName
+          ? `STILL is operated by ${operatorName} (“STILL”, “we”, “us”, or “our”).`
+          : "The operator of this deployment has not published a legal name. The sentences below describe the software as it runs. They are not a finished notice from a named operator."}
+      </p>
 
       <section>
-        <h2>What STILL is</h2>
+        <h2>1. What STILL does</h2>
         <p>
-          STILL remembers commitments you said you would keep. Conversations are sources.
-          Commitments are memory. STILL is not a chatbot, a todo scoreboard, or a surveillance
-          product.
+          STILL is a personal commitment-management service. With your authorization, STILL can process
+          information from connected sources to identify commitments, keep evidence with the thread,
+          watch for relevant changes, offer reminders and recommendations, and — where a connector
+          supports it and you approve it — perform an action through that service.
         </p>
       </section>
 
       <section>
-        <h2>Information you provide</h2>
+        <h2>2. Information we collect</h2>
         <h3>Account information</h3>
+        <p>Email address, a name if you provide one, and the authentication identifiers Supabase stores for your session.</p>
+        <h3>Commitment information</h3>
         <p>
-          Email and password (or Google sign-in if that provider is enabled). Optional name and
-          timezone. These live in Supabase Auth and in STILL&apos;s <code>users</code> /{" "}
-          <code>profiles</code> rows.
-        </p>
-        <h3>Guest workspace</h3>
-        <p>
-          You can enter STILL without an account. Sentences you ask STILL to look at are sent to{" "}
-          <code>/api/extract</code> so the same detector can run. That is server processing — STILL
-          does not claim that nothing leaves your device. The resulting thread is stored in this
-          browser&apos;s IndexedDB (<code>still-guest</code>), not in the STILL database, until you
-          choose which memories to bring into an account. Guest extract requests are rate-limited by
-          network address. A guest privacy page lives at <Link href="/still/privacy">/still/privacy</Link>.
-        </p>
-        <h3>Commitments</h3>
-        <p>
-          The remembered act, optional person, optional deadline, source, and confidence. Stored
-          when you choose Remember, or when you confirm something STILL noticed.
-        </p>
-        <h3>Conversation evidence</h3>
-        <p>
-          The sentence that justifies a memory. Default retention is evidence only — not the rest of
-          a long paste. You can choose to keep more, or nothing beyond the commitment fields, in
-          Privacy settings.
-        </p>
-        <h3>Voice / transcription</h3>
-        <p>
-          Speak uses the browser&apos;s speech engine. STILL does not upload or store the audio
-          file. Words appear in the capture field. They become stored evidence only if you remember
-          them. Which speech vendor your browser uses is not controlled by this repository.
+          Commitments you create or that STILL extracts from text you authorize, their status, deadlines
+          it can actually parse, people or entities named in that evidence, the evidence itself, and how
+          a commitment was resolved.
         </p>
         <h3>Connected-source information</h3>
         <p>
-          If you connect Telegram (or another official source that is actually configured), STILL
-          stores the identifiers needed to receive messages you send or forward to STILL, plus any
-          evidence those messages produce. STILL does not ask for your chat password or session
-          file.
+          This depends on what you connect. If you connect Google Calendar, STILL may process the
+          calendar events needed to see scheduling context, deadline conflicts, and an approved calendar
+          change. STILL does not receive a source you have not authorized. Messages, documents, email,
+          and tasks are not connected in this product yet.
         </p>
-        <h3>Calendar information</h3>
-        <p>
-          Calendar connection is optional and, in this codebase, does not silently read or move
-          events. If Google Calendar OAuth is later completed, this policy must be updated to match
-          that implementation.
-        </p>
-        <h3>Technical / security logs</h3>
-        <p>
-          The server writes operational logs and audit rows (including IP on some actions). Host log
-          destination depends on deployment and is not specified in this repository.
-        </p>
+        <h3>Technical information</h3>
+        <p>IP address as seen by the host, browser and device information sent with ordinary requests, timestamps, and security or diagnostic logs when something fails.</p>
+        <h3>Notification information</h3>
+        <p>Notification preferences you set, and delivery state when a reminder is actually sent.</p>
       </section>
 
       <section>
-        <h2>Cookies and local storage</h2>
-        <p>
-          STILL uses strictly necessary Supabase session cookies. Guest STILL uses IndexedDB on this
-          device. It does not set analytics or marketing cookies. See{" "}
-          <Link href="/legal/cookies">Cookies</Link>.
-        </p>
+        <h2>3. Why we use information</h2>
+        <p>To provide STILL, identify commitments, keep threads, determine deadlines that the text supports, detect changes, provide reminders, generate recommendations, execute actions you approve, authenticate you, secure the service, prevent abuse, troubleshoot failures, and comply with law. Customer content is not used here to train a model.</p>
       </section>
 
       <section>
-        <h2>Why information is processed</h2>
+        <h2>4. AI processing</h2>
         <p>
-          To create and keep your account, remember confirmed commitments, explain why they were
-          kept, send reminders you asked for, and operate security. There is no advertising use in
-          this codebase.
+          STILL uses deterministic checks and, when an operator configures a model, automated systems to
+          interpret authorized content and judge whether it is a commitment, deadline, change,
+          resolution, or possible intervention. AI-generated conclusions are not guaranteed. Evidence and
+          code-backed checks are preferred, and consequential actions require approval. STILL does not
+          treat AI output as a source of truth.
+        </p>
+        <p>
+          No model provider is configured by default. If an operator later sets one, the privacy notice
+          for that deployment must name the provider and the fields sent. This copy will not call an
+          unnamed company a trusted partner.
         </p>
       </section>
 
       <section>
-        <h2>How AI processing works</h2>
-        {ai ? (
-          <p>
-            A language model ({ai}) is configured. STILL sends candidate snippets required to
-            classify a commitment — not a whole inbox. Output is validated before it can become
-            memory. Whether {ai} uses API traffic to train its own models is determined by that
-            provider&apos;s terms and any contract the operator signs. That is not a completed fact
-            in this repository.
-          </p>
-        ) : (
-          <p>
-            No language-model provider is configured in this environment. Classification uses
-            wording patterns on the STILL server. Nothing is sent to OpenAI or Anthropic unless an
-            operator later sets <code>AI_PROVIDER</code>.
-          </p>
-        )}
-      </section>
-
-      <section>
-        <h2>Third-party processors</h2>
-        <ul>
-          <li>Supabase — authentication and, typically, the PostgreSQL database.</li>
-          <li>Hosting provider — README assumes Vercel; production host is not confirmed here.</li>
-          <li>
-            AI provider — {ai ?? "none configured"}.
-          </li>
-          <li>Notification email — {email ?? "none configured (EMAIL_PROVIDER=none or log)."}</li>
-          <li>
-            Web push — {push ? "VAPID keys are present; the browser push service delivers notices." : "not configured."}
-          </li>
-          <li>Analytics provider — none installed.</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Data location</h2>
+        <h2>5. Connected services</h2>
         <p>
-          Location is the region of the Supabase project and the application host. That region is
-          not recorded in this repository.
+          When you connect a third-party service, STILL receives only the permissions that provider&apos;s
+          authorization screen grants. Those services have their own privacy policies and terms. You can
+          disconnect a connected service from STILL. Google Calendar is the connector that exists today.
+          Other sources are not offered as connected.
         </p>
       </section>
 
       <section>
-        <h2>Retention</h2>
+        <h2>6. Human control</h2>
         <p>
-          Account and memories last until you delete them. Default conversation retention is
-          evidence only. Audit and consent rows are removed with the account in the current deletion
-          implementation.
+          STILL may recommend an action from a commitment and its context. It does not independently make
+          a consequential decision for you. A recommendation is a proposal. An action that changes an
+          external service waits for your approval. Sending a message on your behalf is not an available
+          action.
         </p>
       </section>
 
       <section>
-        <h2>Security</h2>
+        <h2>7. Sharing</h2>
+        <p>We do not sell personal data.</p>
         <p>
-          User-owned tables have row-level security policies for Supabase clients. The application
-          server uses a direct database connection and must enforce user id from the signed-in
-          session. This is not a claim of “military-grade” or perfect security.
+          Processors that can be involved are the ones this deployment actually uses: Supabase for
+          authentication and the database, the host that runs the Next.js application, and Google if you
+          connect Calendar. There is no analytics provider. There is no email provider configured by
+          default. Cloudflare Turnstile is used only when its keys are set, and then only for the
+          verification challenge. See <Link href="/legal/subprocessors">Subprocessors</Link>.
         </p>
       </section>
 
       <section>
-        <h2>Your controls</h2>
+        <h2>8. Data retention</h2>
         <p>
-          After you sign in: inspect memories, forget them, export JSON, disconnect sources, delete
-          stored source excerpts, and delete the account from{" "}
-          <Link href="/settings/privacy">Privacy</Link>. Public legal pages do not require an
-          account.
+          Personal data is kept while it is needed to provide the service, keep your account, meet
+          operational needs such as security and abuse prevention, resolve disputes, or comply with law.
+          This deployment does not claim a fixed deletion clock such as 30 days, because the software
+          does not enforce one.
         </p>
       </section>
 
       <section>
-        <h2>Children</h2>
+        <h2>9. Delete your data</h2>
         <p>
-          STILL is not directed at children. A specific age threshold and jurisdiction have not been
-          published. <UnsetField label="AGE POLICY" />
+          Signed in, open Settings and use Delete my STILL. That removes the account, memories, evidence,
+          people, reminders, connected-source identifiers, and consent receipts, and disconnects
+          integrations. Export is on Settings → Privacy. Some information may still be kept where the law
+          requires it, or where it is necessary for security, fraud prevention, or dispute resolution.
         </p>
       </section>
 
       <section>
-        <h2>Changes</h2>
+        <h2>10. Your rights</h2>
         <p>
-          Material changes will update the policy version ({operator.policyVersion} today). How
-          notice is given after launch is not specified yet.
+          You can ask for access, correction, erasure, and withdrawal of consent, and you can raise a
+          grievance. Withdrawal and erasure in the product are the disconnect, forget, export, and delete
+          controls above. Other rights that apply to you depend on the law that covers the operator. A
+          grievance contact is published only when an email is configured
+          {contact ? (
+            <>
+              : <a href={`mailto:${contact}`}>{contact}</a>.
+            </>
+          ) : (
+            ". None is published for this deployment."
+          )}
+        </p>
+      </section>
+
+      <section>
+        <h2>11. Children</h2>
+        <p>
+          STILL is not directed to children. We do not knowingly process a child&apos;s personal data. An age
+          threshold has not been legally adopted for this product, so this page does not invent one.
+        </p>
+      </section>
+
+      <section>
+        <h2>12. Security</h2>
+        <p>
+          Sessions use cookie-based authentication. Traffic should be HTTPS in a deployed environment.
+          Database policies use Row Level Security so a user is scoped to their own rows. Connector
+          tokens stay on the server. Secrets are not placed in the browser bundle. Audit records exist
+          for sign-in and account actions. This is ordinary application security, described on the{" "}
+          <Link href="/legal/security">security page</Link>.
+        </p>
+      </section>
+
+      <section>
+        <h2>13. International transfers</h2>
+        <p>
+          Supabase and, if you connect it, Google may process data outside India. The region is whatever
+          those projects are configured to use. It is not recorded in this repository, so this page will
+          not invent a city. No model provider receives your content unless one is configured.
+        </p>
+      </section>
+
+      <section>
+        <h2>14. Changes</h2>
+        <p>
+          This policy is updated when STILL changes or when a legal requirement changes. The date at the
+          top is the date of this text. A material change should be communicated in the product. Until an
+          operator is named, treat a change here as a software change, not as a notice from a company.
+        </p>
+      </section>
+
+      <section>
+        <h2>15. Contact</h2>
+        <p>
+          {contact ? (
+            <>
+              Privacy and grievance contact: <a href={`mailto:${contact}`}>{contact}</a>.
+            </>
+          ) : (
+            "No privacy or grievance email has been published. Do not treat a placeholder address as real."
+          )}{" "}
+          {operatorName ? `Operator: ${operatorName}.` : "No legal operator name has been published."}{" "}
+          {operator.businessAddress ? `Address: ${operator.businessAddress}.` : "No business address has been published."}
         </p>
       </section>
     </LegalShell>

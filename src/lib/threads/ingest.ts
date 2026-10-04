@@ -11,6 +11,7 @@ import { getPrisma } from "@/lib/prisma";
 import { logger } from "@/lib/logger";
 import type { AppUser } from "@/lib/auth";
 import { createNotification } from "@/lib/notifications/dispatch";
+import { runStillLoop } from "@/lib/agents/orchestrator";
 import { evaluateIntervention } from "@/lib/threads/lifecycle";
 import { calendarStatus } from "@/lib/integrations/google";
 import {
@@ -291,6 +292,27 @@ export async function ingestConversation(input: {
         ok: true,
         confidence: intervention.confidence,
       },
+    });
+    const loop = runStillLoop({
+      text: extracted.evidence,
+      now: new Date(),
+      timeZone: input.user.timezone,
+      calendarConnected: calendar.connected,
+    });
+    await prisma.agentRun.createMany({
+      data: loop.steps.map((item) => ({
+        userId: input.user.id,
+        threadId: thread.id,
+        kind: item.agent,
+        input: { purpose: item.agent } as Prisma.InputJsonValue,
+        output: {
+          decision: item.decision,
+          confidence: item.confidence,
+          risk: item.risk ?? null,
+        } as Prisma.InputJsonValue,
+        ok: item.ok,
+        confidence: item.confidence,
+      })),
     });
 
     await writeAuditLog({

@@ -59,7 +59,7 @@ export default async function ThreadDetailPage({
         {thread.dueAt ? <span>due {formatQuietDateLong(thread.dueAt)}</span> : null}
         <span>moved {thread.postponementCount} time{thread.postponementCount === 1 ? "" : "s"}</span>
       </p>
-      <ol className="mt-12 max-w-2xl space-y-8">
+      <ol className="mt-12 max-w-4xl space-y-8">
         <li>
           <p className="label">You said</p>
           <blockquote className="mt-3 border-l border-accent/40 pl-4 text-lg leading-relaxed">
@@ -109,6 +109,7 @@ export default async function ThreadDetailPage({
                 reason: pending.reason,
                 status: pending.status,
                 blockedReason: pending.blockedReason,
+                risk: pending.risk,
               }
             : null
         }
@@ -126,7 +127,7 @@ export default async function ThreadDetailPage({
         deadline={thread.dueAt ? formatQuietDateLong(thread.dueAt) : null}
         threadId={thread.id}
       />
-      <section id="source" className="mt-16 max-w-2xl">
+      <section id="source" className="mt-16 max-w-4xl">
         <p className="label">You said</p>
         <blockquote className="mt-4 border-l border-accent/40 pl-4 text-lg leading-relaxed">
           “{commitment?.evidenceItems[0]?.exactText ?? thread.evidence}”
@@ -135,7 +136,7 @@ export default async function ThreadDetailPage({
           Original words. Not a summary. Source: {thread.source}.
         </p>
       </section>
-      <section className="mt-12 max-w-2xl">
+      <section className="mt-12 max-w-4xl">
         <p className="label">Reminders</p>
         {thread.reminders.length === 0 ? (
           <p className="mt-3 text-ink-soft">No reminder is scheduled yet.</p>
@@ -149,7 +150,7 @@ export default async function ThreadDetailPage({
           </ul>
         )}
       </section>
-      <section className="mt-12 max-w-2xl">
+      <section className="mt-12 max-w-4xl">
         <p className="label">Interventions</p>
         {thread.interventions.length === 0 ? (
           <p className="mt-3 text-ink-soft">Still has not intervened.</p>
@@ -164,7 +165,7 @@ export default async function ThreadDetailPage({
           </ul>
         )}
       </section>
-      <section className="mt-12 max-w-2xl">
+      <section className="mt-12 max-w-4xl">
         <p className="label">Agent reasoning</p>
         {thread.agentRuns.length === 0 ? (
           <p className="mt-3 text-ink-soft">No agent run is stored yet.</p>

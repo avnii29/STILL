@@ -1,30 +1,14 @@
-import { Suspense } from "react";
-import { AuthForm } from "@/components/auth-form";
-import { AuthShell } from "@/components/auth-shell";
-import { isGoogleAuthEnabled } from "@/lib/env";
+import { redirect } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-
-export default async function SignInPage({
+export default async function SignInAlias({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string }>;
+  searchParams: Promise<{ next?: string; error?: string }>;
 }) {
-  const { next } = await searchParams;
-  const keep = Boolean(next?.startsWith("/still") || next?.startsWith("/try"));
-  return (
-    <AuthShell
-      eyebrow="Sign in"
-      title={keep ? "keep what matters." : "Come back to what you meant."}
-      lede={
-        keep
-          ? "Your threads are currently staying on this device. Sign in to carry them with you."
-          : "Sign in to your STILL."
-      }
-    >
-      <Suspense>
-        <AuthForm googleEnabled={isGoogleAuthEnabled()} intent="sign-in" />
-      </Suspense>
-    </AuthShell>
-  );
+  const params = await searchParams;
+  const query = new URLSearchParams();
+  if (params.next) query.set("next", params.next);
+  if (params.error) query.set("error", params.error);
+  const suffix = query.toString() ? `?${query}` : "";
+  redirect(`/login${suffix}`);
 }

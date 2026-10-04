@@ -201,6 +201,8 @@ export type UserWhereInput = {
   providerEvents?: Prisma.ProviderEventListRelationFilter
   sourcePermissions?: Prisma.SourcePermissionListRelationFilter
   consentEvents?: Prisma.ConsentEventListRelationFilter
+  ingestionEvents?: Prisma.IngestionEventListRelationFilter
+  calendarEvents?: Prisma.CalendarEventListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -235,6 +237,8 @@ export type UserOrderByWithRelationInput = {
   providerEvents?: Prisma.ProviderEventOrderByRelationAggregateInput
   sourcePermissions?: Prisma.SourcePermissionOrderByRelationAggregateInput
   consentEvents?: Prisma.ConsentEventOrderByRelationAggregateInput
+  ingestionEvents?: Prisma.IngestionEventOrderByRelationAggregateInput
+  calendarEvents?: Prisma.CalendarEventOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -272,6 +276,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   providerEvents?: Prisma.ProviderEventListRelationFilter
   sourcePermissions?: Prisma.SourcePermissionListRelationFilter
   consentEvents?: Prisma.ConsentEventListRelationFilter
+  ingestionEvents?: Prisma.IngestionEventListRelationFilter
+  calendarEvents?: Prisma.CalendarEventListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -326,6 +332,8 @@ export type UserCreateInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -360,6 +368,8 @@ export type UserUncheckedCreateInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -394,6 +404,8 @@ export type UserUpdateInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -428,6 +440,8 @@ export type UserUncheckedUpdateInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -872,6 +886,34 @@ export type UserUpdateOneWithoutProviderEventsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProviderEventsInput, Prisma.UserUpdateWithoutProviderEventsInput>, Prisma.UserUncheckedUpdateWithoutProviderEventsInput>
 }
 
+export type UserCreateNestedOneWithoutIngestionEventsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutIngestionEventsInput, Prisma.UserUncheckedCreateWithoutIngestionEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutIngestionEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutIngestionEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutIngestionEventsInput, Prisma.UserUncheckedCreateWithoutIngestionEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutIngestionEventsInput
+  upsert?: Prisma.UserUpsertWithoutIngestionEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutIngestionEventsInput, Prisma.UserUpdateWithoutIngestionEventsInput>, Prisma.UserUncheckedUpdateWithoutIngestionEventsInput>
+}
+
+export type UserCreateNestedOneWithoutCalendarEventsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCalendarEventsInput, Prisma.UserUncheckedCreateWithoutCalendarEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCalendarEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCalendarEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCalendarEventsInput, Prisma.UserUncheckedCreateWithoutCalendarEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCalendarEventsInput
+  upsert?: Prisma.UserUpsertWithoutCalendarEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCalendarEventsInput, Prisma.UserUpdateWithoutCalendarEventsInput>, Prisma.UserUncheckedUpdateWithoutCalendarEventsInput>
+}
+
 export type UserCreateWithoutProfileInput = {
   id: string
   email: string
@@ -903,6 +945,8 @@ export type UserCreateWithoutProfileInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProfileInput = {
@@ -936,6 +980,8 @@ export type UserUncheckedCreateWithoutProfileInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProfileInput = {
@@ -985,6 +1031,8 @@ export type UserUpdateWithoutProfileInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfileInput = {
@@ -1018,6 +1066,8 @@ export type UserUncheckedUpdateWithoutProfileInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPeopleInput = {
@@ -1051,6 +1101,8 @@ export type UserCreateWithoutPeopleInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPeopleInput = {
@@ -1084,6 +1136,8 @@ export type UserUncheckedCreateWithoutPeopleInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPeopleInput = {
@@ -1133,6 +1187,8 @@ export type UserUpdateWithoutPeopleInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPeopleInput = {
@@ -1166,6 +1222,8 @@ export type UserUncheckedUpdateWithoutPeopleInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSourcesInput = {
@@ -1199,6 +1257,8 @@ export type UserCreateWithoutSourcesInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSourcesInput = {
@@ -1232,6 +1292,8 @@ export type UserUncheckedCreateWithoutSourcesInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSourcesInput = {
@@ -1281,6 +1343,8 @@ export type UserUpdateWithoutSourcesInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSourcesInput = {
@@ -1314,6 +1378,8 @@ export type UserUncheckedUpdateWithoutSourcesInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutConversationsInput = {
@@ -1347,6 +1413,8 @@ export type UserCreateWithoutConversationsInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutConversationsInput = {
@@ -1380,6 +1448,8 @@ export type UserUncheckedCreateWithoutConversationsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutConversationsInput = {
@@ -1429,6 +1499,8 @@ export type UserUpdateWithoutConversationsInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConversationsInput = {
@@ -1462,6 +1534,8 @@ export type UserUncheckedUpdateWithoutConversationsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutMessagesInput = {
@@ -1495,6 +1569,8 @@ export type UserCreateWithoutMessagesInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMessagesInput = {
@@ -1528,6 +1604,8 @@ export type UserUncheckedCreateWithoutMessagesInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMessagesInput = {
@@ -1577,6 +1655,8 @@ export type UserUpdateWithoutMessagesInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMessagesInput = {
@@ -1610,6 +1690,8 @@ export type UserUncheckedUpdateWithoutMessagesInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutThreadsInput = {
@@ -1643,6 +1725,8 @@ export type UserCreateWithoutThreadsInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutThreadsInput = {
@@ -1676,6 +1760,8 @@ export type UserUncheckedCreateWithoutThreadsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutThreadsInput = {
@@ -1725,6 +1811,8 @@ export type UserUpdateWithoutThreadsInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutThreadsInput = {
@@ -1758,6 +1846,8 @@ export type UserUncheckedUpdateWithoutThreadsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommitmentsInput = {
@@ -1791,6 +1881,8 @@ export type UserCreateWithoutCommitmentsInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommitmentsInput = {
@@ -1824,6 +1916,8 @@ export type UserUncheckedCreateWithoutCommitmentsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommitmentsInput = {
@@ -1873,6 +1967,8 @@ export type UserUpdateWithoutCommitmentsInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommitmentsInput = {
@@ -1906,6 +2002,8 @@ export type UserUncheckedUpdateWithoutCommitmentsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommitmentEvidenceInput = {
@@ -1939,6 +2037,8 @@ export type UserCreateWithoutCommitmentEvidenceInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommitmentEvidenceInput = {
@@ -1972,6 +2072,8 @@ export type UserUncheckedCreateWithoutCommitmentEvidenceInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommitmentEvidenceInput = {
@@ -2021,6 +2123,8 @@ export type UserUpdateWithoutCommitmentEvidenceInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommitmentEvidenceInput = {
@@ -2054,6 +2158,8 @@ export type UserUncheckedUpdateWithoutCommitmentEvidenceInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutThreadEventsInput = {
@@ -2087,6 +2193,8 @@ export type UserCreateWithoutThreadEventsInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutThreadEventsInput = {
@@ -2120,6 +2228,8 @@ export type UserUncheckedCreateWithoutThreadEventsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutThreadEventsInput = {
@@ -2169,6 +2279,8 @@ export type UserUpdateWithoutThreadEventsInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutThreadEventsInput = {
@@ -2202,6 +2314,8 @@ export type UserUncheckedUpdateWithoutThreadEventsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutResolutionsInput = {
@@ -2235,6 +2349,8 @@ export type UserCreateWithoutResolutionsInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutResolutionsInput = {
@@ -2268,6 +2384,8 @@ export type UserUncheckedCreateWithoutResolutionsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutResolutionsInput = {
@@ -2317,6 +2435,8 @@ export type UserUpdateWithoutResolutionsInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutResolutionsInput = {
@@ -2350,6 +2470,8 @@ export type UserUncheckedUpdateWithoutResolutionsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRemindersInput = {
@@ -2383,6 +2505,8 @@ export type UserCreateWithoutRemindersInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRemindersInput = {
@@ -2416,6 +2540,8 @@ export type UserUncheckedCreateWithoutRemindersInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRemindersInput = {
@@ -2465,6 +2591,8 @@ export type UserUpdateWithoutRemindersInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRemindersInput = {
@@ -2498,6 +2626,8 @@ export type UserUncheckedUpdateWithoutRemindersInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -2531,6 +2661,8 @@ export type UserCreateWithoutNotificationsInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -2564,6 +2696,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -2613,6 +2747,8 @@ export type UserUpdateWithoutNotificationsInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -2646,6 +2782,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPreferenceInput = {
@@ -2679,6 +2817,8 @@ export type UserCreateWithoutPreferenceInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPreferenceInput = {
@@ -2712,6 +2852,8 @@ export type UserUncheckedCreateWithoutPreferenceInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPreferenceInput = {
@@ -2761,6 +2903,8 @@ export type UserUpdateWithoutPreferenceInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPreferenceInput = {
@@ -2794,6 +2938,8 @@ export type UserUncheckedUpdateWithoutPreferenceInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutIntegrationsInput = {
@@ -2827,6 +2973,8 @@ export type UserCreateWithoutIntegrationsInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutIntegrationsInput = {
@@ -2860,6 +3008,8 @@ export type UserUncheckedCreateWithoutIntegrationsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutIntegrationsInput = {
@@ -2909,6 +3059,8 @@ export type UserUpdateWithoutIntegrationsInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutIntegrationsInput = {
@@ -2942,6 +3094,8 @@ export type UserUncheckedUpdateWithoutIntegrationsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAgentRunsInput = {
@@ -2975,6 +3129,8 @@ export type UserCreateWithoutAgentRunsInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAgentRunsInput = {
@@ -3008,6 +3164,8 @@ export type UserUncheckedCreateWithoutAgentRunsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAgentRunsInput = {
@@ -3057,6 +3215,8 @@ export type UserUpdateWithoutAgentRunsInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAgentRunsInput = {
@@ -3090,6 +3250,8 @@ export type UserUncheckedUpdateWithoutAgentRunsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutInterventionsInput = {
@@ -3123,6 +3285,8 @@ export type UserCreateWithoutInterventionsInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutInterventionsInput = {
@@ -3156,6 +3320,8 @@ export type UserUncheckedCreateWithoutInterventionsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutInterventionsInput = {
@@ -3205,6 +3371,8 @@ export type UserUpdateWithoutInterventionsInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInterventionsInput = {
@@ -3238,6 +3406,8 @@ export type UserUncheckedUpdateWithoutInterventionsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutActionProposalsInput = {
@@ -3271,6 +3441,8 @@ export type UserCreateWithoutActionProposalsInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutActionProposalsInput = {
@@ -3304,6 +3476,8 @@ export type UserUncheckedCreateWithoutActionProposalsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutActionProposalsInput = {
@@ -3353,6 +3527,8 @@ export type UserUpdateWithoutActionProposalsInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutActionProposalsInput = {
@@ -3386,6 +3562,8 @@ export type UserUncheckedUpdateWithoutActionProposalsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutActionApprovalsInput = {
@@ -3419,6 +3597,8 @@ export type UserCreateWithoutActionApprovalsInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutActionApprovalsInput = {
@@ -3452,6 +3632,8 @@ export type UserUncheckedCreateWithoutActionApprovalsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutActionApprovalsInput = {
@@ -3501,6 +3683,8 @@ export type UserUpdateWithoutActionApprovalsInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutActionApprovalsInput = {
@@ -3534,6 +3718,8 @@ export type UserUncheckedUpdateWithoutActionApprovalsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -3567,6 +3753,8 @@ export type UserCreateWithoutAuditLogsInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -3600,6 +3788,8 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -3649,6 +3839,8 @@ export type UserUpdateWithoutAuditLogsInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -3682,6 +3874,8 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPushSubscriptionsInput = {
@@ -3715,6 +3909,8 @@ export type UserCreateWithoutPushSubscriptionsInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
@@ -3748,6 +3944,8 @@ export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPushSubscriptionsInput = {
@@ -3797,6 +3995,8 @@ export type UserUpdateWithoutPushSubscriptionsInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
@@ -3830,6 +4030,8 @@ export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutIntegrationAccountsInput = {
@@ -3863,6 +4065,8 @@ export type UserCreateWithoutIntegrationAccountsInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutIntegrationAccountsInput = {
@@ -3896,6 +4100,8 @@ export type UserUncheckedCreateWithoutIntegrationAccountsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutIntegrationAccountsInput = {
@@ -3945,6 +4151,8 @@ export type UserUpdateWithoutIntegrationAccountsInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutIntegrationAccountsInput = {
@@ -3978,6 +4186,8 @@ export type UserUncheckedUpdateWithoutIntegrationAccountsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSourcePermissionsInput = {
@@ -4011,6 +4221,8 @@ export type UserCreateWithoutSourcePermissionsInput = {
   memoryCandidates?: Prisma.MemoryCandidateCreateNestedManyWithoutUserInput
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSourcePermissionsInput = {
@@ -4044,6 +4256,8 @@ export type UserUncheckedCreateWithoutSourcePermissionsInput = {
   memoryCandidates?: Prisma.MemoryCandidateUncheckedCreateNestedManyWithoutUserInput
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSourcePermissionsInput = {
@@ -4093,6 +4307,8 @@ export type UserUpdateWithoutSourcePermissionsInput = {
   memoryCandidates?: Prisma.MemoryCandidateUpdateManyWithoutUserNestedInput
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSourcePermissionsInput = {
@@ -4126,6 +4342,8 @@ export type UserUncheckedUpdateWithoutSourcePermissionsInput = {
   memoryCandidates?: Prisma.MemoryCandidateUncheckedUpdateManyWithoutUserNestedInput
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSourceConversationsInput = {
@@ -4159,6 +4377,8 @@ export type UserCreateWithoutSourceConversationsInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSourceConversationsInput = {
@@ -4192,6 +4412,8 @@ export type UserUncheckedCreateWithoutSourceConversationsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSourceConversationsInput = {
@@ -4241,6 +4463,8 @@ export type UserUpdateWithoutSourceConversationsInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSourceConversationsInput = {
@@ -4274,6 +4498,8 @@ export type UserUncheckedUpdateWithoutSourceConversationsInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSourceMessagesInput = {
@@ -4307,6 +4533,8 @@ export type UserCreateWithoutSourceMessagesInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSourceMessagesInput = {
@@ -4340,6 +4568,8 @@ export type UserUncheckedCreateWithoutSourceMessagesInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSourceMessagesInput = {
@@ -4389,6 +4619,8 @@ export type UserUpdateWithoutSourceMessagesInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSourceMessagesInput = {
@@ -4422,6 +4654,8 @@ export type UserUncheckedUpdateWithoutSourceMessagesInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutMemoryCandidatesInput = {
@@ -4455,6 +4689,8 @@ export type UserCreateWithoutMemoryCandidatesInput = {
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMemoryCandidatesInput = {
@@ -4488,6 +4724,8 @@ export type UserUncheckedCreateWithoutMemoryCandidatesInput = {
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMemoryCandidatesInput = {
@@ -4537,6 +4775,8 @@ export type UserUpdateWithoutMemoryCandidatesInput = {
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMemoryCandidatesInput = {
@@ -4570,6 +4810,8 @@ export type UserUncheckedUpdateWithoutMemoryCandidatesInput = {
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutConsentEventsInput = {
@@ -4603,6 +4845,8 @@ export type UserCreateWithoutConsentEventsInput = {
   memoryCandidates?: Prisma.MemoryCandidateCreateNestedManyWithoutUserInput
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutConsentEventsInput = {
@@ -4636,6 +4880,8 @@ export type UserUncheckedCreateWithoutConsentEventsInput = {
   memoryCandidates?: Prisma.MemoryCandidateUncheckedCreateNestedManyWithoutUserInput
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutConsentEventsInput = {
@@ -4685,6 +4931,8 @@ export type UserUpdateWithoutConsentEventsInput = {
   memoryCandidates?: Prisma.MemoryCandidateUpdateManyWithoutUserNestedInput
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConsentEventsInput = {
@@ -4718,6 +4966,8 @@ export type UserUncheckedUpdateWithoutConsentEventsInput = {
   memoryCandidates?: Prisma.MemoryCandidateUncheckedUpdateManyWithoutUserNestedInput
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutProviderEventsInput = {
@@ -4751,6 +5001,8 @@ export type UserCreateWithoutProviderEventsInput = {
   memoryCandidates?: Prisma.MemoryCandidateCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProviderEventsInput = {
@@ -4784,6 +5036,8 @@ export type UserUncheckedCreateWithoutProviderEventsInput = {
   memoryCandidates?: Prisma.MemoryCandidateUncheckedCreateNestedManyWithoutUserInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
   consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProviderEventsInput = {
@@ -4833,6 +5087,8 @@ export type UserUpdateWithoutProviderEventsInput = {
   memoryCandidates?: Prisma.MemoryCandidateUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProviderEventsInput = {
@@ -4866,6 +5122,320 @@ export type UserUncheckedUpdateWithoutProviderEventsInput = {
   memoryCandidates?: Prisma.MemoryCandidateUncheckedUpdateManyWithoutUserNestedInput
   sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
   consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutIngestionEventsInput = {
+  id: string
+  email: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  people?: Prisma.PersonCreateNestedManyWithoutUserInput
+  sources?: Prisma.ConversationSourceCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutUserInput
+  threads?: Prisma.ThreadCreateNestedManyWithoutUserInput
+  commitments?: Prisma.CommitmentCreateNestedManyWithoutUserInput
+  commitmentEvidence?: Prisma.CommitmentEvidenceCreateNestedManyWithoutUserInput
+  threadEvents?: Prisma.ThreadEventCreateNestedManyWithoutUserInput
+  resolutions?: Prisma.ResolutionCreateNestedManyWithoutUserInput
+  reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  integrations?: Prisma.IntegrationCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  agentRuns?: Prisma.AgentRunCreateNestedManyWithoutUserInput
+  interventions?: Prisma.InterventionCreateNestedManyWithoutUserInput
+  actionProposals?: Prisma.ActionProposalCreateNestedManyWithoutUserInput
+  actionApprovals?: Prisma.ActionApprovalCreateNestedManyWithoutUserInput
+  integrationAccounts?: Prisma.IntegrationAccountCreateNestedManyWithoutUserInput
+  sourceMessages?: Prisma.SourceMessageCreateNestedManyWithoutUserInput
+  sourceConversations?: Prisma.SourceConversationCreateNestedManyWithoutUserInput
+  memoryCandidates?: Prisma.MemoryCandidateCreateNestedManyWithoutUserInput
+  providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
+  sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
+  consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutIngestionEventsInput = {
+  id: string
+  email: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  people?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
+  sources?: Prisma.ConversationSourceUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutUserInput
+  threads?: Prisma.ThreadUncheckedCreateNestedManyWithoutUserInput
+  commitments?: Prisma.CommitmentUncheckedCreateNestedManyWithoutUserInput
+  commitmentEvidence?: Prisma.CommitmentEvidenceUncheckedCreateNestedManyWithoutUserInput
+  threadEvents?: Prisma.ThreadEventUncheckedCreateNestedManyWithoutUserInput
+  resolutions?: Prisma.ResolutionUncheckedCreateNestedManyWithoutUserInput
+  reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  integrations?: Prisma.IntegrationUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  agentRuns?: Prisma.AgentRunUncheckedCreateNestedManyWithoutUserInput
+  interventions?: Prisma.InterventionUncheckedCreateNestedManyWithoutUserInput
+  actionProposals?: Prisma.ActionProposalUncheckedCreateNestedManyWithoutUserInput
+  actionApprovals?: Prisma.ActionApprovalUncheckedCreateNestedManyWithoutUserInput
+  integrationAccounts?: Prisma.IntegrationAccountUncheckedCreateNestedManyWithoutUserInput
+  sourceMessages?: Prisma.SourceMessageUncheckedCreateNestedManyWithoutUserInput
+  sourceConversations?: Prisma.SourceConversationUncheckedCreateNestedManyWithoutUserInput
+  memoryCandidates?: Prisma.MemoryCandidateUncheckedCreateNestedManyWithoutUserInput
+  providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
+  sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
+  consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutIngestionEventsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutIngestionEventsInput, Prisma.UserUncheckedCreateWithoutIngestionEventsInput>
+}
+
+export type UserUpsertWithoutIngestionEventsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutIngestionEventsInput, Prisma.UserUncheckedUpdateWithoutIngestionEventsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutIngestionEventsInput, Prisma.UserUncheckedCreateWithoutIngestionEventsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutIngestionEventsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutIngestionEventsInput, Prisma.UserUncheckedUpdateWithoutIngestionEventsInput>
+}
+
+export type UserUpdateWithoutIngestionEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  people?: Prisma.PersonUpdateManyWithoutUserNestedInput
+  sources?: Prisma.ConversationSourceUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutUserNestedInput
+  threads?: Prisma.ThreadUpdateManyWithoutUserNestedInput
+  commitments?: Prisma.CommitmentUpdateManyWithoutUserNestedInput
+  commitmentEvidence?: Prisma.CommitmentEvidenceUpdateManyWithoutUserNestedInput
+  threadEvents?: Prisma.ThreadEventUpdateManyWithoutUserNestedInput
+  resolutions?: Prisma.ResolutionUpdateManyWithoutUserNestedInput
+  reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  integrations?: Prisma.IntegrationUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  agentRuns?: Prisma.AgentRunUpdateManyWithoutUserNestedInput
+  interventions?: Prisma.InterventionUpdateManyWithoutUserNestedInput
+  actionProposals?: Prisma.ActionProposalUpdateManyWithoutUserNestedInput
+  actionApprovals?: Prisma.ActionApprovalUpdateManyWithoutUserNestedInput
+  integrationAccounts?: Prisma.IntegrationAccountUpdateManyWithoutUserNestedInput
+  sourceMessages?: Prisma.SourceMessageUpdateManyWithoutUserNestedInput
+  sourceConversations?: Prisma.SourceConversationUpdateManyWithoutUserNestedInput
+  memoryCandidates?: Prisma.MemoryCandidateUpdateManyWithoutUserNestedInput
+  providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
+  sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
+  consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutIngestionEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  people?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
+  sources?: Prisma.ConversationSourceUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutUserNestedInput
+  threads?: Prisma.ThreadUncheckedUpdateManyWithoutUserNestedInput
+  commitments?: Prisma.CommitmentUncheckedUpdateManyWithoutUserNestedInput
+  commitmentEvidence?: Prisma.CommitmentEvidenceUncheckedUpdateManyWithoutUserNestedInput
+  threadEvents?: Prisma.ThreadEventUncheckedUpdateManyWithoutUserNestedInput
+  resolutions?: Prisma.ResolutionUncheckedUpdateManyWithoutUserNestedInput
+  reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  integrations?: Prisma.IntegrationUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  agentRuns?: Prisma.AgentRunUncheckedUpdateManyWithoutUserNestedInput
+  interventions?: Prisma.InterventionUncheckedUpdateManyWithoutUserNestedInput
+  actionProposals?: Prisma.ActionProposalUncheckedUpdateManyWithoutUserNestedInput
+  actionApprovals?: Prisma.ActionApprovalUncheckedUpdateManyWithoutUserNestedInput
+  integrationAccounts?: Prisma.IntegrationAccountUncheckedUpdateManyWithoutUserNestedInput
+  sourceMessages?: Prisma.SourceMessageUncheckedUpdateManyWithoutUserNestedInput
+  sourceConversations?: Prisma.SourceConversationUncheckedUpdateManyWithoutUserNestedInput
+  memoryCandidates?: Prisma.MemoryCandidateUncheckedUpdateManyWithoutUserNestedInput
+  providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
+  sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
+  consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCalendarEventsInput = {
+  id: string
+  email: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  people?: Prisma.PersonCreateNestedManyWithoutUserInput
+  sources?: Prisma.ConversationSourceCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutUserInput
+  threads?: Prisma.ThreadCreateNestedManyWithoutUserInput
+  commitments?: Prisma.CommitmentCreateNestedManyWithoutUserInput
+  commitmentEvidence?: Prisma.CommitmentEvidenceCreateNestedManyWithoutUserInput
+  threadEvents?: Prisma.ThreadEventCreateNestedManyWithoutUserInput
+  resolutions?: Prisma.ResolutionCreateNestedManyWithoutUserInput
+  reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  integrations?: Prisma.IntegrationCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  agentRuns?: Prisma.AgentRunCreateNestedManyWithoutUserInput
+  interventions?: Prisma.InterventionCreateNestedManyWithoutUserInput
+  actionProposals?: Prisma.ActionProposalCreateNestedManyWithoutUserInput
+  actionApprovals?: Prisma.ActionApprovalCreateNestedManyWithoutUserInput
+  integrationAccounts?: Prisma.IntegrationAccountCreateNestedManyWithoutUserInput
+  sourceMessages?: Prisma.SourceMessageCreateNestedManyWithoutUserInput
+  sourceConversations?: Prisma.SourceConversationCreateNestedManyWithoutUserInput
+  memoryCandidates?: Prisma.MemoryCandidateCreateNestedManyWithoutUserInput
+  providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutUserInput
+  sourcePermissions?: Prisma.SourcePermissionCreateNestedManyWithoutUserInput
+  consentEvents?: Prisma.ConsentEventCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCalendarEventsInput = {
+  id: string
+  email: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  people?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
+  sources?: Prisma.ConversationSourceUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutUserInput
+  threads?: Prisma.ThreadUncheckedCreateNestedManyWithoutUserInput
+  commitments?: Prisma.CommitmentUncheckedCreateNestedManyWithoutUserInput
+  commitmentEvidence?: Prisma.CommitmentEvidenceUncheckedCreateNestedManyWithoutUserInput
+  threadEvents?: Prisma.ThreadEventUncheckedCreateNestedManyWithoutUserInput
+  resolutions?: Prisma.ResolutionUncheckedCreateNestedManyWithoutUserInput
+  reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  integrations?: Prisma.IntegrationUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  agentRuns?: Prisma.AgentRunUncheckedCreateNestedManyWithoutUserInput
+  interventions?: Prisma.InterventionUncheckedCreateNestedManyWithoutUserInput
+  actionProposals?: Prisma.ActionProposalUncheckedCreateNestedManyWithoutUserInput
+  actionApprovals?: Prisma.ActionApprovalUncheckedCreateNestedManyWithoutUserInput
+  integrationAccounts?: Prisma.IntegrationAccountUncheckedCreateNestedManyWithoutUserInput
+  sourceMessages?: Prisma.SourceMessageUncheckedCreateNestedManyWithoutUserInput
+  sourceConversations?: Prisma.SourceConversationUncheckedCreateNestedManyWithoutUserInput
+  memoryCandidates?: Prisma.MemoryCandidateUncheckedCreateNestedManyWithoutUserInput
+  providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutUserInput
+  sourcePermissions?: Prisma.SourcePermissionUncheckedCreateNestedManyWithoutUserInput
+  consentEvents?: Prisma.ConsentEventUncheckedCreateNestedManyWithoutUserInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCalendarEventsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCalendarEventsInput, Prisma.UserUncheckedCreateWithoutCalendarEventsInput>
+}
+
+export type UserUpsertWithoutCalendarEventsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCalendarEventsInput, Prisma.UserUncheckedUpdateWithoutCalendarEventsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCalendarEventsInput, Prisma.UserUncheckedCreateWithoutCalendarEventsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCalendarEventsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCalendarEventsInput, Prisma.UserUncheckedUpdateWithoutCalendarEventsInput>
+}
+
+export type UserUpdateWithoutCalendarEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  people?: Prisma.PersonUpdateManyWithoutUserNestedInput
+  sources?: Prisma.ConversationSourceUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutUserNestedInput
+  threads?: Prisma.ThreadUpdateManyWithoutUserNestedInput
+  commitments?: Prisma.CommitmentUpdateManyWithoutUserNestedInput
+  commitmentEvidence?: Prisma.CommitmentEvidenceUpdateManyWithoutUserNestedInput
+  threadEvents?: Prisma.ThreadEventUpdateManyWithoutUserNestedInput
+  resolutions?: Prisma.ResolutionUpdateManyWithoutUserNestedInput
+  reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  integrations?: Prisma.IntegrationUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  agentRuns?: Prisma.AgentRunUpdateManyWithoutUserNestedInput
+  interventions?: Prisma.InterventionUpdateManyWithoutUserNestedInput
+  actionProposals?: Prisma.ActionProposalUpdateManyWithoutUserNestedInput
+  actionApprovals?: Prisma.ActionApprovalUpdateManyWithoutUserNestedInput
+  integrationAccounts?: Prisma.IntegrationAccountUpdateManyWithoutUserNestedInput
+  sourceMessages?: Prisma.SourceMessageUpdateManyWithoutUserNestedInput
+  sourceConversations?: Prisma.SourceConversationUpdateManyWithoutUserNestedInput
+  memoryCandidates?: Prisma.MemoryCandidateUpdateManyWithoutUserNestedInput
+  providerEvents?: Prisma.ProviderEventUpdateManyWithoutUserNestedInput
+  sourcePermissions?: Prisma.SourcePermissionUpdateManyWithoutUserNestedInput
+  consentEvents?: Prisma.ConsentEventUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCalendarEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  people?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
+  sources?: Prisma.ConversationSourceUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutUserNestedInput
+  threads?: Prisma.ThreadUncheckedUpdateManyWithoutUserNestedInput
+  commitments?: Prisma.CommitmentUncheckedUpdateManyWithoutUserNestedInput
+  commitmentEvidence?: Prisma.CommitmentEvidenceUncheckedUpdateManyWithoutUserNestedInput
+  threadEvents?: Prisma.ThreadEventUncheckedUpdateManyWithoutUserNestedInput
+  resolutions?: Prisma.ResolutionUncheckedUpdateManyWithoutUserNestedInput
+  reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  integrations?: Prisma.IntegrationUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  agentRuns?: Prisma.AgentRunUncheckedUpdateManyWithoutUserNestedInput
+  interventions?: Prisma.InterventionUncheckedUpdateManyWithoutUserNestedInput
+  actionProposals?: Prisma.ActionProposalUncheckedUpdateManyWithoutUserNestedInput
+  actionApprovals?: Prisma.ActionApprovalUncheckedUpdateManyWithoutUserNestedInput
+  integrationAccounts?: Prisma.IntegrationAccountUncheckedUpdateManyWithoutUserNestedInput
+  sourceMessages?: Prisma.SourceMessageUncheckedUpdateManyWithoutUserNestedInput
+  sourceConversations?: Prisma.SourceConversationUncheckedUpdateManyWithoutUserNestedInput
+  memoryCandidates?: Prisma.MemoryCandidateUncheckedUpdateManyWithoutUserNestedInput
+  providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutUserNestedInput
+  sourcePermissions?: Prisma.SourcePermissionUncheckedUpdateManyWithoutUserNestedInput
+  consentEvents?: Prisma.ConsentEventUncheckedUpdateManyWithoutUserNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -4899,6 +5469,8 @@ export type UserCountOutputType = {
   providerEvents: number
   sourcePermissions: number
   consentEvents: number
+  ingestionEvents: number
+  calendarEvents: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4927,6 +5499,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   providerEvents?: boolean | UserCountOutputTypeCountProviderEventsArgs
   sourcePermissions?: boolean | UserCountOutputTypeCountSourcePermissionsArgs
   consentEvents?: boolean | UserCountOutputTypeCountConsentEventsArgs
+  ingestionEvents?: boolean | UserCountOutputTypeCountIngestionEventsArgs
+  calendarEvents?: boolean | UserCountOutputTypeCountCalendarEventsArgs
 }
 
 /**
@@ -5114,6 +5688,20 @@ export type UserCountOutputTypeCountConsentEventsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.ConsentEventWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountIngestionEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IngestionEventWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCalendarEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CalendarEventWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -5147,6 +5735,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   providerEvents?: boolean | Prisma.User$providerEventsArgs<ExtArgs>
   sourcePermissions?: boolean | Prisma.User$sourcePermissionsArgs<ExtArgs>
   consentEvents?: boolean | Prisma.User$consentEventsArgs<ExtArgs>
+  ingestionEvents?: boolean | Prisma.User$ingestionEventsArgs<ExtArgs>
+  calendarEvents?: boolean | Prisma.User$calendarEventsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -5200,6 +5790,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   providerEvents?: boolean | Prisma.User$providerEventsArgs<ExtArgs>
   sourcePermissions?: boolean | Prisma.User$sourcePermissionsArgs<ExtArgs>
   consentEvents?: boolean | Prisma.User$consentEventsArgs<ExtArgs>
+  ingestionEvents?: boolean | Prisma.User$ingestionEventsArgs<ExtArgs>
+  calendarEvents?: boolean | Prisma.User$calendarEventsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -5235,6 +5827,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     providerEvents: Prisma.$ProviderEventPayload<ExtArgs>[]
     sourcePermissions: Prisma.$SourcePermissionPayload<ExtArgs>[]
     consentEvents: Prisma.$ConsentEventPayload<ExtArgs>[]
+    ingestionEvents: Prisma.$IngestionEventPayload<ExtArgs>[]
+    calendarEvents: Prisma.$CalendarEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -5662,6 +6256,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   providerEvents<T extends Prisma.User$providerEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$providerEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProviderEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sourcePermissions<T extends Prisma.User$sourcePermissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sourcePermissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SourcePermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   consentEvents<T extends Prisma.User$consentEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$consentEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsentEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ingestionEvents<T extends Prisma.User$ingestionEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ingestionEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IngestionEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  calendarEvents<T extends Prisma.User$calendarEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$calendarEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6723,6 +7319,54 @@ export type User$consentEventsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.ConsentEventScalarFieldEnum | Prisma.ConsentEventScalarFieldEnum[]
+}
+
+/**
+ * User.ingestionEvents
+ */
+export type User$ingestionEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the IngestionEvent
+   */
+  select?: Prisma.IngestionEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the IngestionEvent
+   */
+  omit?: Prisma.IngestionEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.IngestionEventInclude<ExtArgs> | null
+  where?: Prisma.IngestionEventWhereInput
+  orderBy?: Prisma.IngestionEventOrderByWithRelationInput | Prisma.IngestionEventOrderByWithRelationInput[]
+  cursor?: Prisma.IngestionEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.IngestionEventScalarFieldEnum | Prisma.IngestionEventScalarFieldEnum[]
+}
+
+/**
+ * User.calendarEvents
+ */
+export type User$calendarEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CalendarEvent
+   */
+  select?: Prisma.CalendarEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CalendarEvent
+   */
+  omit?: Prisma.CalendarEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CalendarEventInclude<ExtArgs> | null
+  where?: Prisma.CalendarEventWhereInput
+  orderBy?: Prisma.CalendarEventOrderByWithRelationInput | Prisma.CalendarEventOrderByWithRelationInput[]
+  cursor?: Prisma.CalendarEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CalendarEventScalarFieldEnum | Prisma.CalendarEventScalarFieldEnum[]
 }
 
 /**

@@ -259,6 +259,8 @@ export type IntegrationAccountWhereInput = {
   sourceConversations?: Prisma.SourceConversationListRelationFilter
   memoryCandidates?: Prisma.MemoryCandidateListRelationFilter
   providerEvents?: Prisma.ProviderEventListRelationFilter
+  ingestionEvents?: Prisma.IngestionEventListRelationFilter
+  calendarEvents?: Prisma.CalendarEventListRelationFilter
 }
 
 export type IntegrationAccountOrderByWithRelationInput = {
@@ -282,6 +284,8 @@ export type IntegrationAccountOrderByWithRelationInput = {
   sourceConversations?: Prisma.SourceConversationOrderByRelationAggregateInput
   memoryCandidates?: Prisma.MemoryCandidateOrderByRelationAggregateInput
   providerEvents?: Prisma.ProviderEventOrderByRelationAggregateInput
+  ingestionEvents?: Prisma.IngestionEventOrderByRelationAggregateInput
+  calendarEvents?: Prisma.CalendarEventOrderByRelationAggregateInput
 }
 
 export type IntegrationAccountWhereUniqueInput = Prisma.AtLeast<{
@@ -309,6 +313,8 @@ export type IntegrationAccountWhereUniqueInput = Prisma.AtLeast<{
   sourceConversations?: Prisma.SourceConversationListRelationFilter
   memoryCandidates?: Prisma.MemoryCandidateListRelationFilter
   providerEvents?: Prisma.ProviderEventListRelationFilter
+  ingestionEvents?: Prisma.IngestionEventListRelationFilter
+  calendarEvents?: Prisma.CalendarEventListRelationFilter
 }, "id" | "linkCode" | "userId_provider">
 
 export type IntegrationAccountOrderByWithAggregationInput = {
@@ -373,6 +379,8 @@ export type IntegrationAccountCreateInput = {
   sourceConversations?: Prisma.SourceConversationCreateNestedManyWithoutAccountInput
   memoryCandidates?: Prisma.MemoryCandidateCreateNestedManyWithoutAccountInput
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutAccountInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutAccountInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutAccountInput
 }
 
 export type IntegrationAccountUncheckedCreateInput = {
@@ -395,6 +403,8 @@ export type IntegrationAccountUncheckedCreateInput = {
   sourceConversations?: Prisma.SourceConversationUncheckedCreateNestedManyWithoutAccountInput
   memoryCandidates?: Prisma.MemoryCandidateUncheckedCreateNestedManyWithoutAccountInput
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutAccountInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutAccountInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type IntegrationAccountUpdateInput = {
@@ -417,6 +427,8 @@ export type IntegrationAccountUpdateInput = {
   sourceConversations?: Prisma.SourceConversationUpdateManyWithoutAccountNestedInput
   memoryCandidates?: Prisma.MemoryCandidateUpdateManyWithoutAccountNestedInput
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutAccountNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutAccountNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutAccountNestedInput
 }
 
 export type IntegrationAccountUncheckedUpdateInput = {
@@ -439,6 +451,8 @@ export type IntegrationAccountUncheckedUpdateInput = {
   sourceConversations?: Prisma.SourceConversationUncheckedUpdateManyWithoutAccountNestedInput
   memoryCandidates?: Prisma.MemoryCandidateUncheckedUpdateManyWithoutAccountNestedInput
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutAccountNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutAccountNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type IntegrationAccountCreateManyInput = {
@@ -564,6 +578,11 @@ export type IntegrationAccountNullableScalarRelationFilter = {
   isNot?: Prisma.IntegrationAccountWhereInput | null
 }
 
+export type IntegrationAccountScalarRelationFilter = {
+  is?: Prisma.IntegrationAccountWhereInput
+  isNot?: Prisma.IntegrationAccountWhereInput
+}
+
 export type IntegrationAccountCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.IntegrationAccountCreateWithoutUserInput, Prisma.IntegrationAccountUncheckedCreateWithoutUserInput> | Prisma.IntegrationAccountCreateWithoutUserInput[] | Prisma.IntegrationAccountUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.IntegrationAccountCreateOrConnectWithoutUserInput | Prisma.IntegrationAccountCreateOrConnectWithoutUserInput[]
@@ -683,6 +702,34 @@ export type IntegrationAccountUpdateOneWithoutProviderEventsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.IntegrationAccountUpdateToOneWithWhereWithoutProviderEventsInput, Prisma.IntegrationAccountUpdateWithoutProviderEventsInput>, Prisma.IntegrationAccountUncheckedUpdateWithoutProviderEventsInput>
 }
 
+export type IntegrationAccountCreateNestedOneWithoutIngestionEventsInput = {
+  create?: Prisma.XOR<Prisma.IntegrationAccountCreateWithoutIngestionEventsInput, Prisma.IntegrationAccountUncheckedCreateWithoutIngestionEventsInput>
+  connectOrCreate?: Prisma.IntegrationAccountCreateOrConnectWithoutIngestionEventsInput
+  connect?: Prisma.IntegrationAccountWhereUniqueInput
+}
+
+export type IntegrationAccountUpdateOneRequiredWithoutIngestionEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.IntegrationAccountCreateWithoutIngestionEventsInput, Prisma.IntegrationAccountUncheckedCreateWithoutIngestionEventsInput>
+  connectOrCreate?: Prisma.IntegrationAccountCreateOrConnectWithoutIngestionEventsInput
+  upsert?: Prisma.IntegrationAccountUpsertWithoutIngestionEventsInput
+  connect?: Prisma.IntegrationAccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.IntegrationAccountUpdateToOneWithWhereWithoutIngestionEventsInput, Prisma.IntegrationAccountUpdateWithoutIngestionEventsInput>, Prisma.IntegrationAccountUncheckedUpdateWithoutIngestionEventsInput>
+}
+
+export type IntegrationAccountCreateNestedOneWithoutCalendarEventsInput = {
+  create?: Prisma.XOR<Prisma.IntegrationAccountCreateWithoutCalendarEventsInput, Prisma.IntegrationAccountUncheckedCreateWithoutCalendarEventsInput>
+  connectOrCreate?: Prisma.IntegrationAccountCreateOrConnectWithoutCalendarEventsInput
+  connect?: Prisma.IntegrationAccountWhereUniqueInput
+}
+
+export type IntegrationAccountUpdateOneRequiredWithoutCalendarEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.IntegrationAccountCreateWithoutCalendarEventsInput, Prisma.IntegrationAccountUncheckedCreateWithoutCalendarEventsInput>
+  connectOrCreate?: Prisma.IntegrationAccountCreateOrConnectWithoutCalendarEventsInput
+  upsert?: Prisma.IntegrationAccountUpsertWithoutCalendarEventsInput
+  connect?: Prisma.IntegrationAccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.IntegrationAccountUpdateToOneWithWhereWithoutCalendarEventsInput, Prisma.IntegrationAccountUpdateWithoutCalendarEventsInput>, Prisma.IntegrationAccountUncheckedUpdateWithoutCalendarEventsInput>
+}
+
 export type IntegrationAccountCreateWithoutUserInput = {
   id?: string
   provider: $Enums.SourceProvider
@@ -702,6 +749,8 @@ export type IntegrationAccountCreateWithoutUserInput = {
   sourceConversations?: Prisma.SourceConversationCreateNestedManyWithoutAccountInput
   memoryCandidates?: Prisma.MemoryCandidateCreateNestedManyWithoutAccountInput
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutAccountInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutAccountInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutAccountInput
 }
 
 export type IntegrationAccountUncheckedCreateWithoutUserInput = {
@@ -723,6 +772,8 @@ export type IntegrationAccountUncheckedCreateWithoutUserInput = {
   sourceConversations?: Prisma.SourceConversationUncheckedCreateNestedManyWithoutAccountInput
   memoryCandidates?: Prisma.MemoryCandidateUncheckedCreateNestedManyWithoutAccountInput
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutAccountInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutAccountInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type IntegrationAccountCreateOrConnectWithoutUserInput = {
@@ -791,6 +842,8 @@ export type IntegrationAccountCreateWithoutSourceConversationsInput = {
   sourceMessages?: Prisma.SourceMessageCreateNestedManyWithoutAccountInput
   memoryCandidates?: Prisma.MemoryCandidateCreateNestedManyWithoutAccountInput
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutAccountInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutAccountInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutAccountInput
 }
 
 export type IntegrationAccountUncheckedCreateWithoutSourceConversationsInput = {
@@ -812,6 +865,8 @@ export type IntegrationAccountUncheckedCreateWithoutSourceConversationsInput = {
   sourceMessages?: Prisma.SourceMessageUncheckedCreateNestedManyWithoutAccountInput
   memoryCandidates?: Prisma.MemoryCandidateUncheckedCreateNestedManyWithoutAccountInput
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutAccountInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutAccountInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type IntegrationAccountCreateOrConnectWithoutSourceConversationsInput = {
@@ -849,6 +904,8 @@ export type IntegrationAccountUpdateWithoutSourceConversationsInput = {
   sourceMessages?: Prisma.SourceMessageUpdateManyWithoutAccountNestedInput
   memoryCandidates?: Prisma.MemoryCandidateUpdateManyWithoutAccountNestedInput
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutAccountNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutAccountNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutAccountNestedInput
 }
 
 export type IntegrationAccountUncheckedUpdateWithoutSourceConversationsInput = {
@@ -870,6 +927,8 @@ export type IntegrationAccountUncheckedUpdateWithoutSourceConversationsInput = {
   sourceMessages?: Prisma.SourceMessageUncheckedUpdateManyWithoutAccountNestedInput
   memoryCandidates?: Prisma.MemoryCandidateUncheckedUpdateManyWithoutAccountNestedInput
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutAccountNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutAccountNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type IntegrationAccountCreateWithoutSourceMessagesInput = {
@@ -891,6 +950,8 @@ export type IntegrationAccountCreateWithoutSourceMessagesInput = {
   sourceConversations?: Prisma.SourceConversationCreateNestedManyWithoutAccountInput
   memoryCandidates?: Prisma.MemoryCandidateCreateNestedManyWithoutAccountInput
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutAccountInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutAccountInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutAccountInput
 }
 
 export type IntegrationAccountUncheckedCreateWithoutSourceMessagesInput = {
@@ -912,6 +973,8 @@ export type IntegrationAccountUncheckedCreateWithoutSourceMessagesInput = {
   sourceConversations?: Prisma.SourceConversationUncheckedCreateNestedManyWithoutAccountInput
   memoryCandidates?: Prisma.MemoryCandidateUncheckedCreateNestedManyWithoutAccountInput
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutAccountInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutAccountInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type IntegrationAccountCreateOrConnectWithoutSourceMessagesInput = {
@@ -949,6 +1012,8 @@ export type IntegrationAccountUpdateWithoutSourceMessagesInput = {
   sourceConversations?: Prisma.SourceConversationUpdateManyWithoutAccountNestedInput
   memoryCandidates?: Prisma.MemoryCandidateUpdateManyWithoutAccountNestedInput
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutAccountNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutAccountNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutAccountNestedInput
 }
 
 export type IntegrationAccountUncheckedUpdateWithoutSourceMessagesInput = {
@@ -970,6 +1035,8 @@ export type IntegrationAccountUncheckedUpdateWithoutSourceMessagesInput = {
   sourceConversations?: Prisma.SourceConversationUncheckedUpdateManyWithoutAccountNestedInput
   memoryCandidates?: Prisma.MemoryCandidateUncheckedUpdateManyWithoutAccountNestedInput
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutAccountNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutAccountNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type IntegrationAccountCreateWithoutMemoryCandidatesInput = {
@@ -991,6 +1058,8 @@ export type IntegrationAccountCreateWithoutMemoryCandidatesInput = {
   sourceMessages?: Prisma.SourceMessageCreateNestedManyWithoutAccountInput
   sourceConversations?: Prisma.SourceConversationCreateNestedManyWithoutAccountInput
   providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutAccountInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutAccountInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutAccountInput
 }
 
 export type IntegrationAccountUncheckedCreateWithoutMemoryCandidatesInput = {
@@ -1012,6 +1081,8 @@ export type IntegrationAccountUncheckedCreateWithoutMemoryCandidatesInput = {
   sourceMessages?: Prisma.SourceMessageUncheckedCreateNestedManyWithoutAccountInput
   sourceConversations?: Prisma.SourceConversationUncheckedCreateNestedManyWithoutAccountInput
   providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutAccountInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutAccountInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type IntegrationAccountCreateOrConnectWithoutMemoryCandidatesInput = {
@@ -1049,6 +1120,8 @@ export type IntegrationAccountUpdateWithoutMemoryCandidatesInput = {
   sourceMessages?: Prisma.SourceMessageUpdateManyWithoutAccountNestedInput
   sourceConversations?: Prisma.SourceConversationUpdateManyWithoutAccountNestedInput
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutAccountNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutAccountNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutAccountNestedInput
 }
 
 export type IntegrationAccountUncheckedUpdateWithoutMemoryCandidatesInput = {
@@ -1070,6 +1143,8 @@ export type IntegrationAccountUncheckedUpdateWithoutMemoryCandidatesInput = {
   sourceMessages?: Prisma.SourceMessageUncheckedUpdateManyWithoutAccountNestedInput
   sourceConversations?: Prisma.SourceConversationUncheckedUpdateManyWithoutAccountNestedInput
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutAccountNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutAccountNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type IntegrationAccountCreateWithoutProviderEventsInput = {
@@ -1091,6 +1166,8 @@ export type IntegrationAccountCreateWithoutProviderEventsInput = {
   sourceMessages?: Prisma.SourceMessageCreateNestedManyWithoutAccountInput
   sourceConversations?: Prisma.SourceConversationCreateNestedManyWithoutAccountInput
   memoryCandidates?: Prisma.MemoryCandidateCreateNestedManyWithoutAccountInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutAccountInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutAccountInput
 }
 
 export type IntegrationAccountUncheckedCreateWithoutProviderEventsInput = {
@@ -1112,6 +1189,8 @@ export type IntegrationAccountUncheckedCreateWithoutProviderEventsInput = {
   sourceMessages?: Prisma.SourceMessageUncheckedCreateNestedManyWithoutAccountInput
   sourceConversations?: Prisma.SourceConversationUncheckedCreateNestedManyWithoutAccountInput
   memoryCandidates?: Prisma.MemoryCandidateUncheckedCreateNestedManyWithoutAccountInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutAccountInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type IntegrationAccountCreateOrConnectWithoutProviderEventsInput = {
@@ -1149,6 +1228,8 @@ export type IntegrationAccountUpdateWithoutProviderEventsInput = {
   sourceMessages?: Prisma.SourceMessageUpdateManyWithoutAccountNestedInput
   sourceConversations?: Prisma.SourceConversationUpdateManyWithoutAccountNestedInput
   memoryCandidates?: Prisma.MemoryCandidateUpdateManyWithoutAccountNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutAccountNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutAccountNestedInput
 }
 
 export type IntegrationAccountUncheckedUpdateWithoutProviderEventsInput = {
@@ -1170,6 +1251,224 @@ export type IntegrationAccountUncheckedUpdateWithoutProviderEventsInput = {
   sourceMessages?: Prisma.SourceMessageUncheckedUpdateManyWithoutAccountNestedInput
   sourceConversations?: Prisma.SourceConversationUncheckedUpdateManyWithoutAccountNestedInput
   memoryCandidates?: Prisma.MemoryCandidateUncheckedUpdateManyWithoutAccountNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutAccountNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type IntegrationAccountCreateWithoutIngestionEventsInput = {
+  id?: string
+  provider: $Enums.SourceProvider
+  status?: $Enums.IntegrationStatus
+  externalAccountId?: string | null
+  scopes?: Prisma.IntegrationAccountCreatescopesInput | string[]
+  tokenCipher?: string | null
+  connectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  linkCode?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastError?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutIntegrationAccountsInput
+  sourceMessages?: Prisma.SourceMessageCreateNestedManyWithoutAccountInput
+  sourceConversations?: Prisma.SourceConversationCreateNestedManyWithoutAccountInput
+  memoryCandidates?: Prisma.MemoryCandidateCreateNestedManyWithoutAccountInput
+  providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutAccountInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutAccountInput
+}
+
+export type IntegrationAccountUncheckedCreateWithoutIngestionEventsInput = {
+  id?: string
+  userId: string
+  provider: $Enums.SourceProvider
+  status?: $Enums.IntegrationStatus
+  externalAccountId?: string | null
+  scopes?: Prisma.IntegrationAccountCreatescopesInput | string[]
+  tokenCipher?: string | null
+  connectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  linkCode?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastError?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sourceMessages?: Prisma.SourceMessageUncheckedCreateNestedManyWithoutAccountInput
+  sourceConversations?: Prisma.SourceConversationUncheckedCreateNestedManyWithoutAccountInput
+  memoryCandidates?: Prisma.MemoryCandidateUncheckedCreateNestedManyWithoutAccountInput
+  providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutAccountInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type IntegrationAccountCreateOrConnectWithoutIngestionEventsInput = {
+  where: Prisma.IntegrationAccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.IntegrationAccountCreateWithoutIngestionEventsInput, Prisma.IntegrationAccountUncheckedCreateWithoutIngestionEventsInput>
+}
+
+export type IntegrationAccountUpsertWithoutIngestionEventsInput = {
+  update: Prisma.XOR<Prisma.IntegrationAccountUpdateWithoutIngestionEventsInput, Prisma.IntegrationAccountUncheckedUpdateWithoutIngestionEventsInput>
+  create: Prisma.XOR<Prisma.IntegrationAccountCreateWithoutIngestionEventsInput, Prisma.IntegrationAccountUncheckedCreateWithoutIngestionEventsInput>
+  where?: Prisma.IntegrationAccountWhereInput
+}
+
+export type IntegrationAccountUpdateToOneWithWhereWithoutIngestionEventsInput = {
+  where?: Prisma.IntegrationAccountWhereInput
+  data: Prisma.XOR<Prisma.IntegrationAccountUpdateWithoutIngestionEventsInput, Prisma.IntegrationAccountUncheckedUpdateWithoutIngestionEventsInput>
+}
+
+export type IntegrationAccountUpdateWithoutIngestionEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumSourceProviderFieldUpdateOperationsInput | $Enums.SourceProvider
+  status?: Prisma.EnumIntegrationStatusFieldUpdateOperationsInput | $Enums.IntegrationStatus
+  externalAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scopes?: Prisma.IntegrationAccountUpdatescopesInput | string[]
+  tokenCipher?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  linkCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutIntegrationAccountsNestedInput
+  sourceMessages?: Prisma.SourceMessageUpdateManyWithoutAccountNestedInput
+  sourceConversations?: Prisma.SourceConversationUpdateManyWithoutAccountNestedInput
+  memoryCandidates?: Prisma.MemoryCandidateUpdateManyWithoutAccountNestedInput
+  providerEvents?: Prisma.ProviderEventUpdateManyWithoutAccountNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutAccountNestedInput
+}
+
+export type IntegrationAccountUncheckedUpdateWithoutIngestionEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumSourceProviderFieldUpdateOperationsInput | $Enums.SourceProvider
+  status?: Prisma.EnumIntegrationStatusFieldUpdateOperationsInput | $Enums.IntegrationStatus
+  externalAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scopes?: Prisma.IntegrationAccountUpdatescopesInput | string[]
+  tokenCipher?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  linkCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sourceMessages?: Prisma.SourceMessageUncheckedUpdateManyWithoutAccountNestedInput
+  sourceConversations?: Prisma.SourceConversationUncheckedUpdateManyWithoutAccountNestedInput
+  memoryCandidates?: Prisma.MemoryCandidateUncheckedUpdateManyWithoutAccountNestedInput
+  providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutAccountNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type IntegrationAccountCreateWithoutCalendarEventsInput = {
+  id?: string
+  provider: $Enums.SourceProvider
+  status?: $Enums.IntegrationStatus
+  externalAccountId?: string | null
+  scopes?: Prisma.IntegrationAccountCreatescopesInput | string[]
+  tokenCipher?: string | null
+  connectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  linkCode?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastError?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutIntegrationAccountsInput
+  sourceMessages?: Prisma.SourceMessageCreateNestedManyWithoutAccountInput
+  sourceConversations?: Prisma.SourceConversationCreateNestedManyWithoutAccountInput
+  memoryCandidates?: Prisma.MemoryCandidateCreateNestedManyWithoutAccountInput
+  providerEvents?: Prisma.ProviderEventCreateNestedManyWithoutAccountInput
+  ingestionEvents?: Prisma.IngestionEventCreateNestedManyWithoutAccountInput
+}
+
+export type IntegrationAccountUncheckedCreateWithoutCalendarEventsInput = {
+  id?: string
+  userId: string
+  provider: $Enums.SourceProvider
+  status?: $Enums.IntegrationStatus
+  externalAccountId?: string | null
+  scopes?: Prisma.IntegrationAccountCreatescopesInput | string[]
+  tokenCipher?: string | null
+  connectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  linkCode?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastError?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sourceMessages?: Prisma.SourceMessageUncheckedCreateNestedManyWithoutAccountInput
+  sourceConversations?: Prisma.SourceConversationUncheckedCreateNestedManyWithoutAccountInput
+  memoryCandidates?: Prisma.MemoryCandidateUncheckedCreateNestedManyWithoutAccountInput
+  providerEvents?: Prisma.ProviderEventUncheckedCreateNestedManyWithoutAccountInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type IntegrationAccountCreateOrConnectWithoutCalendarEventsInput = {
+  where: Prisma.IntegrationAccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.IntegrationAccountCreateWithoutCalendarEventsInput, Prisma.IntegrationAccountUncheckedCreateWithoutCalendarEventsInput>
+}
+
+export type IntegrationAccountUpsertWithoutCalendarEventsInput = {
+  update: Prisma.XOR<Prisma.IntegrationAccountUpdateWithoutCalendarEventsInput, Prisma.IntegrationAccountUncheckedUpdateWithoutCalendarEventsInput>
+  create: Prisma.XOR<Prisma.IntegrationAccountCreateWithoutCalendarEventsInput, Prisma.IntegrationAccountUncheckedCreateWithoutCalendarEventsInput>
+  where?: Prisma.IntegrationAccountWhereInput
+}
+
+export type IntegrationAccountUpdateToOneWithWhereWithoutCalendarEventsInput = {
+  where?: Prisma.IntegrationAccountWhereInput
+  data: Prisma.XOR<Prisma.IntegrationAccountUpdateWithoutCalendarEventsInput, Prisma.IntegrationAccountUncheckedUpdateWithoutCalendarEventsInput>
+}
+
+export type IntegrationAccountUpdateWithoutCalendarEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumSourceProviderFieldUpdateOperationsInput | $Enums.SourceProvider
+  status?: Prisma.EnumIntegrationStatusFieldUpdateOperationsInput | $Enums.IntegrationStatus
+  externalAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scopes?: Prisma.IntegrationAccountUpdatescopesInput | string[]
+  tokenCipher?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  linkCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutIntegrationAccountsNestedInput
+  sourceMessages?: Prisma.SourceMessageUpdateManyWithoutAccountNestedInput
+  sourceConversations?: Prisma.SourceConversationUpdateManyWithoutAccountNestedInput
+  memoryCandidates?: Prisma.MemoryCandidateUpdateManyWithoutAccountNestedInput
+  providerEvents?: Prisma.ProviderEventUpdateManyWithoutAccountNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutAccountNestedInput
+}
+
+export type IntegrationAccountUncheckedUpdateWithoutCalendarEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumSourceProviderFieldUpdateOperationsInput | $Enums.SourceProvider
+  status?: Prisma.EnumIntegrationStatusFieldUpdateOperationsInput | $Enums.IntegrationStatus
+  externalAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scopes?: Prisma.IntegrationAccountUpdatescopesInput | string[]
+  tokenCipher?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  linkCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sourceMessages?: Prisma.SourceMessageUncheckedUpdateManyWithoutAccountNestedInput
+  sourceConversations?: Prisma.SourceConversationUncheckedUpdateManyWithoutAccountNestedInput
+  memoryCandidates?: Prisma.MemoryCandidateUncheckedUpdateManyWithoutAccountNestedInput
+  providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutAccountNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type IntegrationAccountCreateManyUserInput = {
@@ -1208,6 +1507,8 @@ export type IntegrationAccountUpdateWithoutUserInput = {
   sourceConversations?: Prisma.SourceConversationUpdateManyWithoutAccountNestedInput
   memoryCandidates?: Prisma.MemoryCandidateUpdateManyWithoutAccountNestedInput
   providerEvents?: Prisma.ProviderEventUpdateManyWithoutAccountNestedInput
+  ingestionEvents?: Prisma.IngestionEventUpdateManyWithoutAccountNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutAccountNestedInput
 }
 
 export type IntegrationAccountUncheckedUpdateWithoutUserInput = {
@@ -1229,6 +1530,8 @@ export type IntegrationAccountUncheckedUpdateWithoutUserInput = {
   sourceConversations?: Prisma.SourceConversationUncheckedUpdateManyWithoutAccountNestedInput
   memoryCandidates?: Prisma.MemoryCandidateUncheckedUpdateManyWithoutAccountNestedInput
   providerEvents?: Prisma.ProviderEventUncheckedUpdateManyWithoutAccountNestedInput
+  ingestionEvents?: Prisma.IngestionEventUncheckedUpdateManyWithoutAccountNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type IntegrationAccountUncheckedUpdateManyWithoutUserInput = {
@@ -1258,6 +1561,8 @@ export type IntegrationAccountCountOutputType = {
   sourceConversations: number
   memoryCandidates: number
   providerEvents: number
+  ingestionEvents: number
+  calendarEvents: number
 }
 
 export type IntegrationAccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1265,6 +1570,8 @@ export type IntegrationAccountCountOutputTypeSelect<ExtArgs extends runtime.Type
   sourceConversations?: boolean | IntegrationAccountCountOutputTypeCountSourceConversationsArgs
   memoryCandidates?: boolean | IntegrationAccountCountOutputTypeCountMemoryCandidatesArgs
   providerEvents?: boolean | IntegrationAccountCountOutputTypeCountProviderEventsArgs
+  ingestionEvents?: boolean | IntegrationAccountCountOutputTypeCountIngestionEventsArgs
+  calendarEvents?: boolean | IntegrationAccountCountOutputTypeCountCalendarEventsArgs
 }
 
 /**
@@ -1305,6 +1612,20 @@ export type IntegrationAccountCountOutputTypeCountProviderEventsArgs<ExtArgs ext
   where?: Prisma.ProviderEventWhereInput
 }
 
+/**
+ * IntegrationAccountCountOutputType without action
+ */
+export type IntegrationAccountCountOutputTypeCountIngestionEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IngestionEventWhereInput
+}
+
+/**
+ * IntegrationAccountCountOutputType without action
+ */
+export type IntegrationAccountCountOutputTypeCountCalendarEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CalendarEventWhereInput
+}
+
 
 export type IntegrationAccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1327,6 +1648,8 @@ export type IntegrationAccountSelect<ExtArgs extends runtime.Types.Extensions.In
   sourceConversations?: boolean | Prisma.IntegrationAccount$sourceConversationsArgs<ExtArgs>
   memoryCandidates?: boolean | Prisma.IntegrationAccount$memoryCandidatesArgs<ExtArgs>
   providerEvents?: boolean | Prisma.IntegrationAccount$providerEventsArgs<ExtArgs>
+  ingestionEvents?: boolean | Prisma.IntegrationAccount$ingestionEventsArgs<ExtArgs>
+  calendarEvents?: boolean | Prisma.IntegrationAccount$calendarEventsArgs<ExtArgs>
   _count?: boolean | Prisma.IntegrationAccountCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["integrationAccount"]>
 
@@ -1393,6 +1716,8 @@ export type IntegrationAccountInclude<ExtArgs extends runtime.Types.Extensions.I
   sourceConversations?: boolean | Prisma.IntegrationAccount$sourceConversationsArgs<ExtArgs>
   memoryCandidates?: boolean | Prisma.IntegrationAccount$memoryCandidatesArgs<ExtArgs>
   providerEvents?: boolean | Prisma.IntegrationAccount$providerEventsArgs<ExtArgs>
+  ingestionEvents?: boolean | Prisma.IntegrationAccount$ingestionEventsArgs<ExtArgs>
+  calendarEvents?: boolean | Prisma.IntegrationAccount$calendarEventsArgs<ExtArgs>
   _count?: boolean | Prisma.IntegrationAccountCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type IntegrationAccountIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1410,6 +1735,8 @@ export type $IntegrationAccountPayload<ExtArgs extends runtime.Types.Extensions.
     sourceConversations: Prisma.$SourceConversationPayload<ExtArgs>[]
     memoryCandidates: Prisma.$MemoryCandidatePayload<ExtArgs>[]
     providerEvents: Prisma.$ProviderEventPayload<ExtArgs>[]
+    ingestionEvents: Prisma.$IngestionEventPayload<ExtArgs>[]
+    calendarEvents: Prisma.$CalendarEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1826,6 +2153,8 @@ export interface Prisma__IntegrationAccountClient<T, Null = never, ExtArgs exten
   sourceConversations<T extends Prisma.IntegrationAccount$sourceConversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IntegrationAccount$sourceConversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SourceConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   memoryCandidates<T extends Prisma.IntegrationAccount$memoryCandidatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IntegrationAccount$memoryCandidatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MemoryCandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   providerEvents<T extends Prisma.IntegrationAccount$providerEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IntegrationAccount$providerEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProviderEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ingestionEvents<T extends Prisma.IntegrationAccount$ingestionEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IntegrationAccount$ingestionEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IngestionEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  calendarEvents<T extends Prisma.IntegrationAccount$calendarEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IntegrationAccount$calendarEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2364,6 +2693,54 @@ export type IntegrationAccount$providerEventsArgs<ExtArgs extends runtime.Types.
   take?: number
   skip?: number
   distinct?: Prisma.ProviderEventScalarFieldEnum | Prisma.ProviderEventScalarFieldEnum[]
+}
+
+/**
+ * IntegrationAccount.ingestionEvents
+ */
+export type IntegrationAccount$ingestionEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the IngestionEvent
+   */
+  select?: Prisma.IngestionEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the IngestionEvent
+   */
+  omit?: Prisma.IngestionEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.IngestionEventInclude<ExtArgs> | null
+  where?: Prisma.IngestionEventWhereInput
+  orderBy?: Prisma.IngestionEventOrderByWithRelationInput | Prisma.IngestionEventOrderByWithRelationInput[]
+  cursor?: Prisma.IngestionEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.IngestionEventScalarFieldEnum | Prisma.IngestionEventScalarFieldEnum[]
+}
+
+/**
+ * IntegrationAccount.calendarEvents
+ */
+export type IntegrationAccount$calendarEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CalendarEvent
+   */
+  select?: Prisma.CalendarEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CalendarEvent
+   */
+  omit?: Prisma.CalendarEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CalendarEventInclude<ExtArgs> | null
+  where?: Prisma.CalendarEventWhereInput
+  orderBy?: Prisma.CalendarEventOrderByWithRelationInput | Prisma.CalendarEventOrderByWithRelationInput[]
+  cursor?: Prisma.CalendarEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CalendarEventScalarFieldEnum | Prisma.CalendarEventScalarFieldEnum[]
 }
 
 /**

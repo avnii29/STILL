@@ -48,6 +48,8 @@ export const serverEnvSchema = z.object({
   INSTAGRAM_APP_SECRET: z.preprocess(emptyToUndefined, z.string().optional()),
   GMAIL_ENABLED: z.enum(["true", "false"]).optional(),
   GUEST_EXTRACT_DAILY_LIMIT: z.preprocess(emptyToUndefined, z.string().optional()),
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.preprocess(emptyToUndefined, z.string().min(1).optional()),
+  TURNSTILE_SECRET_KEY: z.preprocess(emptyToUndefined, z.string().min(1).optional()),
 });
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>;
@@ -90,4 +92,16 @@ export function isProduction(): boolean {
 export function isServiceRoleConfigured(): boolean {
   const env = getServerEnv();
   return Boolean(env.NEXT_PUBLIC_SUPABASE_URL && env.SUPABASE_SERVICE_ROLE_KEY);
+}
+
+export function isTurnstileConfigured(): boolean {
+  const env = getServerEnv();
+  return Boolean(env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && env.TURNSTILE_SECRET_KEY);
+}
+
+export type CaptchaMode = "active" | "development" | "unavailable";
+
+export function captchaMode(): CaptchaMode {
+  if (isTurnstileConfigured()) return "active";
+  return isProduction() ? "unavailable" : "development";
 }

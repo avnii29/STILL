@@ -33,6 +33,15 @@ export default async function SettingsPage() {
           emailNotifications={preference?.emailNotifications ?? true}
           webPushEnabled={preference?.webPushEnabled ?? false}
           followUpDays={preference?.followUpDays ?? 3}
+          notifyCommitment={preference?.notifyCommitment ?? true}
+          notifyDeadline={preference?.notifyDeadline ?? true}
+          notifyBlocked={preference?.notifyBlocked ?? true}
+          notifyDeadlineChange={preference?.notifyDeadlineChange ?? true}
+          notifyResolved={preference?.notifyResolved ?? true}
+          notifyMinorContext={preference?.notifyMinorContext ?? false}
+          notifyInApp={preference?.notifyInApp ?? true}
+          quietHoursStart={preference?.quietHoursStart ?? "23:00"}
+          quietHoursEnd={preference?.quietHoursEnd ?? "07:00"}
         />
       </div>
       <div className="mt-12 max-w-md">

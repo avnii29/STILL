@@ -69,6 +69,10 @@ Leave Google Calendar and Docs credentials empty unless you have real OAuth clie
 
 It will not invent events or documents.
 
+### Local development
+
+For local development, use the provided `.env.example` as the starting point and keep secrets out of version control.
+
 ## Connected sources
 
 STILL looks for things you said you'd do. It does not read inboxes unless you explicitly connect a supported source.
